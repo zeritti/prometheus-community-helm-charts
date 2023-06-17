@@ -4,9 +4,17 @@
 
 replicaCount: 1
 
+global:
+  ## Allow parent chart to override registry host
+  imageRegistry: ""
+
 image:
-  repository: quay.io/prometheuscommunity/postgres-exporter
-  tag: v0.13.1
+  registry: quay.io
+  repository: prometheuscommunity/postgres-exporter
+  ## image digest
+  digest: ""
+  ## tag gets set to appVersion by default if not set
+  tag: ""
   pullPolicy: IfNotPresent
 
   ## Optionally specify an array of imagePullSecrets.

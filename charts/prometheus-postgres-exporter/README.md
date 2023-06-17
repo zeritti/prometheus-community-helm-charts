@@ -40,6 +40,31 @@ _See [helm uninstall](https://helm.sh/docs/helm/helm_uninstall/) for command doc
 
 ## Upgrading
 
+### To 5.0.0
+
+This release splits up `image.repository` in `image.registry` and `image.repository`.
+Before upgrading, the previous default image repository configuration in custom values files
+
+```
+image:
+  repository: quay.io/prometheuscommunity/postgres-exporter
+```
+
+must be changed to read
+
+```
+image:
+  registry: quay.io
+  repository: prometheuscommunity/postgres-exporter
+```
+
+The same is true for a customized `image.repository` that might have been set.
+
+Other changes include:
+- Added support for global image registry by means of `global.imageRegistry`.
+- Default `image.tag` gets derived from `appVersion` and need not be set.
+- Support for image digest has been added as `image.digest`.
+
 ### To 4.6.0
 
 This release adds functionality to template the variables inside `config.datasource` by means of allowing the `tpl` function in the resources that make use of it. This functionality is useful when you want to do sub-charting (e.g. in a postgres chart) and you want to avoid the duplication of variables inside `config.datasource`.
@@ -101,7 +126,7 @@ kubectl patch deployment prometheus-postgres-exporter --type=json -p='[{"op": "r
 ### Other minor version upgrade
 
 ```console
-helm upgrade [RELEASE_NAME] [CHART] --install
+helm upgrade [RELEASE_NAME] prometheus-community/prometheus-postgres-exporter --install
 ```
 
 _See [helm upgrade](https://helm.sh/docs/helm/helm_upgrade/) for command documentation._
