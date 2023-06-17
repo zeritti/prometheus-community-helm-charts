@@ -59,6 +59,9 @@ spec:
           {{- if .Values.config.disableCollectorBgwriter }}
           - "--no-collector.stat_bgwriter"
           {{- end }}
+          {{- if .Values.config.disableCollectorReplicationSlot }}
+          - "--no-collector.replication_slot"
+          {{- end }}
           {{- if .Values.config.disableDefaultMetrics }}
           - "--disable-default-metrics"
           {{- end }}
@@ -71,9 +74,9 @@ spec:
           {{- if .Values.config.logFormat }}
           - "--log.format={{ .Values.config.logFormat }}"
           {{- end}}
-          {{-  if .Values.config.extraArgs  }}
+          {{- if .Values.config.extraArgs }}
           {{- .Values.config.extraArgs | toYaml | nindent 10 }}
-          {{-  end  }}
+          {{- end }}
           env:
           {{- if .Values.config.datasourceSecret }}
           - name: DATA_SOURCE_NAME
@@ -150,17 +153,20 @@ spec:
             httpGet:
               path: /
               port: http
+          {{- with .Values.resources }}
           resources:
-{{ toYaml .Values.resources | indent 12 }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- with .Values.securityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if .Values.config.postgresExporter }}
+            {{- if or .Values.config.postgresExporter ((.Values.config).postgresExporterConfigSecret).name }}
             - name: postgres-exporter
               mountPath: /etc/postgres_exporter.yml
               subPath: postgres_exporter.yml
+              readOnly: true
             {{- end }}
             {{- with .Values.extraVolumeMounts }}
             {{ toYaml . | nindent 12 }}
@@ -192,6 +198,15 @@ spec:
       - configMap:
           defaultMode: 420
           name: {{ template "prometheus-postgres-exporter.fullname" . }}
+        name: postgres-exporter
+      {{- end }}
+      {{- if ((.Values.config).postgresExporterConfigSecret).name }}
+      - secret:
+          secretName: {{ .Values.config.postgresExporterConfigSecret.name }}
+          items:
+            - key: {{ default "postgres_exporter.yml" .Values.config.postgresExporterConfigSecret.key }}
+              path: postgres_exporter.yml
+          defaultMode: 420
         name: postgres-exporter
       {{- end }}
       {{- with .Values.extraVolumes }}

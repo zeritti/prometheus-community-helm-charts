@@ -7,5 +7,5 @@ metadata:
     {{- include "prometheus-postgres-exporter.labels" . | nindent 4 }}
 data:
   postgres_exporter.yml: |
-    {{ tpl .Values.config.postgresExporter . | nindent 4 }}
+    {{- tpl .Values.config.postgresExporter . | nindent 4 }}
 {{- end }}

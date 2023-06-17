@@ -1,0 +1,69 @@
+{{- if and .Values.serviceMonitor.enabled .Values.serviceMonitor.multiTarget.enabled }}
+{{- range .Values.serviceMonitor.multiTarget.targets }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    {{- include "prometheus-postgres-exporter.labels" $ | nindent 4 }}
+    {{- with $.Values.serviceMonitor.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- with .labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  name: {{ template "prometheus-postgres-exporter.fullname" $ }}-{{ .name }}
+  {{- if $.Values.serviceMonitor.namespace }}
+  namespace: {{ $.Values.serviceMonitor.namespace }}
+  {{- end }}
+spec:
+  endpoints:
+  - port: {{ $.Values.service.name }}
+    scheme: {{ $.Values.serviceMonitor.multiTarget.scheme }}
+    interval: {{ default $.Values.serviceMonitor.interval .interval }}
+    {{- if ((($.Values.serviceMonitor.multiTarget).authorization).credentials).name }}
+    authorization:
+      type: Bearer
+      credentials:
+        {{- toYaml $.Values.serviceMonitor.multiTarget.authorization.credentials | nindent 8 }}
+    {{- end }}
+    path: "/probe"
+    scrapeTimeout: {{ default $.Values.serviceMonitor.timeout .timeout }}
+    {{- with $.Values.serviceMonitor.multiTarget.tlsConfig }}
+    tlsConfig:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    params:
+      auth_module:
+      - {{ default $.Values.serviceMonitor.multiTarget.authModule .authModule }}
+      target:
+      - "{{ .endpoint }}:{{ default $.Values.serviceMonitor.multiTarget.port .port }}"
+    metricRelabelings:
+      - sourceLabels: [instance]
+        targetLabel: instance
+        replacement: {{ .endpoint }}
+      - sourceLabels: [target]
+        targetLabel: target
+        replacement: {{ .name }}
+      {{- if or $.Values.serviceMonitor.metricRelabelings .metricRelabelings }}
+      {{- toYaml (concat (.metricRelabelings | default list) $.Values.serviceMonitor.metricRelabelings) | nindent 6 }}
+      {{- end }}
+    {{- if or $.Values.serviceMonitor.relabelings .relabelings }}
+    relabelings:
+      {{- toYaml (concat (.relabelings | default list) $.Values.serviceMonitor.relabelings) | nindent 6 }}
+    {{- end }}
+  {{- with $.Values.serviceMonitor.multiTarget.jobLabel }}
+  jobLabel: {{ . }}
+  {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ $.Release.Namespace }}
+  selector:
+    matchLabels:
+      {{- include "prometheus-postgres-exporter.selectorLabels" $ | nindent 6 }}
+  {{- if $.Values.serviceMonitor.targetLabels }}
+  targetLabels:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}
+{{- end }}
