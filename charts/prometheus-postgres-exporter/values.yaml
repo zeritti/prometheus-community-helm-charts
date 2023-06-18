@@ -24,6 +24,10 @@ image:
   # pullSecrets:
   #   - myRegistrKeySecretName
 
+nameOverride: ""
+
+fullnameOverride: ""
+
 command: []
 
 service:
