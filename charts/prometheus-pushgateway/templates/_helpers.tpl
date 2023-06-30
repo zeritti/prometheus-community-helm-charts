@@ -77,6 +77,18 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
+Define persistent volume labels
+suitable for volume claim templates with support for user defined labels
+*/}}
+{{- define "prometheus-pushgateway.persistentvolume.labels" -}}
+app.kubernetes.io/name: {{ include "prometheus-pushgateway.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- with .Values.persistentVolumeLabels }}
+{{ toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
 Return the appropriate apiVersion for networkpolicy.
 */}}
 {{- define "prometheus-pushgateway.networkPolicy.apiVersion" -}}
