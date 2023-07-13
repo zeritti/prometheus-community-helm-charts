@@ -1,4 +1,5 @@
 {{- if not .Values.config.externalQueries.enabled }}
+{{- if or .Values.config.queries .Values.config.userQueries }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -8,8 +9,10 @@ metadata:
     chart: {{ template "prometheus-postgres-exporter.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+  namespace: {{ template "prometheus-postgres-exporter.namespace" . }}
 data:
   allow-snippet-annotations: "false"
   config.yaml: |
     {{- tpl (mergeOverwrite (tpl .Values.config.queries . | fromYaml) (tpl .Values.config.userQueries . | fromYaml) | toYaml) . | nindent 4 }}
+{{- end }}
 {{- end }}

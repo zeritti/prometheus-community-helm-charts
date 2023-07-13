@@ -14,6 +14,7 @@ metadata:
 {{- if .Values.service.labels }}
 {{ toYaml .Values.service.labels | trim | indent 4 }}
 {{- end }}
+  namespace: {{ template "prometheus-postgres-exporter.namespace" . }}
 spec:
   type: {{ .Values.service.type }}
   ports:

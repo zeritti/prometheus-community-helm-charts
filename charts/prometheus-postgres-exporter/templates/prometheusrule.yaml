@@ -3,8 +3,10 @@ apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: {{ template "prometheus-postgres-exporter.fullname" . }}
-{{- with .Values.prometheusRule.namespace }}
-  namespace: {{ . }}
+{{- if .Values.prometheusRule.namespace }}
+  namespace: {{ .Values.prometheusRule.namespace }}
+{{- else }}
+  namespace: {{ template "prometheus-postgres-exporter.namespace" . }}
 {{- end }}
   labels:
     app: {{ template "prometheus-postgres-exporter.name" . }}

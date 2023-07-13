@@ -17,6 +17,7 @@ metadata:
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
+  namespace: {{ template "prometheus-postgres-exporter.namespace" . }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -56,13 +57,15 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           args:
+          {{- if or .Values.config.queries .Values.config.userQueries .Values.config.externalQueries.enabled }}
           - "--extend.query-path=/etc/config.yaml"
-          - "--web.listen-address=:{{ .Values.service.targetPort }}"
-          {{- if .Values.config.disableCollectorDatabase }}
-          - "--no-collector.database"
           {{- end }}
-          {{- if .Values.config.disableCollectorBgwriter }}
-          - "--no-collector.stat_bgwriter"
+          - "--web.listen-address=:{{ .Values.service.targetPort }}"
+          {{- range $item := .Values.config.enableCollectors }}
+          - "--collector.{{ $item }}"
+          {{- end }}
+          {{- range $item := .Values.config.disableCollectors }}
+          - "--no-collector.{{ $item }}"
           {{- end }}
           {{- if .Values.config.disableDefaultMetrics }}
           - "--disable-default-metrics"
@@ -148,7 +151,7 @@ spec:
           {{ toYaml . | nindent 10 }}
           {{- end }}
           {{- end }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}:{{ default (printf "v%s" .Chart.AppVersion) .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- with .Values.command }}
           command:
@@ -170,16 +173,20 @@ spec:
             httpGet:
               path: /
               port: http
+          {{- with .Values.resources }}
           resources:
-{{ toYaml .Values.resources | indent 12 }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- with .Values.securityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           volumeMounts:
+          {{- if or .Values.config.queries .Values.config.userQueries .Values.config.externalQueries.enabled }}
             - name: queries
               mountPath: /etc/config.yaml
               subPath: config.yaml
+          {{- end }}
 {{- with .Values.extraVolumeMounts }}
 {{ toYaml . | indent 12 }}
 {{- end }}
@@ -203,14 +210,18 @@ spec:
 {{ toYaml . | indent 8 }}
     {{- end }}
       volumes:
+      {{- if or .Values.config.queries .Values.config.userQueries .Values.config.externalQueries.enabled }}
       - configMap:
           defaultMode: 420
           {{- if not .Values.config.externalQueries.enabled }}
+          {{- if or .Values.config.queries .Values.config.userQueries }}
           name: {{ template "prometheus-postgres-exporter.fullname" . }}
+          {{- end }}
           {{- else }}
           name: {{ .Values.config.externalQueries.configmap }}
           {{- end }}
         name: queries
+        {{- end }}
 {{- with .Values.extraVolumes }}
 {{ toYaml . | indent 6 }}
 {{- end }}

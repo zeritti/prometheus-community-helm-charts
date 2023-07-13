@@ -40,11 +40,32 @@ _See [helm uninstall](https://helm.sh/docs/helm/helm_uninstall/) for command doc
 
 ## Upgrading
 
-### To 4.6.0
+### To 5.0.0
 
-This release adds functionality to template the variables inside `config.datasource` by means of allowing the `tpl` function in the resources that make use of it. This functionality is useful when you want to do sub-charting (e.g. in a postgres chart) and you want to avoid the duplication of variables inside `config.datasource`.
+Since extended queries have been marked as deprecated in release [0.13.0](https://github.com/prometheus-community/postgres_exporter/releases/tag/v0.13.0), this release moves entirely to collectors whilst removing contents of the field `config.queries`.
 
-Compared to the previous release (4.5.0) the only thing that changed is the fact that you can no longer leave the `config.datasource.host` variable blank. Leaving it blank could cause errors with the `tpl` function. However, the default value was changed to `''` so this error is not expected to happen.
+The functionality of extended queries is still being supported by the release.
+
+Each collector can be enabled or disabled individually by its [name](https://github.com/prometheus-community/postgres_exporter/tree/v0.13.2/collector), e.g.
+
+```yaml
+config:
+  enableCollectors:
+    - process_idle
+  disableCollectors:
+    - database
+```
+
+If you have previously modified values `config.disableCollectorDatabase` and `config.disableCollectorStatBgwriter`, respectively, please, apply your change to the new values before upgrading, i.e.
+
+```yaml
+config:
+  disableCollectors:
+    - database
+    - stat_bgwriter
+```
+
+Previously, Pod Security Policy has been enabled by default by means of `rbac.pspEnabled: true`. In this release, the default is set to `false`. If you rely on its previous default value, please, set it to `true` before upgrading.
 
 ### To 4.0.0
 

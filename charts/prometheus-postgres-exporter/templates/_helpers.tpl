@@ -70,3 +70,14 @@ Return the appropriate apiVersion for rbac.
 {{- print "policy/v1beta1" -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Define overriding namespace
+*/}}
+{{- define "prometheus-postgres-exporter.namespace" -}}
+{{- if .Values.namespaceOverride -}}
+{{- .Values.namespaceOverride -}}
+{{- else -}}
+{{- .Release.Namespace -}}
+{{- end -}}
+{{- end -}}

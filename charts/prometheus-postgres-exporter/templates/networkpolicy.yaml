@@ -7,6 +7,7 @@ metadata:
     {{- if .Values.networkPolicy.labels }}
       {{ toYaml .Values.networkPolicy.labels | indent 4 }}
     {{- end }}
+  namespace: {{ template "prometheus-postgres-exporter.namespace" . }}
 spec:
   podSelector:
     matchLabels:
