@@ -105,27 +105,35 @@ server:
   ## If set it will override serviceAccounts.server.automountServiceAccountToken value for ServiceAccount.
   # automountServiceAccountToken: false
 
-  ## Use a ClusterRole (and ClusterRoleBinding)
-  ## - If set to false - we define a RoleBinding in the defined namespaces ONLY
+  ## useExistingClusterRoleName allows prometheus to use an existing cluster role for which a RoleBinding
+  ## will be created in each namespace given in field namespaces below and the release namespace
+  ## if releaseNamespace is set.
+  ## The permissions defined in the cluster role
+  ## will then apply only to the resources in each of the given namespaces.
   ##
-  ## NB: because we need a Role with nonResourceURL's ("/metrics") - you must get someone with Cluster-admin privileges to define this role for you, before running with this setting enabled.
-  ##     This makes prometheus work - for users who do not have ClusterAdmin privs, but wants prometheus to operate on their own namespaces, instead of clusterwide.
+  ## A user with cluster admin privileges must create this cluster role
+  ## before installing the chart with this setting enabled.
+  ## This makes prometheus work for users who do not have cluster admin privs
+  ## but want prometheus to operate on their own namespaces instead of cluster-wide.
   ##
-  ## You MUST also set namespaces to the ones you have access to and want monitored by Prometheus.
-  ##
-  # useExistingClusterRoleName: nameofclusterrole
+  useExistingClusterRoleName: ""
 
-  ## If set it will override prometheus.server.fullname value for ClusterRole and ClusterRoleBinding
-  ##
-  clusterRoleNameOverride: ""
-
-  # Enable only the release namespace for monitoring. By default all namespaces are monitored.
-  # If releaseNamespace and namespaces are both set a merged list will be monitored.
+  ## Enable only the release namespace for monitoring. By default all namespaces
+  ## get included in service discovery (SD). If releaseNamespace and namespaces are both set,
+  ## namespaces in a merged list will be included in SD.
+  ## useExistingClusterRoleName above must be set.
   releaseNamespace: false
 
-  ## namespaces to monitor (instead of monitoring all - clusterwide). Needed if you want to run without Cluster-admin privileges.
-  # namespaces:
-  #   - yournamespace
+  ## Namespaces to include in SD instead of all namespaces cluster-wide.
+  ## Needed if you want to run prometheus without having cluster admin privileges.
+  ## useExistingClusterRoleName above must be set.
+  namespaces: []
+    # - yournamespace
+
+  ## If set it will override prometheus.server.fullname value for created
+  ## ClusterRole and ClusterRoleBinding
+  ##
+  clusterRoleNameOverride: ""
 
   # sidecarContainers - add more containers to prometheus server
   # Key/Value where Key is the sidecar `- name: <Key>`
@@ -210,7 +218,8 @@ server:
   ##       key: username
   env: []
 
-  # List of flags to override default parameters, e.g:
+  # List of flags to fully override default parameters, e.g:
+  # - --config.file=/etc/config/prometheus.yml
   # - --enable-feature=agent
   # - --storage.agent.retention.max-time=30m
   # - --config.file=/etc/config/prometheus.yml
