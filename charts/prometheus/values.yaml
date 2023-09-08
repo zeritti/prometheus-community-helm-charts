@@ -89,27 +89,39 @@ server:
   ##
   name: server
 
-  ## Use a ClusterRole (and ClusterRoleBinding)
-  ## - If set to false - we define a RoleBinding in the defined namespaces ONLY
+  ## useExistingClusterRoleName allows prometheus to use an existing cluster role for which a RoleBinding
+  ## will be created in each namespace given in field namespaces below and the release namespace
+  ## if releaseNamespace is set.
+  ## The permissions defined in the cluster role will then apply only to the resources
+  ## in each of the given namespaces, i.e. service discovery will be restricted to these namespaces.
   ##
-  ## NB: because we need a Role with nonResourceURL's ("/metrics") - you must get someone with Cluster-admin privileges to define this role for you, before running with this setting enabled.
-  ##     This makes prometheus work - for users who do not have ClusterAdmin privs, but wants prometheus to operate on their own namespaces, instead of clusterwide.
+  ## A user with cluster admin privileges must create this cluster role
+  ## before installing the chart with this setting enabled.
+  ## This makes prometheus work for users who do not have cluster admin privs
+  ## but want prometheus to operate on their own namespaces instead of cluster-wide.
   ##
-  ## You MUST also set namespaces to the ones you have access to and want monitored by Prometheus.
+  ## If restricting service discovery to namespaces, see also Prometheus' namespaces field in
+  ## kubernetes_sd_config at https://prometheus.io/docs/prometheus/latest/configuration/configuration/#kubernetes_sd_config.
   ##
   # useExistingClusterRoleName: nameofclusterrole
+
+  ## Enable the release namespace for service discovery. By default, Prometheus will perform discovery
+  ## cluster-wide. If releaseNamespace is set, service discovery will be limited to the release namespace.
+  ## If, in addition, field namespaces is set, those namespaces and the release namespace will be used
+  ## for service discovery.
+  ## useExistingClusterRoleName must be set.
+  releaseNamespace: false
+
+  ## Namespaces to restrict service discovery to.
+  ## Needed if you want to run prometheus without having cluster admin privileges.
+  ## useExistingClusterRoleName must be set.
+  # namespaces:
+      # - ns1
+      # - ns2
 
   ## If set it will override prometheus.server.fullname value for ClusterRole and ClusterRoleBinding
   ##
   clusterRoleNameOverride: ""
-
-  # Enable only the release namespace for monitoring. By default all namespaces are monitored.
-  # If releaseNamespace and namespaces are both set a merged list will be monitored.
-  releaseNamespace: false
-
-  ## namespaces to monitor (instead of monitoring all - clusterwide). Needed if you want to run without Cluster-admin privileges.
-  # namespaces:
-  #   - yournamespace
 
   # sidecarContainers - add more containers to prometheus server
   # Key/Value where Key is the sidecar `- name: <Key>`
@@ -372,7 +384,7 @@ server:
     #   effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
 
   ## Node labels for Prometheus server pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
 
@@ -674,7 +686,7 @@ server:
   ##
   terminationGracePeriodSeconds: 300
 
-  ## Prometheus data retention period (default if not specified is 15 days)
+  ## Prometheus' data retention period (default if not specified is 15 days)
   ##
   retention: "15d"
 
@@ -1067,7 +1079,7 @@ serverFiles:
             action: replace
             target_label: node
 
-      # Example Scrape config for pods which should be scraped slower. An useful example
+      # Example Scrape config for pods which should be scraped slower. A useful example
       # would be stackriver-exporter which queries an API on every scrape of the pod
       #
       # The relabeling allows the actual pod scrape endpoint to be configured via the
@@ -1128,7 +1140,7 @@ serverFiles:
             target_label: node
 
 # adds additional scrape configs to prometheus.yml
-# must be a string so you have to add a | after extraScrapeConfigs:
+# must be a string, so that you have to add a | after extraScrapeConfigs:
 # example adds prometheus-blackbox-exporter scrape config
 extraScrapeConfigs: ""
   # - job_name: 'prometheus-blackbox-exporter'
@@ -1200,7 +1212,7 @@ kube-state-metrics:
   ##
   enabled: true
 
-## promtheus-node-exporter sub-chart configurable values
+## prometheus-node-exporter sub-chart configurable values
 ## Please see https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-node-exporter
 ##
 prometheus-node-exporter:
@@ -1214,7 +1226,7 @@ prometheus-node-exporter:
   containerSecurityContext:
     allowPrivilegeEscalation: false
 
-## pprometheus-pushgateway sub-chart configurable values
+## prometheus-pushgateway sub-chart configurable values
 ## Please see https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-pushgateway
 ##
 prometheus-pushgateway:

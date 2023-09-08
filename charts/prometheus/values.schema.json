@@ -352,6 +352,9 @@
                 "name": {
                     "type": "string"
                 },
+                "namespaces": {
+                    "type": "array"
+                },
                 "nodeSelector": {
                     "type": "object"
                 },
@@ -414,6 +417,9 @@
                             "type": "object"
                         }
                     }
+                },
+                "portName": {
+                    "type": "string"
                 },
                 "prefixURL": {
                     "type": "string"
@@ -483,6 +489,9 @@
                 "service": {
                     "type": "object",
                     "properties": {
+                        "additionalPorts": {
+                            "type": "array"
+                        },
                         "annotations": {
                             "type": "object"
                         },
@@ -633,6 +642,9 @@
                 },
                 "tsdb": {
                     "type": "object"
+                },
+                "useExistingClusterRoleName": {
+                    "type": "string"
                 },
                 "verticalAutoscaler": {
                     "type": "object",
