@@ -63,6 +63,10 @@ data:
 {{ toYaml $value | default "{}" | indent 4 }}
 {{- end }}
 {{- if eq $key "prometheus.yml" -}}
+{{ print "scrape_configs:" | nindent 4 }}
+{{- if $root.Values.scrapeConfigs.enabled }}
+{{- include "prometheus.scrapeConfigs" $root | indent 4 }}
+{{- end }}
 {{- if $root.Values.extraScrapeConfigs }}
 {{ tpl $root.Values.extraScrapeConfigs $root | indent 4 }}
 {{- end -}}
