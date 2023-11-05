@@ -776,17 +776,15 @@ scrapeConfigs:
   ##
   ## Metrics path. In the prometheus job, server.prefixURL is being combined
   ## with the (default or job-specific) path, e.g. PREFIX/metrics.
-  path: /metrics
+  metricsPath: /metrics
   ## Scrape interval (see also server.global)
-  interval: 1m
+  scrapeInterval: 1m
   ## Scrape timeout (see also server.global)
-  timeout: 10s
+  scrapeTimeout: 10s
   ## Scheme (http, https)
   scheme: http
   ## Honor labels
   honorLabels: false
-  ## Attach node's metadata to targets (applicable to roles pod, endpoints, endpointslices).
-  attachMetadata: false
 
   ## Job prometheus (localhost)
   prometheusConfig:
@@ -797,8 +795,10 @@ scrapeConfigs:
     basicAuth: {}
     ## TLS configuration
     tlsConfig: {}
-    ## Labels to attach to static Prometheus targets
-    targetLabels: {}
+    ## static_configs for local Prometheus instance
+    staticConfigs:
+      - targets:
+          - localhost:9090
     ## Metric relabeling before ingestion
     metricRelabelings: []
     ## Target relabeling before scraping
@@ -813,6 +813,8 @@ scrapeConfigs:
   ## If using a rolebinding, i.e. limiting Prometheus to run SD on specific namespaces
   ## as set in server.namespaces and/or server.releaseNamespace, this config should be disabled.
   ##
+  ## All maps and lists in scrape configs expect native Prometheus' configuration parameters.
+
   ## Job kubernetes-apiservers (role endpoints)
   apiserversConfig:
     enabled: true
@@ -824,12 +826,17 @@ scrapeConfigs:
     tlsConfig:
       ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
       insecure_skip_verify: false
+    kubernetesSDConfigs:
+      - role: endpoints
     metricRelabelings: []
     ## Keep only the default/kubernetes service endpoints for the https port. This
     ## will add targets for each API server which Kubernetes adds an endpoint to
     ## the default/kubernetes service.
     relabelings:
-      - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+      - source_labels:
+        - __meta_kubernetes_namespace
+        - __meta_kubernetes_service_name
+        - __meta_kubernetes_endpoint_port_name
         action: keep
         regex: default;kubernetes;https
 
@@ -848,6 +855,8 @@ scrapeConfigs:
       ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
       insecure_skip_verify: false
     metricRelabelings: []
+    kubernetesSDConfigs:
+      - role: node
     relabelings:
       - action: labelmap
         regex: __meta_kubernetes_node_label_(.+)
@@ -872,6 +881,8 @@ scrapeConfigs:
     tlsConfig:
       ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
       insecure_skip_verify: false
+    kubernetesSDConfigs:
+      - role: node
     metricRelabelings: []
     relabelings:
       - action: labelmap
@@ -890,6 +901,8 @@ scrapeConfigs:
     honorLabels: true
     basicAuth: {}
     tlsConfig: {}
+    kubernetesSDConfigs:
+      - role: endpoints
     metricRelabelings: []
     ## The relabeling allows the actual service scrape endpoint to be configured
     ## via the following annotations:
@@ -946,6 +959,8 @@ scrapeConfigs:
     timeout: 30s
     basicAuth: {}
     tlsConfig: {}
+    kubernetesSDConfigs:
+      - role: endpoints
     metricRelabelings: []
     ## The relabeling allows the actual service scrape endpoint to be configured
     ## via the following annotations:
@@ -997,6 +1012,8 @@ scrapeConfigs:
     honorLabels: true
     basicAuth: {}
     tlsConfig: {}
+    kubernetesSDConfigs:
+      - role: service
     metricRelabelings: []
     relabelings:
       - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_probe]
@@ -1012,6 +1029,8 @@ scrapeConfigs:
     path: "/probe"
     params:
       module: [http_2xx]
+    kubernetesSDConfigs:
+      - role: service
     metricRelabelings: []
     relabelings:
     ## The relabeling allows the actual service scrape endpoint to be configured
@@ -1042,6 +1061,8 @@ scrapeConfigs:
     path: "/probe"
     params:
       module: [http_2xx]
+    kubernetesSDConfigs:
+      - role: ingress
     metricRelabelings: []
     relabelings:
       - source_labels: [__meta_kubernetes_ingress_scheme, __address__, __meta_kubernetes_ingress_path]
@@ -1066,6 +1087,8 @@ scrapeConfigs:
     honorLabels: true
     basicAuth: {}
     tlsConfig: {}
+    kubernetesSDConfigs:
+      - role: pod
     metricRelabelings: []
     relabelings:
     ## The relabeling allows the actual pod scrape endpoint to be configured via the
@@ -1127,6 +1150,8 @@ scrapeConfigs:
     timeout: 30s
     basicAuth: {}
     tlsConfig: {}
+    kubernetesSDConfigs:
+      - role: pod
     metricRelabelings: []
     relabelings:
     ## The relabeling allows the actual pod scrape endpoint to be configured via the

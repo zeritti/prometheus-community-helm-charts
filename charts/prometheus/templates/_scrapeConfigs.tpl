@@ -10,10 +10,10 @@ Define default scrape configs template
 {{- if .prometheusConfig.enabled }}
 - job_name: "{{ .prometheusConfig.jobName }}"
   honor_labels: {{ default .honorLabels .prometheusConfig.honorLabels }}
-  metrics_path: {{ $.Values.server.prefixURL }}{{ default .path .prometheusConfig.path }}
+  metrics_path: {{ $.Values.server.prefixURL }}{{ default .metricsPath .prometheusConfig.metricsPath }}
   scheme: {{ default .scheme .prometheusConfig.scheme }}
-  scrape_interval: {{ default .interval .prometheusConfig.interval }}
-  scrape_timeout: {{ default .timeout .prometheusConfig.timeout }}
+  scrape_interval: {{ default .scrapeInterval .prometheusConfig.scrapeInterval }}
+  scrape_timeout: {{ default .scrapeTimeout .prometheusConfig.scrapeTimeout }}
   {{- with .prometheusConfig.basicAuth }}
   basic_auth: {{ toYaml . | nindent 4 }}
   {{- end }}
@@ -26,21 +26,19 @@ Define default scrape configs template
   {{- with .prometheusConfig.relabelings }}
   relabel_configs: {{ toYaml . | nindent 4 }}
   {{- end }}
+  {{- with .prometheusConfig.staticConfigs }}
   static_configs:
-    - targets:
-      - localhost:9090
-      {{- with .prometheusConfig.targetLabels }}
-      labels: {{ toYaml . | nindent 8 }}
-      {{- end }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 {{- end }}
 
 {{- if .apiserversConfig.enabled }}
 - job_name: "{{ .apiserversConfig.jobName }}"
   honor_labels: {{ default .honorLabels .apiserversConfig.honorLabels }}
-  metrics_path: {{ default .path .apiserversConfig.path }}
+  metrics_path: {{ default .metricsPath .apiserversConfig.metricsPath }}
   scheme: {{ default .scheme .apiserversConfig.scheme }}
-  scrape_interval: {{ default .interval .apiserversConfig.interval }}
-  scrape_timeout: {{ default .timeout .apiserversConfig.timeout }}
+  scrape_interval: {{ default .scrapeInterval .apiserversConfig.scrapeInterval }}
+  scrape_timeout: {{ default .scrapeTimeout .apiserversConfig.scrapeTimeout }}
   {{- with .apiserversConfig.authorization }}
   authorization: {{ toYaml . | nindent 4 }}
   {{- end}}
@@ -53,19 +51,19 @@ Define default scrape configs template
   {{- with .apiserversConfig.relabelings }}
   relabel_configs: {{ toYaml . | nindent 4 }}
   {{- end }}
+  {{- with .apiserversConfig.kubernetesSDConfigs }}
   kubernetes_sd_configs:
-    - role: endpoints
-      attach_metadata:
-        node: {{ default .attachMetadata .apiserversConfig.attachMetadata }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 {{- end }}
 
 {{- if .nodesConfig.enabled }}
 - job_name: "{{ .nodesConfig.jobName }}"
   honor_labels: {{ default .honorLabels .nodesConfig.honorLabels }}
-  metrics_path: {{ default .path .nodesConfig.path }}
+  metrics_path: {{ default .metricsPath .nodesConfig.metricsPath }}
   scheme: {{ default .scheme .nodesConfig.scheme }}
-  scrape_interval: {{ default .interval .nodesConfig.interval }}
-  scrape_timeout: {{ default .timeout .nodesConfig.timeout }}
+  scrape_interval: {{ default .scrapeInterval .nodesConfig.scrapeInterval }}
+  scrape_timeout: {{ default .scrapeTimeout .nodesConfig.scrapeTimeout }}
   {{- with .nodesConfig.authorization }}
   authorization: {{ toYaml . | nindent 4 }}
   {{- end}}
@@ -78,17 +76,19 @@ Define default scrape configs template
   {{- with .nodesConfig.relabelings }}
   relabel_configs: {{ toYaml . | nindent 4 }}
   {{- end }}
+  {{- with .nodesConfig.kubernetesSDConfigs }}
   kubernetes_sd_configs:
-    - role: node
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 {{- end }}
 
 {{- if .nodesCadvisorConfig.enabled }}
 - job_name: "{{ .nodesCadvisorConfig.jobName }}"
   honor_labels: {{ default .honorLabels .nodesCadvisorConfig.honorLabels }}
-  metrics_path: {{ default .path .nodesCadvisorConfig.path }}
+  metrics_path: {{ default .metricsPath .nodesCadvisorConfig.metricsPath }}
   scheme: {{ default .scheme .nodesCadvisorConfig.scheme }}
-  scrape_interval: {{ default .interval .nodesCadvisorConfig.interval }}
-  scrape_timeout: {{ default .timeout .nodesCadvisorConfig.timeout }}
+  scrape_interval: {{ default .scrapeInterval .nodesCadvisorConfig.scrapeInterval }}
+  scrape_timeout: {{ default .scrapeTimeout .nodesCadvisorConfig.scrapeTimeout }}
   {{- with .nodesCadvisorConfig.authorization }}
   authorization: {{ toYaml . | nindent 4 }}
   {{- end}}
@@ -101,17 +101,19 @@ Define default scrape configs template
   {{- with .nodesCadvisorConfig.relabelings }}
   relabel_configs: {{ toYaml . | nindent 4 }}
   {{- end }}
+  {{- with .nodesCadvisorConfig.kubernetesSDConfigs }}
   kubernetes_sd_configs:
-    - role: node
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 {{- end }}
 
 {{- if .serviceEndpointsConfig.enabled }}
 - job_name: "{{ .serviceEndpointsConfig.jobName }}"
   honor_labels: {{ default .honorLabels .serviceEndpointsConfig.honorLabels }}
-  metrics_path: {{ default .path .serviceEndpointsConfig.path }}
+  metrics_path: {{ default .metricsPath .serviceEndpointsConfig.metricsPath }}
   scheme: {{ default .scheme .serviceEndpointsConfig.scheme }}
-  scrape_interval: {{ default .interval .serviceEndpointsConfig.interval }}
-  scrape_timeout: {{ default .timeout .serviceEndpointsConfig.timeout }}
+  scrape_interval: {{ default .scrapeInterval .serviceEndpointsConfig.scrapeInterval }}
+  scrape_timeout: {{ default .scrapeTimeout .serviceEndpointsConfig.scrapeTimeout }}
   {{- with .serviceEndpointsConfig.basicAuth }}
   basic_auth: {{ toYaml . | nindent 4 }}
   {{- end }}
@@ -124,23 +126,23 @@ Define default scrape configs template
   {{- with .serviceEndpointsConfig.relabelings }}
   relabel_configs: {{ toYaml . | nindent 4 }}
   {{- end }}
+  {{- with .serviceEndpointsConfig.kubernetesSDConfigs }}
   kubernetes_sd_configs:
-    - role: endpoints
-      attach_metadata:
-        node: {{ default .attachMetadata .serviceEndpointsConfig.attachMetadata }}
-      {{- if $namespaces }}
+    {{- toYaml . | nindent 4 }}
+    {{- if $namespaces }}
       namespaces:
         names: {{ toYaml $namespaces | nindent 10 }}
-      {{- end }}
+    {{- end }}
+  {{- end }}
 {{- end }}
 
 {{- if .serviceEndpointsSlowConfig.enabled }}
 - job_name: "{{ .serviceEndpointsSlowConfig.jobName }}"
   honor_labels: {{ default .honorLabels .serviceEndpointsSlowConfig.honorLabels }}
-  metrics_path: {{ default .path .serviceEndpointsSlowConfig.path }}
+  metrics_path: {{ default .metricsPath .serviceEndpointsSlowConfig.metricsPath }}
   scheme: {{ default .scheme .serviceEndpointsSlowConfig.scheme }}
-  scrape_interval: {{ default .interval .serviceEndpointsSlowConfig.interval }}
-  scrape_timeout: {{ default .timeout .serviceEndpointsSlowConfig.timeout }}
+  scrape_interval: {{ default .scrapeInterval .serviceEndpointsSlowConfig.scrapeInterval }}
+  scrape_timeout: {{ default .scrapeTimeout .serviceEndpointsSlowConfig.scrapeTimeout }}
   {{- with .serviceEndpointsSlowConfig.basicAuth }}
   basic_auth: {{ toYaml . | nindent 4 }}
   {{- end }}
@@ -153,23 +155,23 @@ Define default scrape configs template
   {{- with .serviceEndpointsSlowConfig.relabelings }}
   relabel_configs: {{ toYaml . | nindent 4 }}
   {{- end }}
+  {{- with .serviceEndpointsSlowConfig.kubernetesSDConfigs }}
   kubernetes_sd_configs:
-    - role: endpoints
-      attach_metadata:
-        node: {{ default .attachMetadata .serviceEndpointsSlowConfig.attachMetadata }}
-     {{- if $namespaces }}
+    {{- toYaml . | nindent 4 }}
+    {{- if $namespaces }}
       namespaces:
         names: {{ toYaml $namespaces | nindent 10 }}
-     {{- end }}
+    {{- end }}
+  {{- end }}
 {{- end }}
 
 {{- if .pushgatewayConfig.enabled }}
 - job_name: "{{ .pushgatewayConfig.jobName }}"
   honor_labels: {{ default .honorLabels .pushgatewayConfig.honorLabels }}
-  metrics_path: {{ default .path .pushgatewayConfig.path }}
+  metrics_path: {{ default .metricsPath .pushgatewayConfig.metricsPath }}
   scheme: {{ default .scheme .pushgatewayConfig.scheme }}
-  scrape_interval: {{ default .interval .pushgatewayConfig.interval }}
-  scrape_timeout: {{ default .timeout .pushgatewayConfig.timeout }}
+  scrape_interval: {{ default .scrapeInterval .pushgatewayConfig.scrapeInterval }}
+  scrape_timeout: {{ default .scrapeTimeout .pushgatewayConfig.scrapeTimeout }}
   {{- with .pushgatewayConfig.basicAuth }}
   basic_auth: {{ toYaml . | nindent 4 }}
   {{- end }}
@@ -182,21 +184,23 @@ Define default scrape configs template
   {{- with .pushgatewayConfig.relabelings }}
   relabel_configs: {{ toYaml . | nindent 4 }}
   {{- end }}
+  {{- with .pushgatewayConfig.kubernetesSDConfigs }}
   kubernetes_sd_configs:
-    - role: service
-      {{- if $namespaces }}
+    {{- toYaml . | nindent 4 }}
+    {{- if $namespaces }}
       namespaces:
         names: {{ toYaml $namespaces | nindent 10 }}
-      {{- end }}
+    {{- end }}
+  {{- end }}
 {{- end }}
 
 {{- if .servicesConfig.enabled }}
 - job_name: "{{ .servicesConfig.jobName }}"
   honor_labels: {{ default .honorLabels .servicesConfig.honorLabels }}
-  metrics_path: {{ default .path .servicesConfig.path }}
+  metrics_path: {{ default .metricsPath .servicesConfig.metricsPath }}
   scheme: {{ default .scheme .servicesConfig.scheme }}
-  scrape_interval: {{ default .interval .servicesConfig.interval }}
-  scrape_timeout: {{ default .timeout .servicesConfig.timeout }}
+  scrape_interval: {{ default .scrapeInterval .servicesConfig.scrapeInterval }}
+  scrape_timeout: {{ default .scrapeTimeout .servicesConfig.scrapeTimeout }}
   {{- with .servicesConfig.params }}
   params: {{ toYaml . | nindent 4 }}
   {{- end }}
@@ -209,21 +213,23 @@ Define default scrape configs template
   {{- with .servicesConfig.relabelings }}
   relabel_configs: {{ toYaml . | nindent 4 }}
   {{- end }}
+  {{- with .servicesConfig.kubernetesSDConfigs }}
   kubernetes_sd_configs:
-    - role: service
-      {{- if $namespaces }}
+    {{- toYaml . | nindent 4 }}
+    {{- if $namespaces }}
       namespaces:
         names: {{ toYaml $namespaces | nindent 10 }}
-      {{- end }}
+    {{- end }}
+  {{- end }}
 {{- end }}
 
 {{- if .podsConfig.enabled }}
 - job_name: "{{ .podsConfig.jobName }}"
   honor_labels: {{ default .honorLabels .podsConfig.honorLabels }}
-  metrics_path: {{ default .path .podsConfig.path }}
+  metrics_path: {{ default .metricsPath .podsConfig.metricsPath }}
   scheme: {{ default .scheme .podsConfig.scheme }}
-  scrape_interval: {{ default .interval .podsConfig.interval }}
-  scrape_timeout: {{ default .timeout .podsConfig.timeout }}
+  scrape_interval: {{ default .scrapeInterval .podsConfig.scrapeInterval }}
+  scrape_timeout: {{ default .scrapeTimeout .podsConfig.scrapeTimeout }}
   {{- with .podsConfig.basicAuth }}
   basic_auth: {{ toYaml . | nindent 4 }}
   {{- end }}
@@ -236,23 +242,23 @@ Define default scrape configs template
   {{- with .podsConfig.relabelings }}
   relabel_configs: {{ toYaml . | nindent 4 }}
   {{- end }}
+  {{- with .podsConfig.kubernetesSDConfigs }}
   kubernetes_sd_configs:
-    - role: pod
-      attach_metadata:
-        node: {{ default .attachMetadata .podsConfig.attachMetadata }}
-      {{- if $namespaces }}
+    {{- toYaml . | nindent 4 }}
+    {{- if $namespaces }}
       namespaces:
         names: {{ toYaml $namespaces | nindent 10 }}
-      {{- end }}
+    {{- end }}
+  {{- end }}
 {{- end }}
 
 {{- if .podsSlowConfig.enabled }}
 - job_name: "{{ .podsSlowConfig.jobName }}"
   honor_labels: {{ default .honorLabels .podsSlowConfig.honorLabels }}
-  metrics_path: {{ default .path .podsSlowConfig.path }}
+  metrics_path: {{ default .metricsPath .podsSlowConfig.metricsPath }}
   scheme: {{ default .scheme .podsSlowConfig.scheme }}
-  scrape_interval: {{ default .interval .podsSlowConfig.interval }}
-  scrape_timeout: {{ default .timeout .podsSlowConfig.timeout }}
+  scrape_interval: {{ default .scrapeInterval .podsSlowConfig.scrapeInterval }}
+  scrape_timeout: {{ default .scrapeTimeout .podsSlowConfig.scrapeTimeout }}
   {{- with .podsSlowConfig.basicAuth }}
   basic_auth: {{ toYaml . | nindent 4 }}
   {{- end }}
@@ -265,28 +271,28 @@ Define default scrape configs template
   {{- with .podsSlowConfig.relabelings }}
   relabel_configs: {{ toYaml . | nindent 4 }}
   {{- end }}
+  {{- with .podsSlowConfig.kubernetesSDConfigs }}
   kubernetes_sd_configs:
-    - role: pod
-      attach_metadata:
-        node: {{ default .attachMetadata .podsSlowConfig.attachMetadata }}
-      {{- if $namespaces }}
+    {{- toYaml . | nindent 4 }}
+    {{- if $namespaces }}
       namespaces:
         names: {{ toYaml $namespaces | nindent 10 }}
-      {{- end }}
+    {{- end }}
+  {{- end }}
 {{- end }}
 
 {{- if .ingressesConfig.enabled }}
 - job_name: "{{ .ingressesConfig.jobName }}"
   honor_labels: {{ default .honorLabels .ingressesConfig.honorLabels }}
-  metrics_path: {{ default .path .ingressesConfig.path }}
+  metrics_path: {{ default .metricsPath .ingressesConfig.metricsPath }}
   scheme: {{ default .scheme .ingressesConfig.scheme }}
-  scrape_interval: {{ default .interval .ingressesConfig.interval }}
-  {{- with .ingressesConfig.params }}
-  params: {{ toYaml . | nindent 4 }}
-  {{- end }}
-  scrape_timeout: {{ default .timeout .ingressesConfig.timeout }}
+  scrape_interval: {{ default .scrapeInterval .ingressesConfig.scrapeInterval }}
+  scrape_timeout: {{ default .scrapeTimeout .ingressesConfig.scrapeTimeout }}
   {{- with .ingressesConfig.basicAuth }}
   basic_auth: {{ toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .ingressesConfig.params }}
+  params: {{ toYaml . | nindent 4 }}
   {{- end }}
   {{- with .ingressesConfig.tlsConfig }}
   tls_config: {{ toYaml . | nindent 4 }}
@@ -297,12 +303,14 @@ Define default scrape configs template
   {{- with .ingressesConfig.relabelings }}
   relabel_configs: {{ toYaml . | nindent 4 }}
   {{- end }}
+  {{- with .ingressesConfig.kubernetesSDConfigs }}
   kubernetes_sd_configs:
-    - role: ingress
-      {{- if $namespaces }}
+    {{- toYaml . | nindent 4 }}
+    {{- if $namespaces }}
       namespaces:
         names: {{ toYaml $namespaces | nindent 10 }}
-      {{- end }}
+    {{- end }}
+  {{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
