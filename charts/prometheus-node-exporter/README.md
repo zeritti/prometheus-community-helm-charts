@@ -41,6 +41,16 @@ helm upgrade [RELEASE_NAME] prometheus-community/prometheus-node-exporter --inst
 
 _See [helm upgrade](https://helm.sh/docs/helm/helm_upgrade/) for command documentation._
 
+### 4.x to 5.x
+
+Previously, Node Exporter was configured to start listening on all host's IPs by default as `hostNetwork` as well as `service.listenOnAllInterfaces` was set to _true_. This has changed as it now starts listening on a host IP by default.
+
+Field `service.listenOnAllInterfaces` (default _true_) has been moved in the root context as `listenOnAllInterfaces` and set to _false_.
+
+If you require that Node Exporter listen on all interfaces, please, set `listenOnAllInterfaces` to _true_.
+
+New field `listenOnHostIPs` (list) has been introduced. If `hostNetwork` is set, you can specify one or more host IP addresses that Node Exporter will be listening on.
+
 ### 3.x to 4.x
 
 Starting from version 4.0.0, the `node exporter` chart is using the [Kubernetes recommended labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/). Therefore you have to delete the daemonset before you upgrade.

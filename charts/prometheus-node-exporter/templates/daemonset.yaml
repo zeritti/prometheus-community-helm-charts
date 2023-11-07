@@ -54,7 +54,13 @@ spec:
             - --path.udev.data=/host/root/run/udev/data
             {{- end }}
             {{- end }}
+            {{- if and .Values.listenOnHostIPs .Values.hostNetwork (not .Values.listenOnAllInterfaces) }}
+            {{- range .Values.listenOnHostIPs }}
+            - --web.listen-address={{ . }}:{{ $servicePort }}
+            {{- end }}
+            {{- else }}
             - --web.listen-address=[$(HOST_IP)]:{{ $servicePort }}
+            {{- end }}
             {{- with .Values.extraArgs }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
@@ -62,22 +68,26 @@ spec:
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- if or .Values.env (empty .Values.listenOnHostIPs) }}
           env:
+            {{- if empty .Values.listenOnHostIPs }}
             - name: HOST_IP
               {{- if .Values.kubeRBACProxy.enabled }}
               value: 127.0.0.1
-              {{- else if .Values.service.listenOnAllInterfaces }}
+              {{- else if .Values.listenOnAllInterfaces }}
               value: 0.0.0.0
               {{- else }}
               valueFrom:
                 fieldRef:
                   apiVersion: v1
-                  fieldPath: status.hostIP
+                  fieldPath: {{ ternary "status.hostIP" "status.podIP" .Values.hostNetwork }}
               {{- end }}
+            {{- end }}
             {{- range $key, $value := .Values.env }}
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
+          {{- end }}
           {{- if eq .Values.kubeRBACProxy.enabled false }}
           ports:
             - name: {{ .Values.service.portName }}

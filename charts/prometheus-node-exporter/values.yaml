@@ -75,7 +75,6 @@ service:
   targetPort: 9100
   nodePort:
   portName: metrics
-  listenOnAllInterfaces: true
   annotations:
     prometheus.io/scrape: "true"
   ipDualStack:
@@ -290,12 +289,19 @@ rbac:
   pspEnabled: true
   pspAnnotations: {}
 
-# for deployments that have node_exporter deployed outside of the cluster, list
+# For deployments that have node_exporter deployed outside of the cluster, list
 # their addresses here
 endpoints: []
 
-# Expose the service to the host network
+# Use the host's network namespace
 hostNetwork: true
+
+# Listen on all interfaces. Depending on hostNetwork, these are either hosts's or container's interfaces.
+listenOnAllInterfaces: false
+
+# Listen on specific host's IP addresses. Ensure unsetting listenOnAllInterfaces
+# and setting hostNetwork.
+listenOnHostIPs: []
 
 # Share the host process ID namespace
 hostPID: true
