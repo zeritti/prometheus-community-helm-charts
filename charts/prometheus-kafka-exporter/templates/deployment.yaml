@@ -2,24 +2,30 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "prometheus-kafka-exporter.fullname" . }}
+  {{- with .Values.deployment.annotations }}
+  annotations: {{ toYaml . | nindent 4 }}
+  {{- end }}
   labels:
-    app: {{ template "prometheus-kafka-exporter.name" . }}
-    chart: {{ template "prometheus-kafka-exporter.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    {{- include "prometheus-kafka-exporter.labels" . | nindent 4 }}
+    {{- with .Values.deployment.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  namespace: {{ include "prometheus-kafka-exporter.namespace" . }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ template "prometheus-kafka-exporter.name" . }}
-      release: {{ .Release.Name }}
+      {{- include "prometheus-kafka-exporter.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      annotations:
-{{ toYaml .Values.annotations | indent 8 }}
+      {{- with .Values.pod.annotations }}
+      annotations: {{ toYaml . | nindent 8 }}
+      {{- end }}
       labels:
-        app: {{ template "prometheus-kafka-exporter.name" . }}
-        release: {{ .Release.Name }}
+        {{- include "prometheus-kafka-exporter.labels" . | nindent 8 }}
+        {{- with .Values.pod.labels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       {{- if .Values.securityContext }}
       securityContext:
@@ -103,16 +109,18 @@ spec:
             - name: exporter-port
               containerPort: 9308
               protocol: TCP
-{{- if .Values.liveness.enabled }}
+          {{- if .Values.liveness.enabled }}
           livenessProbe:
-{{- toYaml .Values.liveness.probe | trim | nindent 12 }}
-{{- end }}
-{{- if .Values.readiness.enabled }}
+            {{- toYaml .Values.liveness.probe | trim | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readiness.enabled }}
           readinessProbe:
-{{- toYaml .Values.readiness.probe | trim | nindent 12 }}
-{{- end }}
+            {{- toYaml .Values.readiness.probe | trim | nindent 12 }}
+          {{- end }}
+          {{- with .Values.resources }}
           resources:
-{{ toYaml .Values.resources | indent 12 }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- with .Values.containerSecurityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
@@ -135,18 +143,18 @@ spec:
               readOnly: true
             {{- end }}
           {{- end }}
-    {{- with .Values.nodeSelector }}
+      {{- with .Values.nodeSelector }}
       nodeSelector:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.affinity }}
+        {{ toYaml . | indent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
       affinity:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
+        {{ toYaml . | indent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
       tolerations:
-{{ toYaml . | indent 8 }}
-    {{- end }}
+        {{ toYaml . | indent 8 }}
+      {{- end }}
       {{- if or (.Values.tls.mountPath) (.Values.sasl.kerberos.mountPath) }}
       volumes:
         {{- if .Values.tls.mountPath }}

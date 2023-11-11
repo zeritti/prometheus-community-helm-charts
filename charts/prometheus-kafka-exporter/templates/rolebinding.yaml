@@ -4,10 +4,8 @@ kind: RoleBinding
 metadata:
   name: {{ template "prometheus-kafka-exporter.fullname" . }}
   labels:
-    app: {{ template "prometheus-kafka-exporter.name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
+    {{- include "prometheus-kafka-exporter.labels" . | nindent 4 }}
+  namespace: {{ include "prometheus-kafka-exporter.namespace" . }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role

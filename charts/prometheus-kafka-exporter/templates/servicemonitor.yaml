@@ -5,17 +5,18 @@ metadata:
   name: {{ include "prometheus-kafka-exporter.fullname" . }}
   {{- if .Values.prometheus.serviceMonitor.namespace }}
   namespace: {{ .Values.prometheus.serviceMonitor.namespace }}
+  {{- else }}
+  namespace: {{ include "prometheus-kafka-exporter.namespace" . }}
   {{- end }}
   labels:
-    app.kubernetes.io/name: {{ include "prometheus-kafka-exporter.name" . }}
-    helm.sh/chart: {{ include "prometheus-kafka-exporter.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    {{- if .Values.prometheus.serviceMonitor.additionalLabels }}
-{{ toYaml .Values.prometheus.serviceMonitor.additionalLabels | indent 4 -}}
+    {{- include "prometheus-kafka-exporter.labels" . | nindent 4 }}
+    {{- with .Values.prometheus.serviceMonitor.additionalLabels }}
+    {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
-  jobLabel: jobLabel
+  {{- if .Values.prometheus.serviceMonitor.jobLabel }}
+  jobLabel: {{.Values.prometheus.serviceMonitor.jobLabel }}
+  {{- end }}
 {{- if .Values.prometheus.serviceMonitor.targetLabels }}
   targetLabels:
 {{- range .Values.prometheus.serviceMonitor.targetLabels }}
@@ -24,8 +25,7 @@ spec:
 {{- end }}
   selector:
     matchLabels:
-      app: {{ template "prometheus-kafka-exporter.name" . }}
-      release: {{ .Release.Name }}
+      {{- include "prometheus-kafka-exporter.selectorLabels" . | nindent 6 }}
   namespaceSelector:
     matchNames:
     - {{ .Release.Namespace }}

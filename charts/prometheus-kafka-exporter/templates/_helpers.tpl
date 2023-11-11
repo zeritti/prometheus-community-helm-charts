@@ -43,6 +43,27 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
+Define a set of common labels
+*/}}
+{{- define "prometheus-kafka-exporter.labels" -}}
+helm.sh/chart: {{ include "prometheus-kafka-exporter.chart" . }}
+{{ include "prometheus-kafka-exporter.selectorLabels" . }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- with .Values.commonLabels }}
+{{ toYaml . }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Define a set of selector labels
+*/}}
+{{- define "prometheus-kafka-exporter.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "prometheus-kafka-exporter.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
+
+{{/*
 Return the appropriate apiVersion for rbac.
 */}}
 {{- define "rbac.apiVersion" -}}
@@ -51,7 +72,7 @@ Return the appropriate apiVersion for rbac.
 {{- else -}}
 {{- print "rbac.authorization.k8s.io/v1beta1" -}}
 {{- end -}}
-{{- end -}} 
+{{- end -}}
 
 {{/*
 Create the name of the SASL SCRAM secret to use
@@ -75,4 +96,15 @@ Formats imagePullSecrets. Input is (dict "Values" .Values "imagePullSecrets" .{s
 - name: {{ . }}
   {{- end }}
 {{- end }}
+{{- end -}}
+
+{{/*
+Define overriding namespace
+*/}}
+{{- define "prometheus-kafka-exporter.namespace" -}}
+  {{- if .Values.namespaceOverride -}}
+    {{- .Values.namespaceOverride -}}
+  {{- else -}}
+    {{- .Release.Namespace -}}
+  {{- end -}}
 {{- end -}}

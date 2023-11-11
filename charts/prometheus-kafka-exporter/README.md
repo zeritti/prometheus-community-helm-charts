@@ -1,4 +1,4 @@
-# prometheus-kafka-exporter
+# Prometheus Kafka Exporter
 
 A Prometheus exporter for [Apacher Kafka](https://kafka.apache.org/) metrics.
 
@@ -18,7 +18,7 @@ helm repo add prometheus-community https://prometheus-community.github.io/helm-c
 helm repo update
 ```
 
-_See [`helm repo`](https://helm.sh/docs/helm/helm_repo/) for command documentation._
+_See [helm repo](https://helm.sh/docs/helm/helm_repo/) for command documentation._
 
 ## Install Chart
 
@@ -44,8 +44,34 @@ _See [helm uninstall](https://helm.sh/docs/helm/helm_uninstall/) for command doc
 ## Upgrading Chart
 
 ```console
-helm upgrade [RELEASE_NAME] [CHART] --install
+helm upgrade [RELEASE_NAME] prometheus-community/prometheus-kafka-exporter --install
 ```
+
+## To 3.0
+
+In release 3.0, labels and selectors have been replaced following [Helm 3 label and annotation best practices](https://helm.sh/docs/chart_best_practices/labels/):
+
+| Previous            | Current                      |
+|---------------------|------------------------------|
+| app                 | app.kubernetes.io/name       |
+| chart               | helm.sh/chart                |
+| [none]              | app.kubernetes.io/version    |
+| heritage            | app.kubernetes.io/managed-by |
+| release             | app.kubernetes.io/instance   |
+
+As the change is affecting immutable selector labels, the deployment must be deleted before upgrading the release:
+
+```console
+kubectl delete deploy -l app=prometheus-kafka-exporter
+```
+
+Once the resources have been deleted, you can upgrade the release:
+
+```console
+helm upgrade -i RELEASE_NAME prometheus-community/prometheus-kafka-exporter
+```
+
+Field `annotations` that has been applied to pod's annotations has been replaced with `pod.annotations`. If you previously set annotations by means of that field, please, use the new one instead.
 
 _See [helm upgrade](https://helm.sh/docs/helm/helm_upgrade/) for command documentation._
 

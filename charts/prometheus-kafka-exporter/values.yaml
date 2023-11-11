@@ -137,7 +137,27 @@ resources: {}
 
 nodeSelector: {}
 
-annotations: {}
+## Override release namespace
+namespaceOverride: ""
+
+## Override resource names
+fullnameOverride: ""
+
+## Override chart name
+nameOverride: ""
+
+## Custom labels to attach to all resources
+commonLabels: {}
+
+## Custom labels and annotations for pods
+pod:
+  annotations: {}
+  labels: {}
+
+## Custom labels and annotations for deployment
+deployment:
+  annotations: {}
+  labels: {}
 
 tolerations: []
 

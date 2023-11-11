@@ -4,10 +4,7 @@ kind: PodSecurityPolicy
 metadata:
   name: {{ template "prometheus-kafka-exporter.fullname" . }}
   labels:
-    app: {{ template "prometheus-kafka-exporter.name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
+    {{- include "prometheus-kafka-exporter.labels" . | nindent 4 }}
   annotations:
     seccomp.security.alpha.kubernetes.io/allowedProfileNames: 'docker/default'
     apparmor.security.beta.kubernetes.io/allowedProfileNames: 'runtime/default'
