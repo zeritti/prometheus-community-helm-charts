@@ -44,12 +44,10 @@ spec:
 {{- if .Values.server.schedulerName }}
       schedulerName: "{{ .Values.server.schedulerName }}"
 {{- end }}
-{{- if semverCompare ">=1.13-0" .Capabilities.KubeVersion.GitVersion }}
-      {{- if or (.Values.server.enableServiceLinks) (eq (.Values.server.enableServiceLinks | toString) "<nil>") }}
+{{- if or (.Values.server.enableServiceLinks) (eq (.Values.server.enableServiceLinks | toString) "<nil>") }}
       enableServiceLinks: true
-      {{- else }}
+{{- else }}
       enableServiceLinks: false
-      {{- end }}
 {{- end }}
       serviceAccountName: {{ template "prometheus.serviceAccountName.server" . }}
 {{- if kindIs "bool" .Values.server.automountServiceAccountToken }}

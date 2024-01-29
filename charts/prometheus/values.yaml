@@ -104,32 +104,33 @@ server:
 
   ## Opt out of automounting Kubernetes API credentials.
   ## If set it will override serviceAccounts.server.automountServiceAccountToken value for ServiceAccount.
+  ##
   # automountServiceAccountToken: false
 
-  ## Use a ClusterRole (and ClusterRoleBinding)
-  ## - If set to false - we define a RoleBinding in the defined namespaces ONLY
+  ## Name of an existing cluster role for prometheus' SA. The cluster role will be bound to the service account
+  ## with a role binding in the namespaces given in namespaces and/or releaseNamespace below.
+  ## This lets prometheus run its service discovery on selected namespaces only instead of cluster-wide.
   ##
-  ## NB: because we need a Role with nonResourceURL's ("/metrics") - you must get someone with Cluster-admin privileges to define this role for you, before running with this setting enabled.
-  ##     This makes prometheus work - for users who do not have ClusterAdmin privs, but wants prometheus to operate on their own namespaces, instead of clusterwide.
-  ##
-  ## You MUST also set namespaces to the ones you have access to and want monitored by Prometheus.
-  ##
-  # useExistingClusterRoleName: nameofclusterrole
+  useExistingClusterRoleName: ""
 
   ## If set it will override prometheus.server.fullname value for ClusterRole and ClusterRoleBinding
   ##
   clusterRoleNameOverride: ""
 
-  # Enable only the release namespace for monitoring. By default all namespaces are monitored.
-  # If releaseNamespace and namespaces are both set a merged list will be monitored.
+  ## Enable only the release namespace for service discovery. By default, service discovery is cluster-wide.
+  ## If releaseNamespace and namespaces are both set, a merged list will be created.
+  ##
   releaseNamespace: false
 
-  ## namespaces to monitor (instead of monitoring all - clusterwide). Needed if you want to run without Cluster-admin privileges.
-  # namespaces:
-  #   - yournamespace
+  ## Selected namespaces to run service discovery on.
+  ##
+  namespaces: []
+    # - yournamespace
 
-  # sidecarContainers - add more containers to prometheus server
-  # Key/Value where Key is the sidecar `- name: <Key>`
+  ## sidecarContainers - add more containers to prometheus server
+  ## Key/Value where Key is the sidecar container's `- name: <Key>`
+  ##
+  sidecarContainers: {}
   # Example:
   #   sidecarContainers:
   #      webserver:
@@ -147,10 +148,10 @@ server:
   #         name: oauth-proxy
   #         protocol: TCP
   #       resources: {}
-  sidecarContainers: {}
 
-  # sidecarTemplateValues - context to be used in template for sidecarContainers
-  # Example:
+  ## sidecarTemplateValues - context to be used in template for sidecarContainers
+  ##
+  sidecarTemplateValues: {}
   #   sidecarTemplateValues: *your-custom-globals
   #   sidecarContainers:
   #     webserver: |-
@@ -159,7 +160,6 @@ server:
   #   image: "{{ .Values.server.sidecarTemplateValues.repository }}:{{ .Values.server.sidecarTemplateValues.tag }}"
   #   ...
   #
-  sidecarTemplateValues: {}
 
   ## Prometheus server container image
   ##
@@ -328,9 +328,10 @@ server:
     ##
     enabled: false
 
-    # For Kubernetes >= 1.18 you should specify the ingress-controller via the field ingressClassName
-    # See https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/#specifying-the-class-of-an-ingress
-    # ingressClassName: nginx
+    ## Set Ingress class
+    ## https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-class
+    ##
+    ingressClassName: ""
 
     ## Prometheus server Ingress annotations
     ##
@@ -354,7 +355,7 @@ server:
 
     path: /
 
-    # pathType is only for k8s >= 1.18
+    # pathType
     pathType: Prefix
 
     ## Extra paths to prepend to every host configuration. This is useful when working with annotation based services.
