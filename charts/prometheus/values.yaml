@@ -930,7 +930,9 @@ scrapeConfigs:
         action: replace
         target_label: __metrics_path__
         regex: (.+)
-      - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
+      - source_labels:
+        - __address__
+        - __meta_kubernetes_service_annotation_prometheus_io_port
         action: replace
         target_label: __address__
         regex: (.+?)(?::\d+)?;(\d+)
@@ -985,7 +987,9 @@ scrapeConfigs:
         action: replace
         target_label: __metrics_path__
         regex: (.+)
-      - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
+      - source_labels:
+        - __address__
+        - __meta_kubernetes_service_annotation_prometheus_io_port
         action: replace
         target_label: __address__
         regex: (.+?)(?::\d+)?;(\d+)
@@ -1065,7 +1069,10 @@ scrapeConfigs:
       - role: ingress
     metricRelabelings: []
     relabelings:
-      - source_labels: [__meta_kubernetes_ingress_scheme, __address__, __meta_kubernetes_ingress_path]
+      - source_labels:
+        - __meta_kubernetes_ingress_scheme
+        - __address__
+        - __meta_kubernetes_ingress_path
         regex: (.+);(.+);(.+)
         replacement: ${1}://${2}${3}
         target_label: __param_target
@@ -1113,12 +1120,16 @@ scrapeConfigs:
         action: replace
         target_label: __metrics_path__
         regex: (.+)
-      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port, __meta_kubernetes_pod_ip]
+      - source_labels:
+        - __meta_kubernetes_pod_annotation_prometheus_io_port
+        - __meta_kubernetes_pod_ip
         action: replace
         regex: (\d+);(([A-Fa-f0-9]{1,4}::?){1,7}[A-Fa-f0-9]{1,4})
         replacement: '[$2]:$1'
         target_label: __address__
-      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port, __meta_kubernetes_pod_ip]
+      - source_labels:
+        - __meta_kubernetes_pod_annotation_prometheus_io_port
+        - __meta_kubernetes_pod_ip
         action: replace
         regex: (\d+);((([0-9]+?)(\.|$)){4})
         replacement: $2:$1
@@ -1173,12 +1184,16 @@ scrapeConfigs:
         action: replace
         target_label: __metrics_path__
         regex: (.+)
-      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port, __meta_kubernetes_pod_ip]
+      - source_labels:
+        - __meta_kubernetes_pod_annotation_prometheus_io_port
+        - __meta_kubernetes_pod_ip
         action: replace
         regex: (\d+);(([A-Fa-f0-9]{1,4}::?){1,7}[A-Fa-f0-9]{1,4})
         replacement: '[$2]:$1'
         target_label: __address__
-      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port, __meta_kubernetes_pod_ip]
+      - source_labels:
+        - __meta_kubernetes_pod_annotation_prometheus_io_port
+        - __meta_kubernetes_pod_ip
         action: replace
         regex: (\d+);((([0-9]+?)(\.|$)){4})
         replacement: $2:$1
