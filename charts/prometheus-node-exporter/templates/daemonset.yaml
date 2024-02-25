@@ -25,7 +25,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "prometheus-node-exporter.labels" . | nindent 8 }}
+        {{- include "prometheus-node-exporter.podLabels" . | nindent 8 }}
     spec:
       automountServiceAccountToken: {{ ternary true false (or .Values.serviceAccount.automountServiceAccountToken .Values.kubeRBACProxy.enabled) }}
       {{- with .Values.securityContext }}

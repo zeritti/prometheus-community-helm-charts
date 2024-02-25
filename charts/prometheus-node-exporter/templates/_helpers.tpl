@@ -200,3 +200,13 @@ labelValueLengthLimit: {{ . }}
 {{- end }}
 {{- end }}
 {{- end }}
+
+{{/*
+Define prometheus-node-exporter.podLabels to set labels in pod template excluding
+version-dependent labels from prometheus-node-exporter.labels avoiding
+unnecessary roll-outs
+*/}}
+{{- define "prometheus-node-exporter.podLabels" -}}
+{{- $podLabels := include "prometheus-node-exporter.labels" . | fromYaml }}
+{{- omit $podLabels "app.kubernetes.io/version" "helm.sh/chart" | toYaml }}
+{{- end }}
