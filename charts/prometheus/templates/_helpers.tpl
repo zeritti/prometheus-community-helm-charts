@@ -232,3 +232,12 @@ Define prometheus.server.remoteRead producing a list of remoteRead configuration
 {{ toYaml $remoteReads }}
 {{- end -}}
 
+{{/*
+Define prometheus.podLabels to set labels in pod template excluding
+version-dependent labels from prometheus.server.labels avoiding
+unnecessary roll-outs
+*/}}
+{{- define "prometheus.podLabels" -}}
+{{- $podLabels := include "prometheus.server.labels" . | fromYaml }}
+{{- omit $podLabels "app.kubernetes.io/version" "helm.sh/chart" | toYaml }}
+{{- end }}
