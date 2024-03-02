@@ -774,8 +774,7 @@ scrapeConfigs:
 
   ## Default settings for all scrape configs. Can be overriden in scrape configs below.
   ##
-  ## Metrics path. In the prometheus job, server.prefixURL is being combined
-  ## with the (default or job-specific) path, e.g. PREFIX/metrics.
+  ## Metrics path
   metricsPath: /metrics
   ## Scrape interval (see also server.global)
   scrapeInterval: 1m
@@ -793,6 +792,9 @@ scrapeConfigs:
     jobName: prometheus
     ## Basic authentication
     basicAuth: {}
+    ## Metrics path. server.prefixURL if set is being concatenated
+    ## with the (default or job-specific) metrics path, e.g. PREFIX/metrics.
+    # metricsPath: /metrics
     ## TLS configuration
     tlsConfig: {}
     ## static_configs for local Prometheus instance
