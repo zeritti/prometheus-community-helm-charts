@@ -1025,6 +1025,7 @@ scrapeConfigs:
         regex: pushgateway
 
   ## Job kubernetes-services (role service)
+  ## Requires Blackbox Exporter and its hostname/port in relabelings
   servicesConfig:
     enabled: true
     jobName: kubernetes-services
@@ -1057,6 +1058,7 @@ scrapeConfigs:
         target_label: service
 
   ## Job kubernetes-ingresses (role ingress)
+  ## Requires Blackbox Exporter and its hostname/port in relabelings
   ingressesConfig:
     enabled: true
     jobName: kubernetes-ingresses
