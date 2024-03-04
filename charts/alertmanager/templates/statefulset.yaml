@@ -12,7 +12,9 @@ metadata:
   namespace: {{ include "alertmanager.namespace" . }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  {{- if semverCompare ">=1.23.0-0" .Capabilities.KubeVersion.Version }}
   minReadySeconds: {{ .Values.minReadySeconds }}
+  {{- end }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   selector:
     matchLabels:
