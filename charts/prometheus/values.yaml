@@ -210,14 +210,14 @@ server:
   ##       key: username
   env: []
 
-  # List of flags to override default parameters, e.g:
+  # List of flags to override all default parameters, e.g:
   # - --enable-feature=agent
   # - --storage.agent.retention.max-time=30m
   # - --config.file=/etc/config/prometheus.yml
   defaultFlagsOverride: []
 
-  extraFlags:
-    - web.enable-lifecycle
+  ## Set additional flags that do not require arguments. See also extraArgs below.
+  extraFlags: []
     ## web.enable-admin-api flag controls access to the administrative HTTP API which includes functionality such as
     ## deleting time series. This is disabled by default.
     # - web.enable-admin-api
@@ -228,6 +228,10 @@ server:
     ## storage.tsdb.wal-compression flag enables compression of the write-ahead log (WAL)
     # - storage.tsdb.wal-compression
 
+  ## webEnableLifecycleFlag (bool) sets flag web.enable-lifecycle.
+  ## This flag is required if configmapReload is enabled.
+  webEnableLifecycleFlag: true
+
   ## Path to a configuration file on prometheus server container FS
   configPath: /etc/config/prometheus.yml
 
@@ -235,6 +239,8 @@ server:
   ### When empty server.persistentVolume.mountPath is used instead
   storagePath: ""
 
+  ## global configuration section in Prometheus' configuration file
+  ## ref. https://prometheus.io/docs/prometheus/latest/configuration/configuration/ 
   global:
     ## How frequently to scrape targets by default
     ##
@@ -245,9 +251,11 @@ server:
     ## How frequently to evaluate rules
     ##
     evaluation_interval: 1m
+  
   ## https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write
   ##
   remoteWrite: []
+  
   ## https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_read
   ##
   remoteRead: []
@@ -320,6 +328,7 @@ server:
   ## Extra labels for Prometheus server ConfigMap (ConfigMap that holds serverFiles)
   extraConfigmapLabels: {}
 
+  ## ingress configuration
   ingress:
     ## If true, Prometheus server Ingress will be created
     ##
