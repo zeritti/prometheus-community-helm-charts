@@ -65,6 +65,12 @@ helm upgrade [RELEASE_NAME] prometheus-community/prometheus --install
 
 _See [helm upgrade](https://helm.sh/docs/helm/helm_upgrade/) for command documentation._
 
+### To 26.0
+
+Previously, prometheus' flag `web.enable-lifecycle` has been set as the first element in list `server.extraFlags` by default and care had to be taken to keep this element when modifying the list. This release introduces a separate field, namely `server.webEnableLifecycleFlag` (bool, default _true_) instead, so that `server.extraFlags` can be freely modified as the list is now empty by default.
+
+If you have set `server.extraFlags` including the flag `web.enable-lifecyle` in your custom configuration, please, remove the flag from the list before upgrading.
+
 ### To 25.0
 
 The `server.remoteRead[].url` and `server.remoteWrite[].url` fields now support templating. Allowing for `url` values such as `https://{{ .Release.Name }}.example.com`.

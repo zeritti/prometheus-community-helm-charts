@@ -667,6 +667,9 @@
                             "type": "boolean"
                         }
                     }
+                },
+                "webEnableLifecycleFlag": {
+                    "type": "boolean"
                 }
             }
         },
