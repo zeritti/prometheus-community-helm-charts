@@ -10,14 +10,14 @@ This chart bootstraps a [Prometheus](https://prometheus.io/) deployment on a [Ku
 - Helm 3.7+
 
 ## Get Repository Info
-
+<!-- textlint-disable terminology -->
 ```console
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 ```
 
-_See [helm repository](https://helm.sh/docs/helm/helm_repo/) for command documentation._
-
+_See [helm repo](https://helm.sh/docs/helm/helm_repo/) for command documentation._
+<!-- textlint-enable -->
 ## Install Chart
 
 Starting with version 16.0, the Prometheus chart requires Helm 3.7+ in order to install successfully. Please check your `helm` release before installation.
@@ -65,16 +65,11 @@ helm upgrade [RELEASE_NAME] prometheus-community/prometheus --install
 
 _See [helm upgrade](https://helm.sh/docs/helm/helm_upgrade/) for command documentation._
 
-### To 27.0
+### To 26.0
 
 Previously, prometheus' flag `web.enable-lifecycle` has been set as the first element in list `server.extraFlags` by default and care had to be taken to keep this element when modifying the list. This release introduces a separate field, namely `server.webEnableLifecycleFlag` (bool, default _true_) instead, so that `server.extraFlags` can be freely modified as the list is now empty by default.
 
 If you have set `server.extraFlags` including the flag `web.enable-lifecyle` in your custom configuration, please, remove the flag from the list before upgrading.
-
-### To 26.0
-
-This release changes default version of promethues to v3.0.0, See official [migration guide](https://prometheus.io/docs/prometheus/latest/migration/#prometheus-3-0-migration-guide
-) and [release notes](https://github.com/prometheus/prometheus/releases/tag/v3.0.0) for more details.
 
 ### To 25.0
 
