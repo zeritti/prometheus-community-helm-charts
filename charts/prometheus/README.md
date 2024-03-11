@@ -10,14 +10,14 @@ This chart bootstraps a [Prometheus](https://prometheus.io/) deployment on a [Ku
 - Helm 3.7+
 
 ## Get Repository Info
-
+<!-- textlint-disable terminology -->
 ```console
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 ```
 
-_See [helm repository](https://helm.sh/docs/helm/helm_repo/) for command documentation._
-
+_See [helm repo](https://helm.sh/docs/helm/helm_repo/) for command documentation._
+<!-- textlint-enable -->
 ## Install Chart
 
 Starting with version 16.0, the Prometheus chart requires Helm 3.7+ in order to install successfully. Please check your `helm` release before installation.
@@ -70,6 +70,19 @@ _See [helm upgrade](https://helm.sh/docs/helm/helm_upgrade/) for command documen
 Previously, prometheus' flag `web.enable-lifecycle` has been set as the first element in list `server.extraFlags` by default and care had to be taken to keep this element when modifying the list. This release introduces a separate field, namely `server.webEnableLifecycleFlag` (bool, default _true_) instead, so that `server.extraFlags` can be freely modified as the list is now empty by default.
 
 If you have set `server.extraFlags` including the flag `web.enable-lifecyle` in your custom configuration, please, remove the flag from the list before upgrading.
+
+If you did not set any custom elements in `server.extraFlags`, the field has still to be reset when upgrading,
+either in your values file setting `server.extraFlags: null` and upgrading:
+
+```console
+helm upgrade RELEASE_NAME prometheus-community/prometheus -f VALUES_FILE
+```
+
+or on the command line:
+
+```console
+helm upgrade RELEASE_NAME prometheus-community/prometheus --set server.extraFlags=null
+```
 
 ### To 25.0
 
@@ -335,15 +348,13 @@ helm install [RELEASE_NAME] prometheus-community/prometheus -f values.yaml -f se
 
 Roles and RoleBindings resources will be created automatically for `server` service.
 
-To manually setup RBAC you need to set the parameter `rbac.create=false` and specify the service account to be used for each service by setting the parameters: `serviceAccounts.{{ component }}.create` to `false` and `serviceAccounts.{{ component }}.name` to the name of a pre-existing service account.
+To manually setup RBAC you need to set the parameter `rbac.create=false` and specify the service account to be used by setting the parameters `serviceAccounts.server.create` to `false` and `serviceAccounts.server.name` to the name of a pre-existing service account.
 
 > **Tip**: You can refer to the default `*-clusterrole.yaml` and `*-clusterrolebinding.yaml` files in [templates](templates/) to customize your own.
 
 ### ConfigMap Files
 
-AlertManager is configured through [alertmanager.yml](https://prometheus.io/docs/alerting/configuration/). This file (and any others listed in `alertmanagerFiles`) will be mounted into the `alertmanager` pod.
-
-Prometheus is configured through [prometheus.yml](https://prometheus.io/docs/operating/configuration/). This file (and any others listed in `serverFiles`) will be mounted into the `server` pod.
+Prometheus is configured through [prometheus.yml](https://prometheus.io/docs/prometheus/latest/configuration/configuration/). This file (and any others listed in `serverFiles`) will be mounted into the `server` pod.
 
 ### Ingress TLS
 
@@ -355,7 +366,7 @@ To manually configure TLS, first create/retrieve a key & certificate pair for th
 kubectl create secret tls prometheus-server-tls --cert=path/to/tls.cert --key=path/to/tls.key
 ```
 
-Include the secret's name, along with the desired hostnames, in the alertmanager/server Ingress TLS section of your custom `values.yaml` file:
+Include the secret's name, along with the desired hostnames, in the server Ingress TLS section of your custom `values.yaml` file:
 
 ```yaml
 server:
@@ -381,8 +392,6 @@ server:
 
 ### NetworkPolicy
 
-Enabling Network Policy for Prometheus will secure connections to Alert Manager and Kube State Metrics by only accepting connections from Prometheus Server. All inbound connections to Prometheus Server are still allowed.
-
-To enable network policy for Prometheus, install a networking plugin that implements the Kubernetes NetworkPolicy spec, and set `networkPolicy.enabled` to true.
+To enable network policy for Prometheus, install a networking plugin that implements the Kubernetes NetworkPolicy spec, and set `networkPolicy.enabled` to _true_.
 
 If NetworkPolicy is enabled for Prometheus' scrape targets, you may also need to manually create a networkpolicy which allows it.
