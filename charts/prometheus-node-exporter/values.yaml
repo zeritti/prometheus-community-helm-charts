@@ -84,12 +84,18 @@ kubeRBACProxy:
   #  cpu: 10m
   #  memory: 32Mi
 
+## Port number of the main container and of the RBAC proxy if enabled
+containerPort: 9100
+## Name of the exporter's port
+containerPortName: metrics
+
 service:
   enabled: true
   type: ClusterIP
   port: 9100
-  targetPort: 9100
-  nodePort:
+  ## targetPort defaults to containerPort
+  targetPort: null
+  nodePort: null
   portName: metrics
   listenOnAllInterfaces: true
   annotations:
@@ -402,7 +408,7 @@ terminationMessageParams:
 
 
 ## Assign a PriorityClassName to pods if set
-# priorityClassName: ""
+priorityClassName: ""
 
 ## Additional container arguments
 ##

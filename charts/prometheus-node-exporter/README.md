@@ -41,6 +41,15 @@ helm upgrade [RELEASE_NAME] prometheus-community/prometheus-node-exporter --inst
 
 _See [helm upgrade](https://helm.sh/docs/helm/helm_upgrade/) for command documentation._
 
+### 4.x to 5.x
+
+Release 5.0 enables setting the container port independently from the service port. Previously,
+`service.port` also set the listening port of the container (target port of the service), either Node Exporter's port or kube-rbac-proxy's port. It was not possible to configure different values for the two ports.
+
+This release introduces field `containerPort` for setting the port on which Node Exporter container or kube-rbac-proxy container listens (default `9100`). Furthermore, name of the container port previously set in `service.portName` can also be set independently in field `containerPortName` (default `metrics`). The change affects neither the service port nor the service port name.
+
+In case you modified `service.port` and wish to keep it for the container as before, please, set the corresponding value in the new field `containerPort`. Similarly with `service.portName` and `containerPortName`.
+
 ### 3.x to 4.x
 
 Starting from version 4.0.0, the `node exporter` chart is using the [Kubernetes recommended labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/). Therefore you have to delete the daemonset before you upgrade.
