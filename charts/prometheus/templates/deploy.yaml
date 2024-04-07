@@ -229,8 +229,10 @@ spec:
             - name: config-volume
               mountPath: /etc/config
             - name: storage-volume
-              mountPath: {{ .Values.server.persistentVolume.mountPath }}
+              mountPath: {{ ternary .Values.server.persistentVolume.mountPath .Values.server.storagePath (empty .Values.server.storagePath) }}
+              {{- if and .Values.server.persistentVolume.enabled .Values.server.persistentVolume.subPath }}
               subPath: "{{ .Values.server.persistentVolume.subPath }}"
+              {{- end }}
           {{- range .Values.server.extraHostPathMounts }}
             - name: {{ .name }}
               mountPath: {{ .mountPath }}
