@@ -1,0 +1,28 @@
+apiVersion: v2
+name: prometheus-graphite-exporter
+description: A Helm chart for Prometheus Graphite Exporter
+# renovate: github=prometheus/graphite_exporter
+appVersion: 0.16.0
+version: 0.1.0
+kubeVersion: ">=1.19.0-0"
+home: https://github.com/prometheus/graphite_exporter
+icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346. png
+keywords:
+  - exporter
+  - graphite
+  - monitoring
+  - prometheus
+maintainers:
+  - name: zeritti
+    email: rootsandtrees@posteo.de
+    url: https://github.com/zeritti
+sources:
+  - https://github.com/prometheus/graphite_exporter
+annotations:
+  "artifacthub.io/license": Apache-2.0
+  "artifacthub.io/links": |
+    - name: Chart Source
+      url: https://github.com/prometheus-community/helm-charts
+    - name: Upstream Project
+      url: https://github.com/prometheus/graphite_exporter
+type: application

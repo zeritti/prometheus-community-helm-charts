@@ -1,0 +1,62 @@
+{{- if .Values.serviceMonitor.enabled }}
+{{- $name := include "prometheus-graphite-exporter.fullname" $ }}
+{{- with .Values.serviceMonitor }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  {{- with .annotations }}
+  annotations: {{ toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "prometheus-graphite-exporter.labels" $ | nindent 4 }}
+    {{- with .labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  name: {{ include "prometheus-graphite-exporter.fullname" $ }}
+  namespace: {{ default (include "prometheus-graphite-exporter.namespace" $) .namespace }}
+spec:
+  endpoints:
+    - port: {{ $.Values.service.portName }}
+      path: {{ $.Values.metrics.path }}
+      scheme: {{ .scheme }}
+      interval: {{ .interval }}
+      scrapeTimeout: {{ .scrapeTimeout }}
+      honorLabels: {{ .honorLabels }}
+      {{- with .metricRelabelings }}
+      metricRelabelings: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .relabelings }}
+      relabelings: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if and $.Values.webConfiguration (empty $.Values.serviceMonitor.basicAuth) }}
+      basicAuth:
+        password:
+          name: {{ printf "%s-%s" $name "basic-auth" | trunc 63 | trimSuffix "-"}}
+          key: password
+        username:
+          name: {{ printf "%s-%s" $name "basic-auth" | trunc 63 | trimSuffix "-"}}
+          key: user
+      {{- else if not (empty $.Values.serviceMonitor.basicAuth) }}
+      basicAuth: {{ toYaml $.Values.serviceMonitor.basicAuth | nindent 8 }}
+      {{- end }}
+      {{- with .tlsConfig }}
+      tlsConfig: {{ toYaml . | nindent 8 }}
+      {{- end }}
+  {{- if .jobLabel }}
+  jobLabel: {{ .jobLabel }}
+  {{- end }}
+  {{- with .targetLabels }}
+  targetLabels: {{ toYaml . | nindent 4 }}
+  {{- end }}
+{{- if .attachMetadata.node }}
+  attachMetadata:
+    node: true
+{{- end }}
+  selector:
+    matchLabels: {{ include "prometheus-graphite-exporter.selectorLabels" $ | nindent 6 }}
+  namespaceSelector:
+    matchNames:
+      - {{ include "prometheus-graphite-exporter.namespace" $ }}
+{{- end }}
+{{- end }}

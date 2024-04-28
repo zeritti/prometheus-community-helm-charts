@@ -1,0 +1,237 @@
+---
+## Default values for prometheus-graphite-exporter.
+## This is a YAML-formatted file.
+## Declare variables to be passed into your templates.
+
+## Count of replicas
+replicaCount: 1
+
+## Image and registry configuration
+image:
+  ## Registry hostname
+  registry: quay.io
+  ## Repository path
+  repository: prometheus/graphite-exporter
+  ## Image pull policy
+  pullPolicy: IfNotPresent
+  ## Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+  ## Digest overrides tag
+  digest: ""
+
+## Image pull secrets
+imagePullSecrets: []
+
+## Chart name override
+nameOverride: ""
+
+## Full name override
+fullnameOverride: ""
+
+## Override installation namespace
+namespaceOverride: ""
+
+## Service account configuration
+serviceAccount:
+  ## Specifies whether a service account should be created
+  create: true
+  ## Automatically mount a ServiceAccount's API token
+  automount: false
+  ## Annotations
+  annotations: {}
+  ## Labels
+  labels: {}
+  ## The name of the service account to use.
+  ## If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# Enable basic auth via web configuration (web-config)
+# To enable basic authentication, provide basicAuthUsers as a map
+# If serviceMonitor.enabled is set, a secret with these credentials will be created
+# and configured in serviceMonitor. serviceMonitor.basicAuth overrides this secret.
+webConfiguration: {}
+  # basicAuthUsers:
+  #   username: password
+
+## Commmon labels for all resources
+commonLabels: {}
+
+## Pod labels
+podAnnotations: {}
+## Pod annotations
+podLabels: {}
+
+## Deployment labels
+deploymentAnnotations: {}
+## Deployment annotations
+deploymentLabels: {}
+
+## Security context of the pod
+podSecurityContext:
+  runAsGroup: 65534
+  runAsNonRoot: true
+  runAsUser: 65534
+
+## Security context of the container
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  readOnlyRootFilesystem: true
+  seccompProfile:
+    type: RuntimeDefault
+
+## Container's metrics port, port name and telemetry path
+metrics:
+  ## Container's metrics port
+  port: 9108
+  ## Container's metrics port name
+  portName: metrics
+  ## Telemetry path
+  path: /metrics
+
+## Service configuration
+service:
+  enabled: true
+  ## Service type
+  type: ClusterIP
+
+  ## Metrics port
+  port: 9108
+  ## Metrics port name
+  portName: metrics
+
+  ## Receiver ports
+  ## TCP/UDP port
+  graphitePort: 9109
+  ## TCP port name
+  graphitePortName: graphite
+  ## UDP port name
+  graphiteUdpPortName: graphite-udp
+
+  ## Annotations
+  annotations: {}
+  ## Labels
+  labels: {}
+
+## Exporter's runtime parameters
+graphite:
+  ## TCP and UDP port on which to accept samples
+  port: 9109
+  portName: graphite
+  udpPortName: graphite-udp
+  ## Maximum size of metric mapping cache (1000)
+  # @schema
+  # type: [integer, null]
+  # @schema
+  cacheSize: null
+  ## Metric mapping cache type. Valid options are "lru" (default) and "random"
+  cacheType: ""
+  ## Force strict mapping match
+  mappingStrictMatch: false
+  ## How long a sample is valid for (5m)
+  sampleExpiry: ""
+
+  ## Mapping configuration to be stored a configmap and mounted at graphite-mapping.conf file (string)
+  ## ref. https://github.com/prometheus/graphite_exporter#yaml-config
+  mappingConfig: ""
+  # mappingConfig: |-
+    # mappings:
+    # - match: test.dispatcher.*.*.*
+    #   name: dispatcher_events_total
+    #   labels:
+    #     action: $2
+    #     job: test_dispatcher
+    #     outcome: $3
+    #     processor: $1
+
+  ## Additional labels to attach to the configmap of mapppingConfig
+  labels: {}
+  ## Annotations to attach to the configmap of mapppingConfig
+  annotations: {}
+
+## Additional flags. For flags without argument, set key with its value empty or null.
+extraFlags: {}
+  # log.level: debug
+
+## Container resources
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+## Liveness probe
+livenessProbe:
+  httpGet:
+    path: /
+    port: metrics
+  initialDelaySeconds: 3
+
+## Readiness probe
+readinessProbe:
+  httpGet:
+    path: /
+    port: metrics
+
+## Additional volumes in the pod
+extraVolumes: []
+# - name: foo
+#   secret:
+#     secretName: mysecret
+#     optional: false
+
+## Additional volume mounts in the container
+extraVolumeMounts: []
+# - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
+
+## Node selector
+nodeSelector: {}
+
+## Tolerations
+tolerations: []
+
+## Affinity
+affinity: {}
+
+## Service monitor
+## ref. https://prometheus-operator.dev/docs/operator/api/#monitoring.coreos.com/v1.ServiceMonitor
+serviceMonitor:
+  enabled: false
+
+  annotations: {}
+  labels: {}
+    # release: kube-prometheus-stack
+  namespace: ""
+
+  attachMetadata:
+    node: false
+  basicAuth: {}
+  honorLabels: false
+  interval: 60s
+  jobLabel: ""
+  scheme: http
+  scrapeTimeout: 10s
+  targetLabels: []
+  tlsConfig: {}
+
+  metricRelabelings: []
+  relabelings: []
+
+## Extra manifests (templated) to deploy with the chart (array of strings)
+extraManifests: []
+  # - |
+  #   apiVersion: v1
+  #   kind: ConfigMap
+  #   metadata:
+  #     name: extra-cm
+  #   data:
+  #     GREETING: "hello"

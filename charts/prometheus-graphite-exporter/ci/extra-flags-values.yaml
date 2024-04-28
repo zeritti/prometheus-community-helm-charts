@@ -1,0 +1,3 @@
+---
+extraFlags:
+  log.level: debug

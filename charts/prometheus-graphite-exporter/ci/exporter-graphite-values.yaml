@@ -1,0 +1,6 @@
+---
+graphite:
+  cacheSize: 1500
+  cacheType: lru
+  mappingStrictMatch: true
+  sampleExpiry: 3m

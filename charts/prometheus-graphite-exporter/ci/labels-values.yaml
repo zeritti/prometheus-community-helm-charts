@@ -1,0 +1,7 @@
+---
+commonLabels:
+  foo: bar
+podLabels:
+  baz: qux
+deploymentLabels:
+  quux: fie

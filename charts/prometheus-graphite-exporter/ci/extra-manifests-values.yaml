@@ -1,0 +1,10 @@
+---
+extraManifests:
+  - |
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: extra-secret
+      labels: {{ include "prometheus-graphite-exporter.labels" . | nindent 4 }}
+    stringData:
+      foo: bar

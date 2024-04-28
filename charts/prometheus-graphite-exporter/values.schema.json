@@ -1,0 +1,667 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "affinity": {
+      "description": "# Affinity",
+      "required": [],
+      "title": "affinity",
+      "type": "object"
+    },
+    "commonLabels": {
+      "description": "# Commmon labels for all resources",
+      "required": [],
+      "title": "commonLabels",
+      "type": "object"
+    },
+    "deploymentAnnotations": {
+      "description": "# Deployment labels",
+      "required": [],
+      "title": "deploymentAnnotations",
+      "type": "object"
+    },
+    "deploymentLabels": {
+      "description": "# Deployment annotations",
+      "required": [],
+      "title": "deploymentLabels",
+      "type": "object"
+    },
+    "extraFlags": {
+      "description": "# Additional flags. For flags without argument, set key with its value empty or null.",
+      "required": [],
+      "title": "extraFlags",
+      "type": "object"
+    },
+    "extraManifests": {
+      "description": "# Extra manifests (templated) to deploy with the chart (array of strings)",
+      "items": {
+        "required": []
+      },
+      "required": [],
+      "title": "extraManifests",
+      "type": "array"
+    },
+    "extraVolumeMounts": {
+      "description": "# Additional volume mounts in the container",
+      "items": {
+        "required": []
+      },
+      "required": [],
+      "title": "extraVolumeMounts",
+      "type": "array"
+    },
+    "extraVolumes": {
+      "description": "# Additional volumes in the pod",
+      "items": {
+        "required": []
+      },
+      "required": [],
+      "title": "extraVolumes",
+      "type": "array"
+    },
+    "fullnameOverride": {
+      "default": "",
+      "description": "# Full name override",
+      "required": [],
+      "title": "fullnameOverride",
+      "type": "string"
+    },
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
+    "graphite": {
+      "description": "# Exporter's runtime parameters",
+      "properties": {
+        "annotations": {
+          "description": "# Annotations to attach to the configmap of mapppingConfig",
+          "required": [],
+          "title": "annotations",
+          "type": "object"
+        },
+        "cacheSize": {
+          "default": "null",
+          "description": "# Maximum size of metric mapping cache (1000)",
+          "required": [],
+          "title": "cacheSize",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "cacheType": {
+          "default": "",
+          "description": "# Metric mapping cache type. Valid options are \"lru\" (default) and \"random\"",
+          "required": [],
+          "title": "cacheType",
+          "type": "string"
+        },
+        "labels": {
+          "description": "# Additional labels to attach to the configmap of mapppingConfig",
+          "required": [],
+          "title": "labels",
+          "type": "object"
+        },
+        "mappingConfig": {
+          "default": "",
+          "description": "# Mapping configuration to be stored a configmap and mounted at graphite-mapping.conf file (string)\n# ref. https://github.com/prometheus/graphite_exporter#yaml-config",
+          "required": [],
+          "title": "mappingConfig",
+          "type": "string"
+        },
+        "mappingStrictMatch": {
+          "default": false,
+          "description": "# Force strict mapping match",
+          "required": [],
+          "title": "mappingStrictMatch",
+          "type": "boolean"
+        },
+        "port": {
+          "default": 9109,
+          "description": "# TCP and UDP port on which to accept samples",
+          "required": [],
+          "title": "port",
+          "type": "integer"
+        },
+        "portName": {
+          "default": "graphite",
+          "required": [],
+          "title": "portName",
+          "type": "string"
+        },
+        "sampleExpiry": {
+          "default": "",
+          "description": "# How long a sample is valid for (5m)",
+          "required": [],
+          "title": "sampleExpiry",
+          "type": "string"
+        },
+        "udpPortName": {
+          "default": "graphite-udp",
+          "required": [],
+          "title": "udpPortName",
+          "type": "string"
+        }
+      },
+      "required": [],
+      "title": "graphite",
+      "type": "object"
+    },
+    "image": {
+      "description": "# Image and registry configuration",
+      "properties": {
+        "digest": {
+          "default": "",
+          "description": "# Digest overrides tag",
+          "required": [],
+          "title": "digest",
+          "type": "string"
+        },
+        "pullPolicy": {
+          "default": "IfNotPresent",
+          "description": "# Image pull policy",
+          "required": [],
+          "title": "pullPolicy",
+          "type": "string"
+        },
+        "registry": {
+          "default": "quay.io",
+          "description": "# Registry hostname",
+          "required": [],
+          "title": "registry",
+          "type": "string"
+        },
+        "repository": {
+          "default": "prometheus/graphite-exporter",
+          "description": "# Repository path",
+          "required": [],
+          "title": "repository",
+          "type": "string"
+        },
+        "tag": {
+          "default": "",
+          "description": "# Overrides the image tag whose default is the chart appVersion.",
+          "required": [],
+          "title": "tag",
+          "type": "string"
+        }
+      },
+      "required": [],
+      "title": "image",
+      "type": "object"
+    },
+    "imagePullSecrets": {
+      "description": "# Image pull secrets",
+      "items": {
+        "required": []
+      },
+      "required": [],
+      "title": "imagePullSecrets",
+      "type": "array"
+    },
+    "livenessProbe": {
+      "description": "# Liveness probe",
+      "properties": {
+        "httpGet": {
+          "properties": {
+            "path": {
+              "default": "/",
+              "required": [],
+              "title": "path",
+              "type": "string"
+            },
+            "port": {
+              "default": "metrics",
+              "required": [],
+              "title": "port",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "httpGet",
+          "type": "object"
+        },
+        "initialDelaySeconds": {
+          "default": 3,
+          "required": [],
+          "title": "initialDelaySeconds",
+          "type": "integer"
+        }
+      },
+      "required": [],
+      "title": "livenessProbe",
+      "type": "object"
+    },
+    "metrics": {
+      "description": "# Container's metrics port, port name and telemetry path",
+      "properties": {
+        "path": {
+          "default": "/metrics",
+          "description": "# Telemetry path",
+          "required": [],
+          "title": "path",
+          "type": "string"
+        },
+        "port": {
+          "default": 9108,
+          "description": "# Container's metrics port",
+          "required": [],
+          "title": "port",
+          "type": "integer"
+        },
+        "portName": {
+          "default": "metrics",
+          "description": "# Container's metrics port name",
+          "required": [],
+          "title": "portName",
+          "type": "string"
+        }
+      },
+      "required": [],
+      "title": "metrics",
+      "type": "object"
+    },
+    "nameOverride": {
+      "default": "",
+      "description": "# Chart name override",
+      "required": [],
+      "title": "nameOverride",
+      "type": "string"
+    },
+    "namespaceOverride": {
+      "default": "",
+      "description": "# Override installation namespace",
+      "required": [],
+      "title": "namespaceOverride",
+      "type": "string"
+    },
+    "nodeSelector": {
+      "description": "# Node selector",
+      "required": [],
+      "title": "nodeSelector",
+      "type": "object"
+    },
+    "podAnnotations": {
+      "description": "# Pod labels",
+      "required": [],
+      "title": "podAnnotations",
+      "type": "object"
+    },
+    "podLabels": {
+      "description": "# Pod annotations",
+      "required": [],
+      "title": "podLabels",
+      "type": "object"
+    },
+    "podSecurityContext": {
+      "description": "# Security context of the pod",
+      "properties": {
+        "runAsGroup": {
+          "default": 65534,
+          "required": [],
+          "title": "runAsGroup",
+          "type": "integer"
+        },
+        "runAsNonRoot": {
+          "default": true,
+          "required": [],
+          "title": "runAsNonRoot",
+          "type": "boolean"
+        },
+        "runAsUser": {
+          "default": 65534,
+          "required": [],
+          "title": "runAsUser",
+          "type": "integer"
+        }
+      },
+      "required": [],
+      "title": "podSecurityContext",
+      "type": "object"
+    },
+    "readinessProbe": {
+      "description": "# Readiness probe",
+      "properties": {
+        "httpGet": {
+          "properties": {
+            "path": {
+              "default": "/",
+              "required": [],
+              "title": "path",
+              "type": "string"
+            },
+            "port": {
+              "default": "metrics",
+              "required": [],
+              "title": "port",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "httpGet",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "readinessProbe",
+      "type": "object"
+    },
+    "replicaCount": {
+      "default": 1,
+      "description": "# Count of replicas",
+      "required": [],
+      "title": "replicaCount",
+      "type": "integer"
+    },
+    "resources": {
+      "description": "# Container resources",
+      "required": [],
+      "title": "resources",
+      "type": "object"
+    },
+    "securityContext": {
+      "description": "# Security context of the container",
+      "properties": {
+        "allowPrivilegeEscalation": {
+          "default": false,
+          "required": [],
+          "title": "allowPrivilegeEscalation",
+          "type": "boolean"
+        },
+        "capabilities": {
+          "properties": {
+            "drop": {
+              "items": {
+                "anyOf": [
+                  {
+                    "required": [],
+                    "type": "string"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "drop",
+              "type": "array"
+            }
+          },
+          "required": [],
+          "title": "capabilities",
+          "type": "object"
+        },
+        "readOnlyRootFilesystem": {
+          "default": true,
+          "required": [],
+          "title": "readOnlyRootFilesystem",
+          "type": "boolean"
+        },
+        "seccompProfile": {
+          "properties": {
+            "type": {
+              "default": "RuntimeDefault",
+              "required": [],
+              "title": "type",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "seccompProfile",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "securityContext",
+      "type": "object"
+    },
+    "service": {
+      "description": "# Service configuration",
+      "properties": {
+        "annotations": {
+          "description": "# Annotations",
+          "required": [],
+          "title": "annotations",
+          "type": "object"
+        },
+        "enabled": {
+          "default": true,
+          "required": [],
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "graphitePort": {
+          "default": 9109,
+          "description": "# Receiver ports\n# TCP/UDP port",
+          "required": [],
+          "title": "graphitePort",
+          "type": "integer"
+        },
+        "graphitePortName": {
+          "default": "graphite",
+          "description": "# TCP port name",
+          "required": [],
+          "title": "graphitePortName",
+          "type": "string"
+        },
+        "graphiteUdpPortName": {
+          "default": "graphite-udp",
+          "description": "# UDP port name",
+          "required": [],
+          "title": "graphiteUdpPortName",
+          "type": "string"
+        },
+        "labels": {
+          "description": "# Labels",
+          "required": [],
+          "title": "labels",
+          "type": "object"
+        },
+        "port": {
+          "default": 9108,
+          "description": "# Metrics port",
+          "required": [],
+          "title": "port",
+          "type": "integer"
+        },
+        "portName": {
+          "default": "metrics",
+          "description": "# Metrics port name",
+          "required": [],
+          "title": "portName",
+          "type": "string"
+        },
+        "type": {
+          "default": "ClusterIP",
+          "description": "# Service type",
+          "required": [],
+          "title": "type",
+          "type": "string"
+        }
+      },
+      "required": [],
+      "title": "service",
+      "type": "object"
+    },
+    "serviceAccount": {
+      "description": "# Service account configuration",
+      "properties": {
+        "annotations": {
+          "description": "# Annotations",
+          "required": [],
+          "title": "annotations",
+          "type": "object"
+        },
+        "automount": {
+          "default": false,
+          "description": "# Automatically mount a ServiceAccount's API token",
+          "required": [],
+          "title": "automount",
+          "type": "boolean"
+        },
+        "create": {
+          "default": true,
+          "description": "# Specifies whether a service account should be created",
+          "required": [],
+          "title": "create",
+          "type": "boolean"
+        },
+        "labels": {
+          "description": "# Labels",
+          "required": [],
+          "title": "labels",
+          "type": "object"
+        },
+        "name": {
+          "default": "",
+          "description": "# The name of the service account to use.\n# If not set and create is true, a name is generated using the fullname template",
+          "required": [],
+          "title": "name",
+          "type": "string"
+        }
+      },
+      "required": [],
+      "title": "serviceAccount",
+      "type": "object"
+    },
+    "serviceMonitor": {
+      "description": "# Service monitor\n# ref. https://prometheus-operator.dev/docs/operator/api/#monitoring.coreos.com/v1.ServiceMonitor",
+      "properties": {
+        "annotations": {
+          "required": [],
+          "title": "annotations",
+          "type": "object"
+        },
+        "attachMetadata": {
+          "properties": {
+            "node": {
+              "default": false,
+              "required": [],
+              "title": "node",
+              "type": "boolean"
+            }
+          },
+          "required": [],
+          "title": "attachMetadata",
+          "type": "object"
+        },
+        "basicAuth": {
+          "required": [],
+          "title": "basicAuth",
+          "type": "object"
+        },
+        "enabled": {
+          "default": false,
+          "required": [],
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "honorLabels": {
+          "default": false,
+          "required": [],
+          "title": "honorLabels",
+          "type": "boolean"
+        },
+        "interval": {
+          "default": "60s",
+          "required": [],
+          "title": "interval",
+          "type": "string"
+        },
+        "jobLabel": {
+          "default": "",
+          "required": [],
+          "title": "jobLabel",
+          "type": "string"
+        },
+        "labels": {
+          "required": [],
+          "title": "labels",
+          "type": "object"
+        },
+        "metricRelabelings": {
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "metricRelabelings",
+          "type": "array"
+        },
+        "namespace": {
+          "default": "",
+          "description": "release: kube-prometheus-stack",
+          "required": [],
+          "title": "namespace",
+          "type": "string"
+        },
+        "relabelings": {
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "relabelings",
+          "type": "array"
+        },
+        "scheme": {
+          "default": "http",
+          "required": [],
+          "title": "scheme",
+          "type": "string"
+        },
+        "scrapeTimeout": {
+          "default": "10s",
+          "required": [],
+          "title": "scrapeTimeout",
+          "type": "string"
+        },
+        "targetLabels": {
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "targetLabels",
+          "type": "array"
+        },
+        "tlsConfig": {
+          "required": [],
+          "title": "tlsConfig",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "serviceMonitor",
+      "type": "object"
+    },
+    "tolerations": {
+      "description": "# Tolerations",
+      "items": {
+        "required": []
+      },
+      "required": [],
+      "title": "tolerations",
+      "type": "array"
+    },
+    "webConfiguration": {
+      "description": "Enable basic auth via web configuration (web-config)\nTo enable basic authentication, provide basicAuthUsers as a map\nIf serviceMonitor.enabled is set, a secret with these credentials will be created\nand configured in serviceMonitor. serviceMonitor.basicAuth overrides this secret.",
+      "properties": {
+        "basicAuthUsers": {
+          "properties": {
+            "username": {
+              "default": "password",
+              "required": [],
+              "title": "username",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "basicAuthUsers",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "webConfiguration",
+      "type": "object"
+    }
+  },
+  "required": [],
+  "type": "object"
+}

@@ -1,0 +1,32 @@
+{{- if .Values.service.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "prometheus-graphite-exporter.fullname" . }}
+  namespace: {{ include "prometheus-graphite-exporter.namespace" . }}
+  labels:
+    {{- include "prometheus-graphite-exporter.labels" . | nindent 4 }}
+    {{- with .Values.service.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.service.annotations }}
+  annotations: {{ toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.metrics.portName }}
+      name: {{ .Values.service.portName }}
+      protocol: TCP
+    - port: {{ .Values.service.graphitePort }}
+      targetPort: {{ .Values.graphite.portName }}
+      name: {{ .Values.service.graphitePortName }}
+      protocol: TCP
+    - port: {{ .Values.service.graphitePort }}
+      targetPort: {{ .Values.graphite.udpPortName }}
+      name: {{ .Values.service.graphiteUdpPortName }}
+      protocol: UDP
+  selector: {{ include "prometheus-graphite-exporter.selectorLabels" . | nindent 4 }}
+{{- end }}

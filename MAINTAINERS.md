@@ -94,6 +94,10 @@
 
 - arslanbekov (<arslanbekov@gmail.com> / @arslanbekov)
 
+### prometheus-graphite-exporter
+
+- zeritti (<rootsandtrees@posteo.de> / @zeritti)
+
 ### prometheus-ipmi-exporter
 
 - lexfrei (<f@lex.la> / @lexfrei)
