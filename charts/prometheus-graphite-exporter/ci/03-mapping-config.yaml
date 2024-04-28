@@ -1,0 +1,18 @@
+---
+# Test case with mapping config
+graphite:
+  mappingConfig: |-
+     mappings:
+     - match: 'test.dispatcher.*.*.*'
+       name: dispatcher_events_total
+       labels:
+         action: $2
+         job: test_dispatcher
+         outcome: $3
+         processor: $1
+     - match: '*.signup.*.*'
+       name: signup_events_total
+       labels:
+         job: ${1}_server
+         outcome: $3
+         provider: $2

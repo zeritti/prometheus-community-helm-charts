@@ -1,0 +1,9 @@
+---
+extraManifests:
+  - |
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: extra-cm
+    data:
+      GREETING: "hello"

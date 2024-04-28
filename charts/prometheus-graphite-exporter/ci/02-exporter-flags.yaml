@@ -1,0 +1,7 @@
+---
+# Test case with exporter flags set in the graphite field
+graphite:
+  cacheSize: 1500
+  cacheType: lru
+  mappingStrictMatch: true
+  sampleExpiry: 3m

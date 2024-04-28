@@ -1,0 +1,4 @@
+---
+# Test case with extra args
+extraFlags:
+  log.level: debug
