@@ -786,7 +786,7 @@ scrapeConfigs:
   honorLabels: false
 
   ## Job prometheus (localhost)
-  prometheusConfig:
+  prometheusScrapeConfig:
     ## Each single scrape config can be disabled
     enabled: true
     jobName: prometheus
@@ -794,7 +794,8 @@ scrapeConfigs:
     basicAuth: {}
     ## Metrics path. server.prefixURL if set is being concatenated
     ## with the (default or job-specific) metrics path, e.g. PREFIX/metrics.
-    # metricsPath: /metrics
+    metricsPath: /metrics
+    scheme: ""
     ## TLS configuration
     tlsConfig: {}
     ## static_configs for local Prometheus instance
@@ -818,7 +819,7 @@ scrapeConfigs:
   ## All maps and lists in scrape configs expect native Prometheus' configuration parameters.
 
   ## Job kubernetes-apiservers (role endpoints)
-  apiserversConfig:
+  apiserversScrapeConfig:
     enabled: true
     jobName: kubernetes-apiservers
     scheme: https
@@ -846,7 +847,7 @@ scrapeConfigs:
   ## as set in server.namespaces and/or server.releaseNamespace, this config should be disabled.
   ##
   ## Job kubernetes-nodes (role node)
-  nodesConfig:
+  nodesScrapeConfig:
     enabled: true
     jobName: kubernetes-nodes
     scheme: https
@@ -873,7 +874,7 @@ scrapeConfigs:
   ## as set in server.namespaces and/or server.releaseNamespace, this config should be disabled.
   ##
   ## Jobs kubernetes-nodes-cadvisor (role node)
-  nodesCadvisorConfig:
+  nodesCadvisorScrapeConfig:
     enabled: true
     jobName: kubernetes-nodes-cadvisor
     scheme: https
@@ -897,9 +898,10 @@ scrapeConfigs:
         replacement: /api/v1/nodes/$1/proxy/metrics/cadvisor
 
   ## Job kubernetes-service-endpoints (role endpoints)
-  serviceEndpointsConfig:
+  serviceEndpointsScrapeConfig:
     enabled: true
     jobName: kubernetes-service-endpoints
+    scheme: ""
     honorLabels: true
     basicAuth: {}
     tlsConfig: {}
@@ -955,9 +957,10 @@ scrapeConfigs:
         target_label: node
 
   ## Job kubernetes-service-endpoints-slow (role endpoints)
-  serviceEndpointsSlowConfig:
+  serviceEndpointsSlowScrapeConfig:
     enabled: true
     jobName: kubernetes-service-endpoints-slow
+    scheme: ""
     honorLabels: true
     interval: 5m
     timeout: 30s
@@ -1012,9 +1015,10 @@ scrapeConfigs:
         target_label: node
 
   ## Job prometheus-pushgateway (role service)
-  pushgatewayConfig:
+  pushgatewayScrapeConfig:
     enabled: true
     jobName: prometheus-pushgateway
+    scheme: ""
     honorLabels: true
     basicAuth: {}
     tlsConfig: {}
@@ -1028,10 +1032,12 @@ scrapeConfigs:
 
   ## Job kubernetes-services (role service)
   ## Requires Blackbox Exporter and its hostname/port in relabelings
-  servicesConfig:
+  servicesScrapeConfig:
     enabled: true
     jobName: kubernetes-services
+    scheme: ""
     honorLabels: true
+    basicAuth: {}
     tlsConfig: {}
     path: "/probe"
     params:
@@ -1061,10 +1067,12 @@ scrapeConfigs:
 
   ## Job kubernetes-ingresses (role ingress)
   ## Requires Blackbox Exporter and its hostname/port in relabelings
-  ingressesConfig:
+  ingressesScrapeConfig:
     enabled: true
     jobName: kubernetes-ingresses
+    scheme: ""
     honorLabels: true
+    basicAuth: {}
     tlsConfig: {}
     path: "/probe"
     params:
@@ -1092,9 +1100,10 @@ scrapeConfigs:
         target_label: ingress
 
   ## Job kubernetes-pods (role pod)
-  podsConfig:
+  podsScrapeConfig:
     enabled: true
     jobName: kubernetes-pods
+    scheme: ""
     honorLabels: true
     basicAuth: {}
     tlsConfig: {}
@@ -1157,9 +1166,10 @@ scrapeConfigs:
         target_label: node
 
   ## Jobs kubernetes-pods-slow (role pod)
-  podsSlowConfig:
+  podsSlowScrapeConfig:
     enabled: true
     jobName: kubenetes-pods-slow
+    scheme: ""
     honorLabels: true
     interval: 5m
     timeout: 30s
