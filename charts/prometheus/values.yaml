@@ -829,7 +829,7 @@ scrapeConfigs:
       ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
       insecure_skip_verify: false
     kubernetesSDConfigs:
-      - role: endpoints
+      - role: endpointslice
     metricRelabelings: []
     ## Keep only the default/kubernetes service endpoints for the https port. This
     ## will add targets for each API server which Kubernetes adds an endpoint to
@@ -838,7 +838,7 @@ scrapeConfigs:
       - source_labels:
         - __meta_kubernetes_namespace
         - __meta_kubernetes_service_name
-        - __meta_kubernetes_endpoint_port_name
+        - __meta_kubernetes_endpointslice_port_name
         action: keep
         regex: default;kubernetes;https
 
@@ -904,7 +904,7 @@ scrapeConfigs:
     basicAuth: {}
     tlsConfig: {}
     kubernetesSDConfigs:
-      - role: endpoints
+      - role: endpointslice
     metricRelabelings: []
     ## The relabeling allows the actual service scrape endpoint to be configured
     ## via the following annotations:
@@ -964,7 +964,7 @@ scrapeConfigs:
     basicAuth: {}
     tlsConfig: {}
     kubernetesSDConfigs:
-      - role: endpoints
+      - role: endpointslice
     metricRelabelings: []
     ## The relabeling allows the actual service scrape endpoint to be configured
     ## via the following annotations:
