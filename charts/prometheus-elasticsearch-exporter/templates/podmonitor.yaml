@@ -8,13 +8,9 @@ metadata:
   {{- if .Values.podMonitor.namespace }}
   namespace: {{ .Values.podMonitor.namespace }}
   {{- end }}
-  labels:
-    chart: {{ template "elasticsearch-exporter.chart" . }}
-    app: {{ template "elasticsearch-exporter.name" . }}
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
-    {{- if .Values.podMonitor.labels }}
-    {{- toYaml .Values.podMonitor.labels | nindent 4 }}
+  labels: {{ include "elasticsearch-exporter.labels" . | nindent 4 }}
+    {{- with .Values.podMonitor.labels }}
+    {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
   namespaceSelector:
@@ -44,7 +40,5 @@ spec:
       {{- toYaml .Values.podMonitor.relabelings | nindent 6 }}
   {{- end }}
   selector:
-    matchLabels:
-      app: {{ template "elasticsearch-exporter.name" . }}
-      release: "{{ .Release.Name }}"
+    matchLabels: {{ include "elasticsearch-exporter.selectorLabels" . | nindent 6 }}
 {{- end }}
