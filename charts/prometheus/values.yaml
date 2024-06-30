@@ -65,7 +65,29 @@ configmapReload:
       digest: ""
       pullPolicy: IfNotPresent
 
-    # containerPort: 9533
+    ## config-reloader's container port and port name for probes and metrics
+    containerPort: 8080
+    containerPortName: metrics
+
+    ## Enable config-reloader's metrics port in prometheus' service
+    enableMetrics: false
+
+    ## livenessProbe sets liveness probe parameters
+    livenessProbe:
+      httpGet:
+        path: /healthz
+        port: metrics
+        scheme: HTTP
+      periodSeconds: 10
+      initialDelaySeconds: 2
+
+    ## readinessProbe sets readiness probe parameters
+    readinessProbe:
+      httpGet:
+        path: /healthz
+        port: metrics
+        scheme: HTTP
+      periodSeconds: 10
 
     ## Additional configmap-reload container arguments
     ## Set to null for argumentless flags

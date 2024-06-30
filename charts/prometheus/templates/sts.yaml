@@ -89,6 +89,9 @@ spec:
           {{- range .Values.configmapReload.prometheus.extraVolumeDirs }}
             - --watched-dir={{ . }}
           {{- end }}
+          {{- if .Values.configmapReload.prometheus.containerPort }}
+            - --listen-address=:{{ .Values.configmapReload.prometheus.containerPort }}
+          {{- end }}
           {{- with .Values.configmapReload.env }}
           env:
             {{- toYaml . | nindent 12 }}
@@ -96,6 +99,17 @@ spec:
           {{- if .Values.configmapReload.prometheus.containerPort }}
           ports:
             - containerPort: {{ .Values.configmapReload.prometheus.containerPort }}
+              {{- if .Values.configmapReload.prometheus.containerPortName }}
+              name: {{ .Values.configmapReload.prometheus.containerPortName }}
+              {{- end }}
+          {{- end }}
+          {{- with .Values.configmapReload.prometheus.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.configmapReload.prometheus.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           {{- with .Values.configmapReload.prometheus.resources }}
           resources:
@@ -380,8 +394,8 @@ spec:
 {{- end }}
 {{- if .Values.server.persistentVolume.enabled }}
   volumeClaimTemplates:
-    - apiVersion: v1	
-      kind: PersistentVolumeClaim	
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
       metadata:
         name: {{ .Values.server.persistentVolume.statefulSetNameOverride | default "storage-volume" }}
         {{- if .Values.server.persistentVolume.annotations }}
