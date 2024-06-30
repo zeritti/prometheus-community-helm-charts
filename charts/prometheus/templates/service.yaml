@@ -47,6 +47,12 @@ spec:
       nodePort: {{ .Values.server.service.gRPC.nodePort }}
     {{- end }}
     {{- end }}
+    {{- if .Values.configmapReload.prometheus.enableMetrics }}
+    - name: metrics
+      port: {{ .Values.configmapReload.prometheus.containerPort }}
+      protocol: TCP
+      targetPort: {{ .Values.configmapReload.prometheus.containerPortName }}
+    {{- end }}
 {{- if .Values.server.service.additionalPorts }}
 {{ toYaml .Values.server.service.additionalPorts | indent 4 }}
 {{- end }}
