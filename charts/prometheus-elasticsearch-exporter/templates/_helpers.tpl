@@ -79,6 +79,9 @@ global:
 - name: {{ tpl . $ }}
   {{- end }}
 {{- end }}
+{{- if .Values.image.pullSecret }}
+- name: {{ .Values.image.pullSecret }}
+{{- end }}
 {{- end -}}
 
 {{/*
