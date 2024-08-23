@@ -193,9 +193,18 @@ spec:
             - --upstream=http://127.0.0.1:{{ $servicePort }}/
             - --proxy-endpoints-port={{ .Values.kubeRBACProxy.proxyEndpointsPort }}
             - --config-file=/etc/kube-rbac-proxy-config/config-file.yaml
+            {{- if and .Values.kubeRBACProxy.tlsSecretEnabled .Values.tlsSecret.enabled }}
+            - --tls-cert-file=/tls/private/{{ .Values.tlsSecret.certItem }}
+            - --tls-private-key-file=/tls/private/{{ .Values.tlsSecret.keyItem }}
+            {{- end }}
           volumeMounts:
             - name: kube-rbac-proxy-config
               mountPath: /etc/kube-rbac-proxy-config
+            {{- if and .Values.kubeRBACProxy.tlsSecretEnabled .Values.tlsSecret.enabled }}
+            - name: {{ tpl .Values.tlsSecret.volumeName . | quote }}
+              mountPath: /tls/private
+              readOnly: true
+            {{- end}}
           imagePullPolicy: {{ .Values.kubeRBACProxy.image.pullPolicy }}
           {{- if .Values.kubeRBACProxy.image.sha }}
           image: "{{ .Values.global.imageRegistry | default .Values.kubeRBACProxy.image.registry}}/{{ .Values.kubeRBACProxy.image.repository }}:{{ .Values.kubeRBACProxy.image.tag }}@sha256:{{ .Values.kubeRBACProxy.image.sha }}"
@@ -312,4 +321,18 @@ spec:
         - name: kube-rbac-proxy-config
           configMap:
             name: {{ template "prometheus-node-exporter.fullname" . }}-rbac-config
+        {{- end }}
+        {{- if .Values.tlsSecret.enabled }}
+        - name: {{ tpl .Values.tlsSecret.volumeName . | quote }}
+          secret:
+            secretName: {{ tpl .Values.tlsSecret.secretName . | quote }}
+            items:
+              - key: {{ required "Value tlsSecret.certItem must be set." .Values.tlsSecret.certItem | quote }}
+                path: "tls.crt"
+              - key: {{ required "Value tlsSecret.keyItem must be set." .Values.tlsSecret.keyItem | quote }}
+                path: "tls.key"
+              {{- if .Values.tlsSecret.caItem }}
+              - key: {{ .Values.tlsSecret.caItem | quote }}
+                path: "ca.crt"
+              {{- end }}
         {{- end }}

@@ -84,6 +84,28 @@ kubeRBACProxy:
     #  cpu: 10m
     #  memory: 32Mi
 
+  ## Use TLS resources from an existing secret referred to in tlsSecret below
+  ## Ref. https://github.com/brancz/kube-rbac-proxy/issues/187
+  tlsSecretEnabled: false
+
+## tlsSecret references an existing secret holding TLS items: CA certificate, private key and certificate.
+## secretName and volumeName can be templated.
+## If enabled, volume volumeName with the items gets created on secret secretName.
+## This volume will be used by kubeRBACProxy if kubeRBACProxy.tlsSecretEnabled is set.
+tlsSecret:
+  enabled: false
+
+  ## CA certificate's key (optional)
+  caItem: ""
+  ## Certificate's key
+  certItem: tls.crt
+  ## Private key's key
+  keyItem: tls.key
+  ## Name of an existing secret
+  secretName: prometheus-node-exporter-tls
+  ## Name of the volume to be created
+  volumeName: prometheus-node-exporter-tls-secret
+
 ## Service configuration
 service:
   ## Creating a service is enabled by default
