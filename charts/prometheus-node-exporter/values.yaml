@@ -84,22 +84,28 @@ kubeRBACProxy:
     #  cpu: 10m
     #  memory: 32Mi
 
+  ## Additional volume mounts in the kube-rbac-proxy container
+  ## See extraVolumes below
+  extraVolumeMounts: []
+    # - name: extra-volume
+    #   mountPath: /extra
+    #   readOnly: true
+
   ## Use TLS resources from an existing secret referred to in tlsSecret below
   ## Ref. https://github.com/brancz/kube-rbac-proxy/issues/187
   tlsSecretEnabled: false
 
-## tlsSecret references an existing secret holding TLS items: CA certificate, private key and certificate.
+## tlsSecret refers to an existing secret holding TLS items: CA certificate, private key and certificate.
 ## secretName and volumeName can be templated.
 ## If enabled, volume volumeName with the items gets created on secret secretName.
-## This volume will be used by kubeRBACProxy if kubeRBACProxy.tlsSecretEnabled is set.
+## The volume's resources will be used by kube-rbac-proxy if kubeRBACProxy.tlsSecretEnabled is set.
 tlsSecret:
   enabled: false
-
-  ## CA certificate's key (optional)
+  ## Key with CA certificate (optional)
   caItem: ""
-  ## Certificate's key
+  ## Key with certificate
   certItem: tls.crt
-  ## Private key's key
+  ## Key with private key
   keyItem: tls.key
   ## Name of an existing secret
   secretName: prometheus-node-exporter-tls
@@ -480,9 +486,11 @@ extraHostVolumeMounts: []
 configmaps: []
 # - name: <configMapName>
 #   mountPath: <mountPath>
+
 secrets: []
 # - name: <secretName>
 #   mountPath: <mountPatch>
+
 ## Override the deployment namespace
 ##
 namespaceOverride: ""
@@ -580,6 +588,20 @@ extraManifests: []
   #     name: prometheus-extra
   #   data:
   #     extra-data: "value"
+
+## Extra volumes to become available in the pod
+extraVolumes: []
+  # - name: extra-volume
+  #   secret:
+  #     defaultMode: 420
+  #     optional: false
+  #     secretName: node-exporter-secret
+
+## Extra volume mounts in the node-exporter container
+extraVolumeMounts: []
+  # - name: extra-volume
+  #   mountPath: /extra
+  #   readOnly: true
 
 # Override version of app, required if image.tag is defined and does not follow semver
 version: ""

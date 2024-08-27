@@ -178,6 +178,9 @@ spec:
             - name: {{ .name }}
               mountPath: {{ .mountPath }}
             {{- end }}
+            {{- with .Values.extraVolumeMounts }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
         {{- range .Values.sidecars }}
           {{- $overwrites := dict "volumeMounts" (concat (include "prometheus-node-exporter.sidecarVolumeMounts" $ | fromYamlArray) (.volumeMounts | default list) | default list) }}
           {{- $defaults := dict "image" (include "prometheus-node-exporter.image" $) "securityContext" $.Values.containerSecurityContext "imagePullPolicy" $.Values.image.pullPolicy }}
@@ -204,7 +207,10 @@ spec:
             - name: {{ tpl .Values.tlsSecret.volumeName . | quote }}
               mountPath: /tls/private
               readOnly: true
-            {{- end}}
+            {{- end }}
+            {{- with .Values.kubeRBACProxy.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
           imagePullPolicy: {{ .Values.kubeRBACProxy.image.pullPolicy }}
           {{- if .Values.kubeRBACProxy.image.sha }}
           image: "{{ .Values.global.imageRegistry | default .Values.kubeRBACProxy.image.registry}}/{{ .Values.kubeRBACProxy.image.repository }}:{{ .Values.kubeRBACProxy.image.tag }}@sha256:{{ .Values.kubeRBACProxy.image.sha }}"
@@ -335,4 +341,7 @@ spec:
               - key: {{ .Values.tlsSecret.caItem | quote }}
                 path: "ca.crt"
               {{- end }}
+        {{- end }}
+        {{- with .Values.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
         {{- end }}
