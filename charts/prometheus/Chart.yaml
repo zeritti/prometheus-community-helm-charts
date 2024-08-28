@@ -1,6 +1,6 @@
 apiVersion: v2
 name: prometheus
-appVersion: v2.54.0
+appVersion: v2.54.1
 version: 26.0.0
 kubeVersion: ">=1.19.0-0"
 description: Prometheus is a monitoring system and time series database.
@@ -34,7 +34,7 @@ dependencies:
     repository: https://prometheus-community.github.io/helm-charts
     condition: kube-state-metrics.enabled
   - name: prometheus-node-exporter
-    version: "4.37.*"
+    version: "4.39.*"
     repository: https://prometheus-community.github.io/helm-charts
     condition: prometheus-node-exporter.enabled
   - name: prometheus-pushgateway
