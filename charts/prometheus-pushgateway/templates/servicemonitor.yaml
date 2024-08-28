@@ -4,8 +4,8 @@ kind: ServiceMonitor
 metadata:
   labels:
     {{- include "prometheus-pushgateway.defaultLabels" . | nindent 4 }}
-    {{- if .Values.serviceMonitor.additionalLabels }}
-    {{- toYaml .Values.serviceMonitor.additionalLabels | nindent 4 }}
+    {{- with .Values.serviceMonitor.additionalLabels }}
+    {{- toYaml . | nindent 4 }}
     {{- end }}
   name: {{ include "prometheus-pushgateway.fullname" .  }}
   {{- if .Values.serviceMonitor.namespace }}
@@ -24,6 +24,9 @@ spec:
     {{- end }}
     {{- with .Values.serviceMonitor.bearerTokenFile }}
     bearerTokenFile: {{ . }}
+    {{- end }}
+    {{- with .Values.serviceMonitor.basicAuth }}
+    basicAuth: {{ toYaml . | nindent 6 }}
     {{- end }}
     {{- with .Values.serviceMonitor.tlsConfig }}
     tlsConfig:
