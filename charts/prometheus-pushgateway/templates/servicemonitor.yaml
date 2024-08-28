@@ -45,6 +45,9 @@ spec:
     relabelings:
       {{- toYaml . | nindent 6 }}
     {{- end }}
+  {{- if .Values.serviceMonitor.jobLabel }}
+  jobLabel: {{ .Values.serviceMonitor.jobLabel }}
+  {{- end }}
   namespaceSelector:
     matchNames:
       - {{ template "prometheus-pushgateway.namespace" . }}

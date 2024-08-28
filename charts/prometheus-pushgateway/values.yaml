@@ -246,6 +246,10 @@ topologySpreadConstraints: []
 serviceMonitor:
   enabled: false
 
+  ## jobLabel selects the label from the associated Kubernetes Service object
+  ## which will be used as the job label for all metrics.
+  jobLabel: ""
+
   ## Target namespace
   namespace: monitoring
 
