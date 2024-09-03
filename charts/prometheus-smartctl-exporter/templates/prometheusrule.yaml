@@ -8,11 +8,18 @@ metadata:
 {{- if ne (len .Values.prometheusRules.extraLabels) 0 }}
 {{ toYaml .Values.prometheusRules.extraLabels | indent 4 }}
 {{- end }}
-{{- if hasKey .Values.prometheusRules "namespace" }}
+{{- if .Values.prometheusRules.namespace }}
   namespace: {{ .Values.prometheusRules.namespace }}
 {{- end }}
 spec:
   groups:
   - name: smartctl-exporter.rules
-{{ .Files.Get "rules/rules.txt" | indent 4 }}
+    rules:
+{{- range $key, $value := .Values.prometheusRules.rules }}
+{{- if $.Values.prometheusRules.alertLabels }}
+{{- $_ := mustMerge .labels $.Values.prometheusRules.alertLabels }}
+{{- end }}
+    - alert: {{ $key }}
+      {{- toYaml $value | nindent 6 }}
+{{- end }}
 {{- end }}

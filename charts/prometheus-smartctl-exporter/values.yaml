@@ -1,3 +1,12 @@
+
+## Default values for prometheus-smartctl-exporter
+## This is a YAML-formatted file.
+## Declare variables to be passed into your templates.
+
+fullnameOverride: ""
+
+nameOverride: ""
+
 config: {}
 #  devices:
 #  - /dev/sda
@@ -27,14 +36,6 @@ serviceMonitor:
   scrapeTimeout: 30s
   # Set relabel_configs as per https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
   relabelings: []
-
-prometheusRules:
-  enabled: false
-  # Specify namespace to load the monitor if not in the same namespace
-  # namespace: prometheus-operator
-  # Add Extra labels if needed. Prometeus operator may need them to find it.
-  extraLabels: {}
-  # release: prometheus-operator
 
 image:
   repository: quay.io/prometheuscommunity/smartctl-exporter
@@ -84,3 +85,63 @@ service:
     enabled: false
     ipFamilies: ["IPv6", "IPv4"]
     ipFamilyPolicy: "PreferDualStack"
+
+prometheusRules:
+  enabled: false
+  # Specify namespace to install the rules in
+  namespace: ""
+  # Add extra labels for prometheusRule for Prometheus operator's rule selector to find it
+  extraLabels: {}
+    # release: prometheus-operator
+  # Additional labels to attach to each alert rule
+  alertLabels: {}
+  # Alert rules
+  rules:
+    SmartCTLDeviceMediaErrors:
+      expr: 'smartctl_device_media_errors != 0'
+      annotations:
+        message: |
+          Device {{ $labels.device }} on instance {{ $labels.instance }} has media errors
+      for: 1m
+      labels:
+        severity: error
+    SmartCTLDeviceCriticalWarning:
+      expr: 'smartctl_device_critical_warning != 0'
+      annotations:
+        message: |
+          Device {{ $labels.device }} on instance {{ $labels.instance }} has media errors
+      for: 1m
+      labels:
+        severity: warning
+    SmartCTLDeviceAvailableSpareUnderThreshold:
+      expr: 'smartctl_device_available_spare_threshold > smartctl_device_available_spare'
+      annotations:
+        message: |
+          Device {{ $labels.device }} on instance {{ $labels.instance }} is under available spare threshold.
+      for: 1m
+      labels:
+        severity: warning
+    SmartCTLDeviceStatus:
+      expr: 'smartctl_device_status != 1'
+      annotations:
+        message: |
+          Device {{ $labels.device }} on instance {{ $labels.instance }} has a bad status
+      for: 1m
+      labels:
+        severity: error
+    SmartCTLDInterfaceSlow:
+      expr: 'smartctl_device_interface_speed{speed_type="current"} != on(device, instance, namespace, pod) smartctl_device_interface_speed{speed_type="max"}'
+      annotations:
+        message: |
+          Device {{ $labels.device }} on instance {{ $labels.instance }} interface is slower then it should be
+      for: 1m
+      labels:
+        severity: warning
+    SmartCTLDDeviceTemperature:
+      expr: 'smartctl_device_temperature{temperature_type="current"} > 60'
+      annotations:
+        message: |
+          Device {{ $labels.device }} on instance {{ $labels.instance }} has temperature higher than 60°C
+      for: 1m
+      labels:
+        severity: warning
