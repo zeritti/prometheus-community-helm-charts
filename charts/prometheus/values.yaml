@@ -369,27 +369,27 @@ server:
 
     # For Kubernetes >= 1.18 you should specify the ingress-controller via the field ingressClassName
     # See https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/#specifying-the-class-of-an-ingress
-    # ingressClassName: nginx
+    ingressClassName: ""
 
     ## Prometheus server Ingress annotations
     ##
     annotations: {}
-    #   kubernetes.io/ingress.class: nginx
-    #   kubernetes.io/tls-acme: 'true'
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: 'true'
 
     ## Prometheus server Ingress additional labels
     ##
     extraLabels: {}
 
     ## Redirect ingress to an additional defined port on the service
-    # servicePort: 8081
+    servicePort: null
 
     ## Prometheus server Ingress hostnames with optional path (passed through tpl)
     ## Must be provided if Ingress is enabled
     ##
     hosts: []
-    #   - prometheus.domain.com
-    #   - domain.com/prometheus
+    # - prometheus.domain.com
+    # - domain.com/prometheus
 
     path: /
 
