@@ -2,22 +2,22 @@
 
 Prometheus exporter for [PostgreSQL](https://www.postgresql.org/about/servers/) server metrics.
 
-This chart bootstraps a prometheus [postgres exporter](https://github.com/prometheus-community/postgres_exporter) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a Prometheus [Postgres Exporter](https://github.com/prometheus-community/postgres_exporter) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
-- Kubernetes 1.16+
+- Kubernetes 1.19+
 - Helm 3+
 
 ## Add Helm Chart Repository
-
+<!-- textlint-disable terminology -->
 ```console
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 ```
 
-_See [`helm repo`](https://helm.sh/docs/helm/helm_repo/) for command documentation._
-
+_See [helm repo](https://helm.sh/docs/helm/helm_repo/) for command documentation._
+<!-- textlint-enable -->
 ## Install Chart
 
 ```console
@@ -40,6 +40,34 @@ _See [helm uninstall](https://helm.sh/docs/helm/helm_uninstall/) for command doc
 
 ## Upgrading
 
+```console
+helm upgrade [RELEASE_NAME] prometheus-community/prometheus-postgres-exporter --install
+```
+
+_See [helm upgrade](https://helm.sh/docs/helm/helm_upgrade/) for command documentation._
+
+### To 7.0.0
+
+The minimum required Kubernetes version is set to 1.19.
+
+The Kubernetes labels have been updated to follow [Helm 3 label and annotation best practices](https://helm.sh/docs/chart_best_practices/labels/) as follows:
+
+| Previous | New                        |
+|----------|----------------------------|
+| heritage | [none]                     |
+| chart    | helm.sh/chart              |
+| [none]   | app.kubernetes.io/version  |
+| app      | app.kubernetes.io/name     |
+| release  | app.kubernetes.io/instance |
+
+Label `app.kubernetes.io/managed-by` replaces `heritage` but is not being set specifically as helm always sets it.
+
+Since the change is affecting immutable selectors, the previous deployment needs to be deleted before upgrading:
+
+```console
+kubectl delete deploy -l app=prometheus-postgres-exporter
+```
+
 ### To 6.0.0
 
 Image repository has been split into two values: the new `image.registry` value and the already existing `image.repository` value. No change is required when using the default for `image.repository`. If you have previously modified field `image.repository`, please, set the two fields accordingly.
@@ -53,12 +81,6 @@ Chart.yaml appVersion field is used as default image tag.
 Labels are templated now.
 Add default securityContext and PodSecurityContext.
 LivenessProbe timeout has been raised to 3.
-
-### To 4.6.0
-
-This release adds functionality to template the variables inside `config.datasource` by means of allowing the `tpl` function in the resources that make use of it. This functionality is useful when you want to do sub-charting (e.g. in a postgres chart) and you want to avoid the duplication of variables inside `config.datasource`.
-
-Compared to the previous release (4.5.0) the only thing that changed is the fact that you can no longer leave the `config.datasource.host` variable blank. Leaving it blank could cause errors with the `tpl` function. However, the default value was changed to `''` so this error is not expected to happen.
 
 ### To 4.0.0
 
