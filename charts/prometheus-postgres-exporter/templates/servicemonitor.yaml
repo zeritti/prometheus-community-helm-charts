@@ -38,7 +38,9 @@ spec:
     tlsConfig:
 {{- toYaml . | nindent 6 }}
 {{- end }}
-  jobLabel: {{ template "prometheus-postgres-exporter.fullname" . }}
+  {{- if .Values.serviceMonitor.jobLabel }}
+  jobLabel: {{ .Values.serviceMonitor.jobLabel }}
+  {{- end}}
   namespaceSelector:
     matchNames:
     - {{ .Release.Namespace }}
