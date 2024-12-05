@@ -301,6 +301,11 @@ extraManifests: []
   #   data:
   #     extra-data: "value"
 
+## PodDisruptionBudget settings
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
+##
 podDisruptionBudget:
   enabled: false
-  maxUnavailable: 1
+  # maxUnavailable: 1
+  # minAvailable: 1
+  # unhealthyPodEvictionPolicy: IfHealthyBudget
