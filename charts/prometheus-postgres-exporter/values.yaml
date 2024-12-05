@@ -41,10 +41,12 @@ serviceMonitor:
   # namespace: monitoring
   # Set how frequently Prometheus should scrape
   # interval: 30s
-  # Set path to cloudwatch-exporter telemtery-path
+  # Set telemetry path
   # telemetryPath: /metrics
   # Set labels for the ServiceMonitor, use this to define your scrape label for Prometheus Operator
   # labels:
+  # Set service label the value of which to use for the job label
+  # jobLabel: app.kubernetes.io/name
   # Set timeout for scrape
   # timeout: 10s
   # Set of labels to transfer from the Kubernetes Service onto the target
