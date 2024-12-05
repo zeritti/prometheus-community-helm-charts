@@ -1,4 +1,5 @@
 {{- if .Values.podDisruptionBudget.enabled }}
+{{- $pdbSpec := omit .Values.podDisruptionBudget "enabled" }}
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
@@ -6,7 +7,18 @@ metadata:
   labels:
     {{- include "prometheus-postgres-exporter.labels" . | nindent 4 }}
 spec:
-  maxUnavailable: {{ .Values.podDisruptionBudget.maxUnavailable }}
+  {{- if not (or (hasKey $pdbSpec "minAvailable") (hasKey $pdbSpec "maxUnavailable")) }}
+  maxUnavailable: 1
+  {{- end }}
+  {{- if hasKey $pdbSpec "minAvailable" }}
+  minAvailable: {{ $pdbSpec.minAvailable }}
+  {{- end }}
+  {{- if hasKey $pdbSpec "maxUnavailable" }}
+  maxUnavailable: {{ $pdbSpec.maxUnavailable }}
+  {{- end }}
+  {{- if hasKey $pdbSpec "unhealthyPodEvictionPolicy" }}
+  unhealthyPodEvictionPolicy: {{ $pdbSpec.unhealthyPodEvictionPolicy }}
+  {{- end }}
   selector:
     matchLabels:
       {{- include "prometheus-postgres-exporter.selectorLabels" . | nindent 6 }}
