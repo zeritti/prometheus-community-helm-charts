@@ -2,7 +2,7 @@
 
 Prometheus exporter for [PostgreSQL](https://www.postgresql.org/about/servers/) server metrics.
 
-This chart bootstraps a prometheus [postgres exporter](https://github.com/prometheus-community/postgres_exporter) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a Prometheus [Postgres Exporter](https://github.com/prometheus-community/postgres_exporter) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
@@ -52,13 +52,13 @@ The minimum required Kubernetes version is set to 1.19.
 
 The Kubernetes labels have been updated to follow [Helm 3 label and annotation best practices](https://helm.sh/docs/chart_best_practices/labels/) as follows:
 
-| Previous           | New                          |
-|--------------------|------------------------------|
-|heritage            | [none]                       |
-|chart               | helm.sh/chart                |
-|[none]              | app.kubernetes.io/version    |
-|app                 | app.kubernetes.io/name       |
-|release             | app.kubernetes.io/instance   |
+| Previous | New                        |
+|----------|----------------------------|
+| heritage | [none]                     |
+| chart    | helm.sh/chart              |
+| [none]   | app.kubernetes.io/version  |
+| app      | app.kubernetes.io/name     |
+| release  | app.kubernetes.io/instance |
 
 Label `app.kubernetes.io/managed-by` replaces `heritage` but is not being set specifically as helm always sets it.
 
