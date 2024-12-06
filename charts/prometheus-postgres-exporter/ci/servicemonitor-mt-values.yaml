@@ -1,0 +1,25 @@
+---
+config:
+  postgresExporter: |-
+    auth_modules:
+      shared:
+        type: userpass
+        userpass:
+          username: postgres-exporter
+          password: firstpass
+        options:
+          sslmode: disable
+          dbname: postgres
+
+serviceMonitor:
+  enabled: true
+  multipleTarget:
+    enabled: true
+    sharedAuthModule:
+      enabled: true
+      name: shared
+    targets:
+      - endpoint: pg01.local
+        name: pg01
+      - endpoint: pg02.local
+        name: pg02
