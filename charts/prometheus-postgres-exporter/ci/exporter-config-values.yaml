@@ -1,0 +1,12 @@
+---
+config:
+  postgresExporter: |-
+    auth_modules:
+      i1:
+        type: userpass
+        userpass:
+          username: postgres-exporter
+          password: firstpass
+        options:
+          sslmode: disable
+          dbname: postgres

@@ -1,3 +1,4 @@
+---
 extraManifests:
 - apiVersion: v1
   kind: ConfigMap
