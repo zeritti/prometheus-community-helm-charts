@@ -37,7 +37,9 @@ Common labels
 {{- define "prometheus-postgres-exporter.labels" -}}
 helm.sh/chart: {{ include "prometheus-postgres-exporter.chart" . }}
 {{ include "prometheus-postgres-exporter.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
+{{- if .Values.image.tag }}
+app.kubernetes.io/version: {{ .Values.image.tag | quote }}
+{{- else }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 {{- if .Values.commonLabels}}
