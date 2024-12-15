@@ -62,7 +62,7 @@ The Kubernetes labels have been updated to follow [Helm 3 label and annotation b
 
 Label `app.kubernetes.io/managed-by` replaces `heritage` but is not being set specifically as helm always sets it.
 
-Since the change is affecting immutable selectors, the previous deployment needs to be deleted before upgrading:
+Since the change is affecting immutable selectors, the previous deployment needs to be deleted before upgrading, e.g.:
 
 ```console
 kubectl delete deploy -l app=prometheus-postgres-exporter
