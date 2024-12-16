@@ -353,3 +353,14 @@ networkPolicy:
   ## Additional labels and annotations to attach to network policy
   labels: {}
   annotations: {}
+
+# Extra manifests to deploy as an array
+extraManifests: []
+  # - |
+  #   apiVersion: v1
+  #   kind: ConfigMap
+  #   metadata:
+  #   labels:
+  #     name: config-extra
+  #   data:
+  #     extra-data: "value"
