@@ -1,0 +1,3 @@
+---
+fullnameOverride: admission-webhook
+replicas: 2

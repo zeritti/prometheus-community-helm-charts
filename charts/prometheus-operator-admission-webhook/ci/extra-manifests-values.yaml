@@ -1,0 +1,22 @@
+---
+fullnameOverride: admission-webhook
+extraManifests:
+  - |
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      labels:
+        foo: bar
+      name: '{{ include "prometheus-operator-admission-webhook.fullname" . }}-extra-cm-first'
+    data:
+      FOO: bar
+  - |
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      labels:
+        baz: qux
+      name: extra-cm-second
+    data:
+      config.txt: '{{ include "prometheus-operator-admission-webhook.fullname" . }}'
+    immutable: true
