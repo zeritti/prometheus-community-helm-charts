@@ -22,6 +22,10 @@ spec:
     {{- with .Values.serviceMonitor.scheme }}
     scheme: {{ . }}
     {{- end }}
+    {{- with .Values.serviceMonitor.basicAuth }}
+    basicAuth:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
     {{- with .Values.serviceMonitor.bearerTokenFile }}
     bearerTokenFile: {{ . }}
     {{- end }}

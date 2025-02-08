@@ -260,6 +260,8 @@ serviceMonitor:
   ## tlsConfig: TLS configuration to use when scraping the endpoint. For example if using istio mTLS.
   ## Of type: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#tlsconfig
   # tlsConfig: {}
+  ## basicAuth configures the Basic Authentication credentials to use when scraping the target
+  basicAuth: {}
 
   # bearerTokenFile:
   # Fallback to the prometheus default unless specified
