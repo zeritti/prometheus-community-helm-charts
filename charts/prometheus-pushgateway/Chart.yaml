@@ -1,6 +1,8 @@
 apiVersion: v2
 appVersion: "v1.11.0"
 description: A Helm chart for prometheus pushgateway
+icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
+kubeVersion: ">=1.19.0-0"
 name: prometheus-pushgateway
 version: 3.0.0
 home: https://github.com/prometheus/pushgateway

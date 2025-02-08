@@ -4,6 +4,11 @@ This chart bootstraps a Prometheus [Pushgateway](http://github.com/prometheus/pu
 
 An optional prometheus `ServiceMonitor` can be enabled, should you wish to use this gateway with [Prometheus Operator](https://github.com/coreos/prometheus-operator).
 
+## Prerequisites
+
+- Kubernetes 1.19+
+- Helm 3.7+
+
 ## Get Repository Info
 <!-- textlint-disable terminology -->
 ```console
