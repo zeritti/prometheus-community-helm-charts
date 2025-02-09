@@ -28,6 +28,5 @@ kube-prometheus-*.tgz
 unittests/
 files/dashboards/
 
-README.md
 CONTRIBUTING.md
 .editorconfig
