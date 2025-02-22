@@ -374,8 +374,6 @@ server:
     ## Prometheus server Ingress annotations
     ##
     annotations: {}
-      # kubernetes.io/ingress.class: nginx
-      # kubernetes.io/tls-acme: 'true'
 
     ## Prometheus server Ingress additional labels
     ##
