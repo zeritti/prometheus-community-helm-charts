@@ -5,7 +5,7 @@
 {{- $ingressPath := .Values.server.ingress.path -}}
 {{- $ingressPathType := .Values.server.ingress.pathType -}}
 {{- $extraPaths := .Values.server.ingress.extraPaths -}}
-apiVersion: {{ template "ingress.apiVersion" . }}
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
 {{- if .Values.server.ingress.annotations }}

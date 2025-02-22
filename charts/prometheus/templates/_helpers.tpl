@@ -115,13 +115,6 @@ Return the appropriate apiVersion for deployment.
 {{- end -}}
 
 {{/*
-Return the appropriate apiVersion for ingress.
-*/}}
-{{- define "ingress.apiVersion" -}}
-{{- print "networking.k8s.io/v1" -}}
-{{- end -}}
-
-{{/*
 Return the appropriate apiVersion for networkpolicy.
 */}}
 {{- define "prometheus.networkPolicy.apiVersion" -}}
