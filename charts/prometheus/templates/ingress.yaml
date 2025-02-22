@@ -29,7 +29,7 @@ spec:
     - host: {{ tpl (first $url) $ }}
       http:
         paths:
-{{ if $extraPaths }}
+{{- if $extraPaths }}
 {{ tpl (toYaml $extraPaths | indent 10) $ }}
 {{- end }}
           - path: {{ tpl ($ingressPath) $ }}
