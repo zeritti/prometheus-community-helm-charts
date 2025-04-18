@@ -1,4 +1,5 @@
 {{- if .Values.server.statefulSet.enabled -}}
+{{- $fullname := include "prometheus.server.fullname" . }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -11,7 +12,7 @@ metadata:
 {{- if .Values.server.statefulSet.headless.labels }}
 {{ toYaml .Values.server.statefulSet.headless.labels | indent 4 }}
 {{- end }}
-  name: {{ template "prometheus.server.fullname" . }}-headless
+  name: {{ printf "%s-%s" $fullname "headless" | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "prometheus.namespace" . }}
 spec:
   clusterIP: None

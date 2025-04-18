@@ -1,8 +1,9 @@
 {{- if .Values.server.verticalAutoscaler.enabled -}}
+{{- $fullname := include "prometheus.server.fullname" . }}
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
 metadata:
-  name: {{ template "prometheus.server.fullname" . }}-vpa
+  name: {{ printf "%s-%s" $fullname "vpa" | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "prometheus.namespace" . }}
   labels:
     {{- include "prometheus.server.labels" . | nindent 4 }}
