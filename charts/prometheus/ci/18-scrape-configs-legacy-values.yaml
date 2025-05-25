@@ -1,0 +1,12 @@
+---
+scrapeConfigs: null
+
+serverFiles:
+  prometheus.yml:
+    scrape_configs:
+      - job_name: "self"
+        static_configs:
+          - targets:
+              - "localhost:9090"
+            labels:
+              foo: "bar"

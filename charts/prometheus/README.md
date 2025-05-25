@@ -65,10 +65,49 @@ helm upgrade [RELEASE_NAME] prometheus-community/prometheus --install
 
 _See [helm upgrade](https://helm.sh/docs/helm/helm_upgrade/) for command documentation._
 
+### To 28.0
+
+In this release default scrape configs previously defined in field `serverFiles."prometheus.yml".scrape_configs`
+(array) have been moved in the new field `scrapeConfigs` (map). The contents of the scrape configs have not changed.
+
+Fields in a map can easily be adjusted, inserted, unset and merged as opposed to an array and array's
+elements. Each scrape config can be disabled by setting `enabled` to _false_. A scrape config expects native Prometheus' configuration.
+
+For example, skipping TLS verification in scrape config
+`kubernetes-nodes`:
+
+```yaml
+scrapeConfigs:
+  kubernetes-nodes:
+    tls_config:
+      insecure_skip_verify: true
+```
+
+Or setting `track_timestamps_staleness` in scrape config `kubernetes-nodes-cadvisor`:
+
+```yaml
+scrapeConfigs:
+  kubernetes-nodes-cadvisor:
+    track_timestamps_staleness: true
+```
+
+Further scrape configs can be inserted as new keys whereby these get enabled by default (the toggle `enabled` gets
+set to _true_ by default and need not be present). Each key becomes by default the value of the `job_name` field.
+Field `extraScrapeConfigs` can still be used for additional scrape configs and is not affected by the change.
+
+Using the new field is not mandatory, `serverFiles."prometheus.yml".scrape_configs` works in the same way
+as before but is unset by default. Users wishing to continue using this field may want to unset `scrapeConfigs`:
+
+```yaml
+scrapeConfigs: null
+```
+
+Similarly if users wish to use the new field but have modified the previous default scrape configs - the modifications should be transferred in `scrapeConfigs` and the previous scrape configs removed.
+
 ### To 27.0
 
 Prometheus' configuration parameter `insecure_skip_verify` in scrape configs `serverFiles."prometheus.yml".scrape_configs` has been commented out keeping thus the default Prometheus' value.
-If certificate verification must be skipped, please, uncomment the line before upgrading.
+If certificate verification must be skipped, please, set the parameter in your scrape configs.
 
 ### To 26.0
 
