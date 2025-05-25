@@ -23,7 +23,13 @@ _See [helm repository](https://helm.sh/docs/helm/helm_repo/) for command documen
 Starting with version 16.0, the Prometheus chart requires Helm 3.7+ in order to install successfully. Please check your `helm` release before installation.
 
 ```console
-helm install [RELEASE_NAME] prometheus-community/prometheus
+helm install RELEASE_NAME prometheus-community/prometheus
+```
+
+Alternatively, the chart can be installed from the GitHub OCI registry:
+
+```bash
+helm install RELEASE_NAME oci://ghcr.io/prometheus-community/charts/prometheus
 ```
 
 _See [configuration](#configuration) below._
@@ -46,7 +52,7 @@ _See [helm dependency](https://helm.sh/docs/helm/helm_dependency/) for command d
 ## Uninstall Chart
 
 ```console
-helm uninstall [RELEASE_NAME]
+helm uninstall RELEASE_NAME
 ```
 
 This removes all the Kubernetes components associated with the chart and deletes the release.
@@ -60,20 +66,40 @@ A [`values.schema.json`](https://helm.sh/docs/topics/charts/#schema-files) file 
 ## Upgrading Chart
 
 ```console
-helm upgrade [RELEASE_NAME] prometheus-community/prometheus --install
+helm upgrade RELEASE_NAME prometheus-community/prometheus --install
 ```
 
 _See [helm upgrade](https://helm.sh/docs/helm/helm_upgrade/) for command documentation._
 
+### To 28.0
+
+In this release default scrape configs previously defined in field `serverFiles."prometheus.yml".scrape_configs`
+(array) have been moved in the new field `scrapeConfigs` (map). The contents of the scrape configs have not changed.
+
+Each scrape config can be disabled by setting `enabled` to _false_. A scrape config expects native Prometheus' configuration.
+
+Further scrape configs can be inserted as new keys whereby these get enabled by default (the toggle `enabled` gets
+set to _true_ and need not be present). Each key becomes by default the value of the `job_name` field.
+Field `extraScrapeConfigs` can still be used for additional scrape configs and is not affected by the change.
+
+Using the new field is not mandatory, `serverFiles."prometheus.yml".scrape_configs` works in the same way
+as before but is unset by default. Users wishing to continue using this field may want to unset `scrapeConfigs`:
+
+```yaml
+scrapeConfigs: null
+```
+
+Similarly if users wish to use the new field but have modified the previous default scrape configs - the modifications should be transferred in `scrapeConfigs` and the previous scrape configs removed.
+
 ### To 27.0
 
 Prometheus' configuration parameter `insecure_skip_verify` in scrape configs `serverFiles."prometheus.yml".scrape_configs` has been commented out keeping thus the default Prometheus' value.
-If certificate verification must be skipped, please, uncomment the line before upgrading.
+If certificate verification must be skipped, please, set the parameter in your scrape configs.
 
 ### To 26.0
 
-This release changes default version of promethues to v3.0.0, See official [migration guide](https://prometheus.io/docs/prometheus/latest/migration/#prometheus-3-0-migration-guide
-) and [release notes](https://github.com/prometheus/prometheus/releases/tag/v3.0.0) for more details.
+This release changes default version of prometheus to v3.0.0, See official
+[migration guide](https://prometheus.io/docs/prometheus/latest/migration/#prometheus-3-0-migration-guide) and [release notes](https://github.com/prometheus/prometheus/releases/tag/v3.0.0) for more details.
 
 ### To 25.0
 

@@ -1,0 +1,59 @@
+---
+scrapeConfigs:
+  kubernetes-api-servers:
+    tls_config:
+      insecure_skip_verify: false
+  kubernetes-nodes:
+    tls_config:
+      insecure_skip_verify: false
+  kubernetes-nodes-cadvisor:
+    track_timestamps_staleness: true
+    tls_config:
+      insecure_skip_verify: false
+  kubernetes-service-endpoints:
+    enabled: false
+  kubernetes-service-endpoints-slow:
+    enabled: false
+  prometheus-pushgateway:
+    enabled: true
+  kubernetes-services:
+    enabled: false
+  kubernetes-pods:
+    enabled: false
+  kubernetes-pods-slow:
+    enabled: false
+  foo:
+    honor_labels: true
+    kubernetes_sd_configs:
+      - role: service
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_probe]
+        action: keep
+        regex: true
+
+extraScrapeConfigs: |
+  - job_name: "custom-job"
+    static_configs:
+      - targets:
+          - "example.com:1234"
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: "custom-instance"
+      - source_labels: [__meta_kubernetes_namespace]
+        target_label: namespace
+        replacement: "custom-namespace"
+      - action: labelmap
+        regex: __meta_kubernetes_service_label_(.+)
+
+alertmanager:
+  enabled: false
+
+kube-state-metrics:
+  enabled: false
+
+prometheus-node-exporter:
+  enabled: false
+
+prometheus-pushgateway:
+  enabled: true
