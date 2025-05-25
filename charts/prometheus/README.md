@@ -18,6 +18,18 @@ helm repo update
 
 _See [helm repository](https://helm.sh/docs/helm/helm_repo/) for command documentation._
 
+## OCI Registry
+
+A chart release can be installed as well as upgraded from the GitHub OCI registry:
+
+```bash
+helm install [RELEASE_NAME] oci://ghcr.io/prometheus-community/charts/prometheus:x.y.z
+```
+
+where `x.y.z` indicates the desired version, e.g. `27.25.0`.
+
+_See [Using an OCI-based registry](https://helm.sh/docs/topics/registries/#using-an-oci-based-registry) for more information._
+
 ## Install Chart
 
 Starting with version 16.0, the Prometheus chart requires Helm 3.7+ in order to install successfully. Please check your `helm` release before installation.
@@ -65,15 +77,36 @@ helm upgrade [RELEASE_NAME] prometheus-community/prometheus --install
 
 _See [helm upgrade](https://helm.sh/docs/helm/helm_upgrade/) for command documentation._
 
+### To 28.0
+
+In this release default scrape configs previously defined in field `serverFiles."prometheus.yml".scrape_configs`
+(array) have been moved in the new field `scrapeConfigs` (map). The contents of the scrape configs have not changed.
+
+Each scrape config can be disabled by setting `enabled` to _false_. A scrape config expects native Prometheus' configuration.
+
+Further scrape configs can be inserted as new keys whereby these get enabled by default. Each key becomes the
+default value of the `job_name` field.
+Field `extraScrapeConfigs` can still be used for additional scrape configs and is not affected by the change.
+
+Using the new field is not mandatory, `serverFiles."prometheus.yml".scrape_configs` works in the same way
+as before but is unset by default. Users wishing to continue using this field should unset `scrapeConfigs`:
+
+```yaml
+scrapeConfigs: null
+```
+
+Similarly, if users wish to make use of the new field but have modified the previous default scrape configs - the
+modifications should be transferred in `scrapeConfigs` and the previous scrape configs removed.
+
 ### To 27.0
 
 Prometheus' configuration parameter `insecure_skip_verify` in scrape configs `serverFiles."prometheus.yml".scrape_configs` has been commented out keeping thus the default Prometheus' value.
-If certificate verification must be skipped, please, uncomment the line before upgrading.
+If certificate verification must be skipped, please, set the configuration parameter in your scrape configs.
 
 ### To 26.0
 
-This release changes default version of promethues to v3.0.0, See official [migration guide](https://prometheus.io/docs/prometheus/latest/migration/#prometheus-3-0-migration-guide
-) and [release notes](https://github.com/prometheus/prometheus/releases/tag/v3.0.0) for more details.
+This release changes default version of prometheus to v3.0.0, See official
+[migration guide](https://prometheus.io/docs/prometheus/latest/migration/#prometheus-3-0-migration-guide) and [release notes](https://github.com/prometheus/prometheus/releases/tag/v3.0.0) for more details.
 
 ### To 25.0
 
