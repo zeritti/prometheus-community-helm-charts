@@ -132,27 +132,29 @@ server:
   ## If set it will override serviceAccounts.server.automountServiceAccountToken value for ServiceAccount.
   # automountServiceAccountToken: false
 
-  ## Use a ClusterRole (and ClusterRoleBinding)
-  ## - If set to false - we define a RoleBinding in the defined namespaces ONLY
-  ##
-  ## NB: because we need a Role with nonResourceURL's ("/metrics") - you must get someone with Cluster-admin privileges to define this role for you, before running with this setting enabled.
-  ##     This makes prometheus work - for users who do not have ClusterAdmin privs, but wants prometheus to operate on their own namespaces, instead of clusterwide.
-  ##
-  ## You MUST also set namespaces to the ones you have access to and want monitored by Prometheus.
-  ##
-  # useExistingClusterRoleName: nameofclusterrole
-
   ## If set it will override prometheus.server.fullname value for ClusterRole and ClusterRoleBinding
   ##
   clusterRoleNameOverride: ""
 
-  # Enable only the release namespace for monitoring. By default all namespaces are monitored.
-  # If releaseNamespace and namespaces are both set a merged list will be monitored.
+  ## Name of an existing cluster role to use in a role binding in namespaces set in
+  ## namespaces and releaseNamespace for namespaced discovery.
+  ##
+  useExistingClusterRoleName: ""
+
+  ## releaseNamespace to enable only the release namespace for service discovery.
+  ## By default all namespaces are included in service discovery.
+  ## If releaseNamespace and namespaces are both set, a merged list will be created.
+  ## Note that kubernetes_sd_configs.namespaces in scrape configs must be specified
+  ## if namespaced service discovery is desired. Setting useExistingClusterRoleName is required.
+  ##
   releaseNamespace: false
 
-  ## namespaces to monitor (instead of monitoring all - clusterwide). Needed if you want to run without Cluster-admin privileges.
-  # namespaces:
-  #   - yournamespace
+  ## namespaces to include in service discovery instead of clusterwide discovery. Needed if you want to run
+  ## Prometheus without cluster-admin privileges (namespaced configuration). See also releaseNamespace.
+  ## Setting useExistingClusterRoleName is required.
+  ##
+  namespaces: []
+    # - yournamespace
 
   # sidecarContainers - add more containers to prometheus server
   # Key/Value where Key is the sidecar `- name: <Key>`
