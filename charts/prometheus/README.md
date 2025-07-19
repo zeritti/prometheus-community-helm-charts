@@ -6,7 +6,7 @@ This chart bootstraps a [Prometheus](https://prometheus.io/) deployment on a [Ku
 
 ## Prerequisites
 
-- Kubernetes 1.19+
+- Kubernetes 1.25+
 - Helm 3.7+
 
 ## Usage
@@ -67,23 +67,25 @@ _See [helm upgrade](https://helm.sh/docs/helm/helm_upgrade/) for command documen
 
 #### To 28.0
 
-In this release default scrape configs previously defined in field `serverFiles."prometheus.yml".scrape_configs`
+This release requires Kubernetes version 1.25+.
+
+Scrape configs previously defined in field `serverFiles."prometheus.yml".scrape_configs`
 (array) have been moved in the new field `scrapeConfigs` (map). The contents of the scrape configs have not changed.
 
 Each scrape config can be disabled by setting `enabled` to _false_. A scrape config expects native Prometheus' configuration.
 
 Further scrape configs can be inserted as new keys whereby these get enabled by default. Each key becomes the
-default value of the `job_name` field.
+default value of `job_name`.
 Field `extraScrapeConfigs` can still be used for additional scrape configs and is not affected by the change.
 
 Using the new field is not mandatory, `serverFiles."prometheus.yml".scrape_configs` works in the same way
-as before but is unset by default. Users wishing to continue using this field should unset `scrapeConfigs`:
+as before but is _unset_ by default. Users wishing to continue using this field should unset `scrapeConfigs` before upgrading:
 
 ```yaml
 scrapeConfigs: null
 ```
 
-Similarly, if users wish to make use of the new field but have modified the previous default scrape configs - the
+Similarly, users who wish to make use of the new field but have modified the previous default scrape configs - the
 modifications should be transferred in `scrapeConfigs` and the previous scrape configs removed.
 
 #### To 27.0
