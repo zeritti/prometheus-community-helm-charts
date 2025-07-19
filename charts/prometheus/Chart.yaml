@@ -2,8 +2,8 @@ apiVersion: v2
 name: prometheus
 # renovate: github=prometheus/prometheus
 appVersion: v3.7.3
-version: 27.44.0
-kubeVersion: ">=1.19.0-0"
+version: 28.0.0
+kubeVersion: ">=1.25.0-0"
 description: Prometheus is a monitoring system and time series database.
 home: https://prometheus.io/
 icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
