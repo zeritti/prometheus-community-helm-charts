@@ -58,7 +58,6 @@ Common labels
 */}}
 {{- define "prometheus-nginx-exporter.labels" }}
 helm.sh/chart: {{ include "prometheus-nginx-exporter.chart" . }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/component: metrics
 app.kubernetes.io/part-of: {{ template "prometheus-nginx-exporter.name" . }}
 {{- include "prometheus-nginx-exporter.selectorLabels" . }}
