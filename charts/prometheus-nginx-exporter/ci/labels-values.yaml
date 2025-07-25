@@ -1,0 +1,14 @@
+---
+additionalLabels:
+  foo: bar
+additionalAnnotations:
+  baz: qux
+
+podAnnotations:
+  example.com/annotation: foo
+
+deployment:
+  annotations:
+    example.com/deployment-annotation: bar
+  labels:
+    qux: quux
