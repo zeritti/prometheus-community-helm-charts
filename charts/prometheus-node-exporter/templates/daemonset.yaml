@@ -91,8 +91,9 @@ spec:
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           {{- end }}
+          {{- if or .Values.livenessProbe.httpGet.enabled .Values.livenessProbe.tcpSocket.enabled }}
           livenessProbe:
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            {{- if .Values.livenessProbe.httpGet.enabled }}
             httpGet:
               {{- if .Values.kubeRBACProxy.enabled }}
               host: 127.0.0.1
@@ -105,12 +106,22 @@ spec:
               path: /
               port: {{ $servicePortReference }}
               scheme: {{ upper .Values.livenessProbe.httpGet.scheme }}
+            {{- else if .Values.livenessProbe.tcpSocket.enabled }}
+            tcpSocket:
+              port: {{ $servicePortReference }}
+              {{- if .Values.kubeRBACProxy.enabled }}
+              host: 127.0.0.1
+              {{- end }}
+            {{- end }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             successThreshold: {{ .Values.livenessProbe.successThreshold }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          {{- end }}
+          {{- if or .Values.readinessProbe.httpGet.enabled .Values.readinessProbe.tcpSocket.enabled }}
           readinessProbe:
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            {{- if .Values.readinessProbe.httpGet.enabled }}
             httpGet:
               {{- if .Values.kubeRBACProxy.enabled }}
               host: 127.0.0.1
@@ -123,10 +134,19 @@ spec:
               path: /
               port: {{ $servicePortReference }}
               scheme: {{ upper .Values.readinessProbe.httpGet.scheme }}
+            {{- else if .Values.readinessProbe.tcpSocket.enabled }}
+            tcpSocket:
+              port: {{ $servicePortReference }}
+              {{- if .Values.kubeRBACProxy.enabled }}
+              host: 127.0.0.1
+              {{- end }}
+            {{- end }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+          {{- end }}
           {{- with .Values.resources }}
           resources:
             {{- toYaml . | nindent 12 }}
