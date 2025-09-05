@@ -537,25 +537,31 @@ extraInitContainers: []
 ##
 livenessProbe:
   failureThreshold: 3
-  httpGet:
-    httpHeaders: []
-    scheme: http
   initialDelaySeconds: 0
   periodSeconds: 10
   successThreshold: 1
   timeoutSeconds: 1
+  httpGet:
+    enabled: true
+    httpHeaders: []
+    scheme: http
+  tcpSocket:
+    enabled: false
 
 ## Readiness probe
 ##
 readinessProbe:
   failureThreshold: 3
-  httpGet:
-    httpHeaders: []
-    scheme: http
   initialDelaySeconds: 0
   periodSeconds: 10
   successThreshold: 1
   timeoutSeconds: 1
+  httpGet:
+    enabled: true
+    httpHeaders: []
+    scheme: http
+  tcpSocket:
+    enabled: false
 
 # Enable vertical pod autoscaler support for prometheus-node-exporter
 verticalPodAutoscaler:
