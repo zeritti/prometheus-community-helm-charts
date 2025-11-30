@@ -399,7 +399,7 @@ server:
 
     path: /
 
-    # pathType is only for k8s >= 1.18
+    # pathType determines the interpretation of the path matching
     pathType: Prefix
 
     ## Extra paths to prepend to every host configuration. This is useful when working with annotation based services. (passed through tpl)
