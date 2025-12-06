@@ -79,14 +79,15 @@ default value of `job_name`.
 Field `extraScrapeConfigs` can still be used for additional scrape configs and is not affected by the change.
 
 Using the new field is not mandatory, `serverFiles."prometheus.yml".scrape_configs` works in the same way
-as before but is _unset_ by default. Users wishing to continue using this field should unset `scrapeConfigs` before upgrading:
+as before but is _unset_ by default. Users wishing to continue using this field via a custom values file should unset
+`scrapeConfigs` before upgrading:
 
 ```yaml
 scrapeConfigs: null
 ```
 
-Similarly, users who wish to make use of the new field but have modified the previous default scrape configs - the
-modifications should be transferred in `scrapeConfigs` and the previous scrape configs removed.
+Similarly, users who wish to make use of the new field but have modified the previous default scrape configs should
+transfer the modifications in `scrapeConfigs` and remove the previous scrape configs.
 
 #### To 27.0
 
