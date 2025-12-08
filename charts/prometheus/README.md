@@ -67,8 +67,6 @@ _See [helm upgrade](https://helm.sh/docs/helm/helm_upgrade/) for command documen
 
 #### To 28.0
 
-This release requires Kubernetes version 1.25+.
-
 Scrape configs previously defined in field `serverFiles."prometheus.yml".scrape_configs`
 (array) have been moved in the new field `scrapeConfigs` (map). The contents of the scrape configs have not changed.
 
