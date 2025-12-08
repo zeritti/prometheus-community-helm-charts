@@ -6,7 +6,7 @@ This chart bootstraps a [Prometheus](https://prometheus.io/) deployment on a [Ku
 
 ## Prerequisites
 
-- Kubernetes 1.25+
+- Kubernetes 1.19+
 - Helm 3.7+
 
 ## Usage
