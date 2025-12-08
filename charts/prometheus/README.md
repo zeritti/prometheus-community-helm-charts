@@ -89,6 +89,49 @@ scrapeConfigs: null
 Similarly, users who wish to make use of the new field but have modified the previous default scrape configs should
 transfer the modifications in `scrapeConfigs` and remove the previous scrape configs.
 
+Some examples:
+
+- Skip certificate verification for API servers (default is not to skip the verification)
+
+```yaml
+scrapeConfigs:
+  kubernetes-api-servers:
+    tls_config:
+      insecure_skip_verify: true
+```
+
+- Add basic auth in the default scrape config for prometheus
+
+```yaml
+scrapeConfigs:
+  prometheus:
+    basic_auth:
+      username: "admin"
+      password_file: /etc/private/auth-passwd
+```
+
+- Disable scrape config _kubernetes-pods-slow_
+
+```yaml
+scrapeConfigs:
+  kubernetes-pods-slow:
+    enabled: false
+```
+
+- Add a new scrape config with `job_name` set to _foo_ (gets enabled by default)
+
+```yaml
+scrapeConfigs:
+  foo:
+    honor_labels: true
+    kubernetes_sd_configs:
+      - role: service
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_probe]
+        action: keep
+        regex: true
+```
+
 #### To 27.0
 
 Prometheus' configuration parameter `insecure_skip_verify` in scrape configs `serverFiles."prometheus.yml".scrape_configs` has been commented out keeping thus the default Prometheus' value.
