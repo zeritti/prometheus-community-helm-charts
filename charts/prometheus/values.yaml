@@ -585,7 +585,7 @@ server:
     ## Useful if Persistent Volumes have been provisioned in advance
     ## Ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector
     ##
-    # selector:
+    selector: {}
     #  matchLabels:
     #    release: "stable"
     #  matchExpressions:
@@ -594,7 +594,7 @@ server:
     ## Persistent Volume Name
     ## Useful if Persistent Volumes have been provisioned in advance and you want to use a specific one
     ##
-    # volumeName: ""
+    volumeName: ""
 
   emptyDir:
     ## Prometheus server emptyDir volume
