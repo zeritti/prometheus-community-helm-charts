@@ -242,11 +242,14 @@ server:
   ##       key: username
   env: []
 
-  # List of flags to override default parameters, e.g:
-  # - --enable-feature=agent
+  ## defaultFlagsOverride replaces all the default flags by means of container's "args"
+  defaultFlagsOverride: []
+  ## E.g. enabling agent mode:
+  ## https://prometheus.io/docs/prometheus/latest/prometheus_agent/
+  ## With prometheus >= 3.0 "--agent", < 3.0 "--enable-feature=agent"
+  # - --agent
   # - --storage.agent.retention.max-time=30m
   # - --config.file=/etc/config/prometheus.yml
-  defaultFlagsOverride: []
 
   extraFlags:
     - web.enable-lifecycle
