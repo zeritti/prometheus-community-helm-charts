@@ -526,7 +526,7 @@ server:
   ## Use an alternate scheduler, e.g. "stork".
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
-  # schedulerName:
+  schedulerName: ""
 
   persistentVolume:
     ## If true, Prometheus server will create/use a Persistent Volume Claim
