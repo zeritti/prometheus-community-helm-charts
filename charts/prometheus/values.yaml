@@ -643,7 +643,7 @@ server:
     labels: {}
     podManagementPolicy: OrderedReady
 
-    ## Alertmanager headless service to use for the statefulset
+    ## Prometheus' headless service to use for the statefulset
     ##
     headless:
       annotations: {}
