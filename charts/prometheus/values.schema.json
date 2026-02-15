@@ -1,739 +1,4442 @@
 {
-    "$schema": "http://json-schema.org/schema#",
-    "type": "object",
-    "properties": {
-        "alertRelabelConfigs": {
-            "type": "object"
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "alertRelabelConfigs": {
+      "description": "Adds option to add alert_relabel_configs to avoid duplicate alerts in alertmanager useful in H/A prometheus with different external labels but the same alerts @schema type: [object, null] @schema",
+      "required": [],
+      "title": "alertRelabelConfigs",
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "alertmanager": {
+      "description": "alertmanager sub-chart configurable values  Ref. https://github.com/prometheus-community/helm-charts/tree/main/charts/alertmanager",
+      "properties": {
+        "enabled": {
+          "default": "true",
+          "description": "If false, alertmanager will not be installed",
+          "required": [],
+          "title": "enabled"
         },
-        "alertmanager": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean"
-                },
-                "persistence": {
-                    "type": "object",
-                    "properties": {
-                        "size": {
-                            "type": "string"
-                        }
-                    }
-                },
-                "podSecurityContext": {
-                    "type": "object",
-                    "properties": {
-                        "fsGroup": {
-                            "type": "integer"
-                        },
-                        "runAsGroup": {
-                            "type": "integer"
-                        },
-                        "runAsNonRoot": {
-                            "type": "boolean"
-                        },
-                        "runAsUser": {
-                            "type": "integer"
-                        }
-                    }
-                }
-            }
-        },
-        "configmapReload": {
-            "type": "object",
-            "properties": {
-                "env": {
-                    "type": "array"
-                },
-                "prometheus": {
-                    "type": "object",
-                    "properties": {
-                        "containerSecurityContext": {
-                            "type": "object"
-                        },
-                        "enabled": {
-                            "type": "boolean"
-                        },
-                        "extraArgs": {
-                            "type": "object"
-                        },
-                        "extraConfigmapMounts": {
-                            "type": "array"
-                        },
-                        "extraVolumeDirs": {
-                            "type": "array"
-                        },
-                        "extraVolumeMounts": {
-                            "type": "array"
-                        },
-                        "image": {
-                            "type": "object",
-                            "properties": {
-                                "digest": {
-                                    "type": "string"
-                                },
-                                "pullPolicy": {
-                                    "type": "string"
-                                },
-                                "repository": {
-                                    "type": "string"
-                                },
-                                "tag": {
-                                    "type": "string"
-                                }
-                            }
-                        },
-                        "name": {
-                            "type": "string"
-                        },
-                        "resources": {
-                            "type": "object"
-                        }
-                    }
-                },
-                "reloadUrl": {
+        "persistence": {
+          "description": "Persistence configuration for Alertmanager",
+          "properties": {
+            "accessModes": {
+              "description": "Access mode",
+              "items": {
+                "anyOf": [
+                  {
                     "type": "string"
-                }
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "accessModes"
+            },
+            "annotations": {
+              "description": "Custom annotations for the PVC created by the alertmanager StatefulSet. Useful for configuring storage provider options such as disk type, KMS encryption keys, or custom volume name prefixes.",
+              "required": [],
+              "title": "annotations"
+            },
+            "emptyDir": {
+              "description": "Configure emptyDir volume",
+              "required": [],
+              "title": "emptyDir"
+            },
+            "enabled": {
+              "default": "true",
+              "description": "If true, storage will create or use a persistent volume If false, storage will use emptyDir",
+              "required": [],
+              "title": "enabled"
+            },
+            "labels": {
+              "description": "Custom labels for the PVC created by the alertmanager StatefulSet. Useful for selecting, grouping, and organizing so that they can be queried or targeted in deployments, policies, etc.",
+              "required": [],
+              "title": "labels"
+            },
+            "size": {
+              "default": "2Gi",
+              "description": "Size of persistent volume",
+              "required": [],
+              "title": "size"
+            },
+            "storageClass": {
+              "default": "~",
+              "description": " If defined, storageClassName: <storageClass> If set to \"-\", storageClassName: \"\", which disables dynamic provisioning If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner.",
+              "required": [],
+              "title": "storageClass"
             }
+          },
+          "required": [],
+          "title": "persistence"
         },
-        "extraManifests": {
-            "type": "array"
-        },
-        "extraScrapeConfigs": {
-            "type": "string"
-        },
-        "forceNamespace": {
-            "type": "string"
-        },
-        "imagePullSecrets": {
-            "type": "array"
-        },
-        "kube-state-metrics": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean"
-                }
+        "podSecurityContext": {
+          "description": "Security context for alertmanager pod",
+          "properties": {
+            "fsGroup": {
+              "default": 65534,
+              "title": "fsGroup",
+              "type": "integer"
+            },
+            "runAsGroup": {
+              "default": 65534,
+              "title": "runAsGroup",
+              "type": "integer"
+            },
+            "runAsNonRoot": {
+              "default": true,
+              "title": "runAsNonRoot",
+              "type": "boolean"
+            },
+            "runAsUser": {
+              "default": 65534,
+              "title": "runAsUser",
+              "type": "integer"
             }
+          },
+          "required": [],
+          "title": "podSecurityContext"
+        }
+      },
+      "required": [],
+      "title": "alertmanager"
+    },
+    "commonMetaLabels": {
+      "description": "Additional labels to attach to all resources @schema type: [object, null] @schema",
+      "required": [],
+      "title": "commonMetaLabels",
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "configmapReload": {
+      "description": "Monitors ConfigMap changes and POSTs to a URL Ref: https://github.com/prometheus-operator/prometheus-operator/tree/main/cmd/prometheus-config-reloader",
+      "properties": {
+        "env": {
+          "description": "env sets environment variables to pass to the container. Can be set as name/value pairs, read from secrets or configmaps. @schema type: [array, null] @schema",
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "env",
+          "type": [
+            "array",
+            "null"
+          ]
         },
-        "networkPolicy": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean"
-                }
-            }
-        },
-        "prometheus-node-exporter": {
-            "type": "object",
-            "properties": {
-                "containerSecurityContext": {
-                    "type": "object",
-                    "properties": {
-                        "allowPrivilegeEscalation": {
-                            "type": "boolean"
-                        }
-                    }
+        "prometheus": {
+          "description": "Further configuration of config-reloader",
+          "properties": {
+            "containerPort": {
+              "default": 8080,
+              "description": "config-reloader's container port for probes and metrics @schema type: [integer] @schema",
+              "title": "containerPort",
+              "type": "integer"
+            },
+            "containerPortName": {
+              "default": "metrics",
+              "description": "config-reloader's container port name for probes and metrics @schema type: [string] @schema",
+              "title": "containerPortName",
+              "type": "string"
+            },
+            "containerSecurityContext": {
+              "description": "Security context to be added to configmap-reload container @schema type: [object, null] @schema",
+              "required": [],
+              "title": "containerSecurityContext",
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "enabled": {
+              "default": true,
+              "description": "If false, the configmap-reload container will not be deployed @schema type: [boolean] @schema",
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "extraArgs": {
+              "description": "Set to null for argumentless flags @schema type: [object, null] @schema",
+              "required": [],
+              "title": "extraArgs",
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "extraConfigmapMounts": {
+              "description": "Additional configmap-reload mounts @schema type: [null, array] @schema",
+              "items": {
+                "required": []
+              },
+              "required": [],
+              "title": "extraConfigmapMounts",
+              "type": [
+                "null",
+                "array"
+              ]
+            },
+            "extraVolumeDirs": {
+              "description": "Additional configmap-reload volume directories @schema type: [null, array] @schema",
+              "items": {
+                "required": []
+              },
+              "required": [],
+              "title": "extraVolumeDirs",
+              "type": [
+                "null",
+                "array"
+              ]
+            },
+            "extraVolumeMounts": {
+              "description": "Additional configmap-reload volume mounts @schema type: [null, array] @schema",
+              "items": {
+                "required": []
+              },
+              "required": [],
+              "title": "extraVolumeMounts",
+              "type": [
+                "null",
+                "array"
+              ]
+            },
+            "image": {
+              "description": "configmap-reload container image",
+              "properties": {
+                "digest": {
+                  "default": "",
+                  "description": "When digest is set to a non-empty value, images will be pulled by digest (regardless of tag value). @schema type: [null, string] @schema",
+                  "required": [],
+                  "title": "digest",
+                  "type": [
+                    "null",
+                    "string"
+                  ]
                 },
-                "enabled": {
-                    "type": "boolean"
+                "pullPolicy": {
+                  "default": "IfNotPresent",
+                  "description": "configmap-reload container image pull policy @schema type: [string, null] @schema",
+                  "required": [],
+                  "title": "pullPolicy",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
-                "rbac": {
-                    "type": "object",
-                    "properties": {
-                        "pspEnabled": {
-                            "type": "boolean"
-                        }
-                    }
+                "repository": {
+                  "default": "quay.io/prometheus-operator/prometheus-config-reloader",
+                  "description": "configmap-reload container image repository @schema type: [string] @schema",
+                  "title": "repository",
+                  "type": "string"
+                },
+                "tag": {
+                  "default": "v0.87.1",
+                  "description": "configmap-reload container image tag @schema type: [string] @schema",
+                  "title": "tag",
+                  "type": "string"
                 }
+              },
+              "required": [],
+              "title": "image"
+            },
+            "livenessProbe": {
+              "description": "Settings for config-reloader's liveness probe Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/",
+              "properties": {
+                "httpGet": {
+                  "properties": {
+                    "path": {
+                      "default": "/healthz",
+                      "title": "path",
+                      "type": "string"
+                    },
+                    "port": {
+                      "default": "metrics",
+                      "description": " type: [integer, string] @schema",
+                      "required": [],
+                      "title": "port",
+                      "type": [
+                        "integer",
+                        "string"
+                      ]
+                    },
+                    "scheme": {
+                      "default": "HTTP",
+                      "title": "scheme",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "httpGet",
+                  "type": "object"
+                },
+                "initialDelaySeconds": {
+                  "default": 2,
+                  "title": "initialDelaySeconds",
+                  "type": "integer"
+                },
+                "periodSeconds": {
+                  "default": 10,
+                  "title": "periodSeconds",
+                  "type": "integer"
+                }
+              },
+              "required": [],
+              "title": "livenessProbe"
+            },
+            "name": {
+              "default": "configmap-reload",
+              "description": "configmap-reload container name @schema type: [string] @schema",
+              "title": "name",
+              "type": "string"
+            },
+            "readinessProbe": {
+              "description": "Settings for config-reloader's readiness probe",
+              "properties": {
+                "httpGet": {
+                  "properties": {
+                    "path": {
+                      "default": "/healthz",
+                      "title": "path",
+                      "type": "string"
+                    },
+                    "port": {
+                      "default": "metrics",
+                      "description": " type: [integer, string] @schema",
+                      "required": [],
+                      "title": "port",
+                      "type": [
+                        "integer",
+                        "string"
+                      ]
+                    },
+                    "scheme": {
+                      "default": "HTTP",
+                      "title": "scheme",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "httpGet",
+                  "type": "object"
+                },
+                "periodSeconds": {
+                  "default": 10,
+                  "title": "periodSeconds",
+                  "type": "integer"
+                }
+              },
+              "required": [],
+              "title": "readinessProbe"
+            },
+            "resources": {
+              "description": "configmap-reload resource requests and limits Ref: http://kubernetes.io/docs/user-guide/compute-resources/ @schema type: [object, null] @schema",
+              "required": [],
+              "title": "resources",
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "startupProbe": {
+              "description": "Settings for config-reloader's startup probe",
+              "properties": {
+                "enabled": {
+                  "default": false,
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "httpGet": {
+                  "properties": {
+                    "path": {
+                      "default": "/healthz",
+                      "title": "path",
+                      "type": "string"
+                    },
+                    "port": {
+                      "default": "metrics",
+                      "description": " type: [integer, string] @schema",
+                      "required": [],
+                      "title": "port",
+                      "type": [
+                        "integer",
+                        "string"
+                      ]
+                    },
+                    "scheme": {
+                      "default": "HTTP",
+                      "title": "scheme",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "httpGet",
+                  "type": "object"
+                },
+                "periodSeconds": {
+                  "default": 10,
+                  "title": "periodSeconds",
+                  "type": "integer"
+                }
+              },
+              "required": [],
+              "title": "startupProbe"
             }
+          },
+          "required": [],
+          "title": "prometheus"
         },
-        "prometheus-pushgateway": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean"
-                },
-                "serviceAnnotations": {
-                    "type": "object",
-                    "properties": {
-                        "prometheus.io/probe": {
-                            "type": "string"
-                        }
-                    }
-                }
+        "reloadUrl": {
+          "default": "",
+          "description": "URL for configmap-reload to use for reloads @schema type: [string, null] @schema",
+          "required": [],
+          "title": "reloadUrl",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [],
+      "title": "configmapReload"
+    },
+    "extraManifests": {
+      "description": "Extra manifests to deploy as an array @schema type: [array, null] @schema",
+      "items": {
+        "required": []
+      },
+      "required": [],
+      "title": "extraManifests",
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "extraScrapeConfigs": {
+      "default": "",
+      "description": "extraScrapeConfigs adds additional scrape configs to prometheus.yml must be a string so you have to add a | after extraScrapeConfigs: example adds prometheus-blackbox-exporter scrape config @schema type: [string, null] @schema",
+      "required": [],
+      "title": "extraScrapeConfigs",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "forceNamespace": {
+      "default": "",
+      "description": "Override namespace of namespaced resources @schema type: [string, null] @schema",
+      "required": [],
+      "title": "forceNamespace",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
+    "imagePullSecrets": {
+      "description": "imagePullSecrets for pulling images from a private repository @schema type: [array, null] @schema",
+      "items": {
+        "required": []
+      },
+      "required": [],
+      "title": "imagePullSecrets",
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "kube-state-metrics": {
+      "description": "kube-state-metrics sub-chart configurable values Please see https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-state-metrics",
+      "properties": {
+        "enabled": {
+          "default": "true",
+          "description": "If false, kube-state-metrics sub-chart will not be installed",
+          "required": [],
+          "title": "enabled"
+        }
+      },
+      "required": [],
+      "title": "kube-state-metrics"
+    },
+    "networkPolicy": {
+      "description": "Network policy",
+      "properties": {
+        "enabled": {
+          "default": "false",
+          "description": "Enable creation of NetworkPolicy resources.",
+          "required": [],
+          "title": "enabled"
+        }
+      },
+      "required": [],
+      "title": "networkPolicy"
+    },
+    "prometheus-node-exporter": {
+      "description": "prometheus-node-exporter sub-chart configurable values Please see https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-node-exporter",
+      "properties": {
+        "containerSecurityContext": {
+          "description": "Security context for prometheus-node-exporter pod",
+          "properties": {
+            "allowPrivilegeEscalation": {
+              "default": false,
+              "title": "allowPrivilegeEscalation",
+              "type": "boolean"
             }
+          },
+          "required": [],
+          "title": "containerSecurityContext"
+        },
+        "enabled": {
+          "default": "true",
+          "description": "If false, node-exporter will not be installed",
+          "required": [],
+          "title": "enabled"
         },
         "rbac": {
-            "type": "object",
-            "properties": {
-                "create": {
-                    "type": "boolean"
-                }
+          "description": "Config RBAC resources for prometheus-node-exporter",
+          "properties": {
+            "pspEnabled": {
+              "default": "false",
+              "description": "Enable PSP resources creation (unavailable since 1.25)",
+              "required": [],
+              "title": "pspEnabled"
             }
-        },
-        "ruleFiles": {
-            "type": "object"
-        },
-        "server": {
-            "type": "object",
-            "properties": {
-                "affinity": {
-                    "type": "object"
-                },
-                "alertmanagers": {
-                    "type": "array"
-                },
-                "baseURL": {
-                    "type": "string"
-                },
-                "clusterRoleNameOverride": {
-                    "type": "string"
-                },
-                "command": {
-                    "type": "array"
-                },
-                "configMapAnnotations": {
-                    "type": "object"
-                },
-                "configMapOverrideName": {
-                    "type": "string"
-                },
-                "configPath": {
-                    "type": "string"
-                },
-                "containerSecurityContext": {
-                    "type": "object"
-                },
-                "defaultFlagsOverride": {
-                    "type": "array"
-                },
-                "deploymentAnnotations": {
-                    "type": "object"
-                },
-                "dnsConfig": {
-                    "type": "object"
-                },
-                "dnsPolicy": {
-                    "type": "string"
-                },
-                "emptyDir": {
-                    "type": "object",
-                    "properties": {
-                        "sizeLimit": {
-                            "type": "string"
-                        }
-                    }
-                },
-                "enableServiceLinks": {
-                    "type": "boolean"
-                },
-                "env": {
-                    "type": "array"
-                },
-                "exemplars": {
-                    "type": "object"
-                },
-                "extraArgs": {
-                    "type": "object"
-                },
-                "extraConfigmapLabels": {
-                    "type": "object"
-                },
-                "extraConfigmapMounts": {
-                    "type": "array"
-                },
-                "extraFlags": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "extraHostPathMounts": {
-                    "type": "array"
-                },
-                "extraInitContainers": {
-                    "type": "array"
-                },
-                "extraSecretMounts": {
-                    "type": "array"
-                },
-                "extraVolumeMounts": {
-                    "type": "array"
-                },
-                "extraVolumes": {
-                    "type": "array"
-                },
-                "fullnameOverride": {
-                    "type": "string"
-                },
-                "global": {
-                    "type": "object",
-                    "properties": {
-                        "evaluation_interval": {
-                            "type": "string"
-                        },
-                        "scrape_interval": {
-                            "type": "string"
-                        },
-                        "scrape_timeout": {
-                            "type": "string"
-                        }
-                    }
-                },
-                "hostAliases": {
-                    "type": "array"
-                },
-                "hostNetwork": {
-                    "type": "boolean"
-                },
-                "image": {
-                    "type": "object",
-                    "properties": {
-                        "digest": {
-                            "type": "string"
-                        },
-                        "pullPolicy": {
-                            "type": "string"
-                        },
-                        "repository": {
-                            "type": "string"
-                        },
-                        "tag": {
-                            "type": "string"
-                        }
-                    }
-                },
-                "ingress": {
-                    "type": "object",
-                    "properties": {
-                        "annotations": {
-                            "type": "object"
-                        },
-                        "enabled": {
-                            "type": "boolean"
-                        },
-                        "extraLabels": {
-                            "type": "object"
-                        },
-                        "extraPaths": {
-                            "type": "array"
-                        },
-                        "hosts": {
-                            "type": "array"
-                        },
-                        "path": {
-                            "type": "string"
-                        },
-                        "pathType": {
-                            "type": "string"
-                        },
-                        "tls": {
-                            "type": "array"
-                        }
-                    }
-                },
-                "livenessProbeFailureThreshold": {
-                    "type": "integer"
-                },
-                "livenessProbeInitialDelay": {
-                    "type": "integer"
-                },
-                "livenessProbePeriodSeconds": {
-                    "type": "integer"
-                },
-                "livenessProbeSuccessThreshold": {
-                    "type": "integer"
-                },
-                "livenessProbeTimeout": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "nodeSelector": {
-                    "type": "object"
-                },
-                "persistentVolume": {
-                    "type": "object",
-                    "properties": {
-                        "accessModes": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        },
-                        "annotations": {
-                            "type": "object"
-                        },
-                        "enabled": {
-                            "type": "boolean"
-                        },
-                        "existingClaim": {
-                            "type": "string"
-                        },
-                        "labels": {
-                            "type": "object"
-                        },
-                        "mountPath": {
-                            "type": "string"
-                        },
-                        "size": {
-                            "type": "string"
-                        },
-                        "statefulSetNameOverride": {
-                            "type": "string"
-                        },
-                        "subPath": {
-                            "type": "string"
-                        }
-                    }
-                },
-                "podAnnotations": {
-                    "type": "object"
-                },
-                "podAntiAffinity": {
-                    "type": "string",
-                    "enum": ["", "soft", "hard"],
-                    "default": ""
-                },
-                "podAntiAffinityTopologyKey": {
-                    "type": "string"
-                },
-                "podDisruptionBudget": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean"
-                        },
-                        "maxUnavailable": {
-                            "type": [
-                                "string",
-                                "integer"
-                            ]
-                        }
-                    }
-                },
-                "podLabels": {
-                    "type": "object"
-                },
-                "portName": {
-                    "type": "string"
-                },
-                "prefixURL": {
-                    "type": "string"
-                },
-                "priorityClassName": {
-                    "type": "string"
-                },
-                "runtimeClassName": {
-                    "type": "string"
-                },
-                "probeHeaders": {
-                    "type": "array"
-                },
-                "probeScheme": {
-                    "type": "string"
-                },
-                "readinessProbeFailureThreshold": {
-                    "type": "integer"
-                },
-                "readinessProbeInitialDelay": {
-                    "type": "integer"
-                },
-                "readinessProbePeriodSeconds": {
-                    "type": "integer"
-                },
-                "readinessProbeSuccessThreshold": {
-                    "type": "integer"
-                },
-                "readinessProbeTimeout": {
-                    "type": "integer"
-                },
-                "releaseNamespace": {
-                    "type": "boolean"
-                },
-                "remoteRead": {
-                    "type": "array"
-                },
-                "remoteWrite": {
-                    "type": "array"
-                },
-                "replicaCount": {
-                    "type": "integer"
-                },
-                "resources": {
-                    "type": "object"
-                },
-                "retention": {
-                    "type": "string"
-                },
-                "retentionSize": {
-                    "type": "string"
-                },
-                "revisionHistoryLimit": {
-                    "type": "integer"
-                },
-                "securityContext": {
-                    "type": "object",
-                    "properties": {
-                        "fsGroup": {
-                            "type": "integer"
-                        },
-                        "runAsGroup": {
-                            "type": "integer"
-                        },
-                        "runAsNonRoot": {
-                            "type": "boolean"
-                        },
-                        "runAsUser": {
-                            "type": "integer"
-                        }
-                    }
-                },
-                "service": {
-                    "type": "object",
-                    "properties": {
-                        "additionalPorts": {
-                            "type": "array"
-                        },
-                        "annotations": {
-                            "type": "object"
-                        },
-                        "clusterIP": {
-                            "type": "string"
-                        },
-                        "enabled": {
-                            "type": "boolean"
-                        },
-                        "externalIPs": {
-                            "type": "array"
-                        },
-                        "gRPC": {
-                            "type": "object",
-                            "properties": {
-                                "enabled": {
-                                    "type": "boolean"
-                                },
-                                "servicePort": {
-                                    "type": "integer"
-                                }
-                            }
-                        },
-                        "labels": {
-                            "type": "object"
-                        },
-                        "loadBalancerIP": {
-                            "type": "string"
-                        },
-                        "loadBalancerSourceRanges": {
-                            "type": "array"
-                        },
-                        "servicePort": {
-                            "type": "integer"
-                        },
-                        "sessionAffinity": {
-                            "type": "string"
-                        },
-                        "statefulsetReplica": {
-                            "type": "object",
-                            "properties": {
-                                "enabled": {
-                                    "type": "boolean"
-                                },
-                                "replica": {
-                                    "type": "integer"
-                                }
-                            }
-                        },
-                        "type": {
-                            "type": "string"
-                        }
-                    }
-                },
-                "sidecarContainers": {
-                    "type": "object"
-                },
-                "sidecarTemplateValues": {
-                    "type": "object"
-                },
-                "startupProbe": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean"
-                        },
-                        "failureThreshold": {
-                            "type": "integer"
-                        },
-                        "periodSeconds": {
-                            "type": "integer"
-                        },
-                        "timeoutSeconds": {
-                            "type": "integer"
-                        }
-                    }
-                },
-                "statefulSet": {
-                    "type": "object",
-                    "properties": {
-                        "annotations": {
-                            "type": "object"
-                        },
-                        "enabled": {
-                            "type": "boolean"
-                        },
-                        "headless": {
-                            "type": "object",
-                            "properties": {
-                                "annotations": {
-                                    "type": "object"
-                                },
-                                "gRPC": {
-                                    "type": "object",
-                                    "properties": {
-                                        "enabled": {
-                                            "type": "boolean"
-                                        },
-                                        "servicePort": {
-                                            "type": "integer"
-                                        }
-                                    }
-                                },
-                                "labels": {
-                                    "type": "object"
-                                },
-                                "servicePort": {
-                                    "type": "integer"
-                                }
-                            }
-                        },
-                        "labels": {
-                            "type": "object"
-                        },
-                        "podManagementPolicy": {
-                            "type": "string"
-                        },
-                        "pvcDeleteOnStsDelete": {
-                            "type": "boolean"
-                        },
-                        "pvcDeleteOnStsScale": {
-                            "type": "boolean"
-                        }
-                    }
-                },
-                "storagePath": {
-                    "type": "string"
-                },
-                "strategy": {
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "type": "string"
-                        }
-                    }
-                },
-                "tcpSocketProbeEnabled": {
-                    "type": "boolean"
-                },
-                "terminationGracePeriodSeconds": {
-                    "type": "integer"
-                },
-                "tolerations": {
-                    "type": "array"
-                },
-                "topologySpreadConstraints": {
-                    "type": "array"
-                },
-                "tsdb": {
-                    "type": "object"
-                },
-                "verticalAutoscaler": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean"
-                        }
-                    }
-                }
-            }
-        },
-        "scrapeConfigFiles": {
-            "type": "array"
-        },
-        "serverFiles": {
-            "type": "object",
-            "properties": {
-                "alerting_rules.yml": {
-                    "type": "object"
-                },
-                "alerts": {
-                    "type": "object"
-                },
-                "prometheus.yml": {
-                    "type": "object",
-                    "properties": {
-                        "rule_files": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        },
-                        "scrape_configs": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "job_name": {
-                                        "type": "string"
-                                    },
-                                    "static_configs": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "object",
-                                            "properties": {
-                                                "targets": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "string"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "recording_rules.yml": {
-                    "type": "object"
-                },
-                "rules": {
-                    "type": "object"
-                }
-            }
-        },
-        "serviceAccounts": {
-            "type": "object",
-            "properties": {
-                "server": {
-                    "type": "object",
-                    "properties": {
-                        "annotations": {
-                            "type": "object"
-                        },
-                        "create": {
-                            "type": "boolean"
-                        },
-                        "name": {
-                            "type": "string"
-                        },
-                        "automountServiceAccountToken": {
-                            "type": "boolean"
-                        }
-                    }
-                }
-            }
+          },
+          "required": [],
+          "title": "rbac"
         }
+      },
+      "required": [],
+      "title": "prometheus-node-exporter"
+    },
+    "prometheus-pushgateway": {
+      "description": "prometheus-pushgateway sub-chart configurable values Please see https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-pushgateway",
+      "properties": {
+        "enabled": {
+          "default": "true",
+          "description": "If false, pushgateway will not be installed",
+          "required": [],
+          "title": "enabled"
+        },
+        "serviceAnnotations": {
+          "description": "Optional service annotations",
+          "properties": {
+            "prometheus.io/probe": {
+              "default": "pushgateway",
+              "title": "prometheus.io/probe",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "serviceAnnotations"
+        }
+      },
+      "required": [],
+      "title": "prometheus-pushgateway"
+    },
+    "rbac": {
+      "description": "Create RBAC resources",
+      "properties": {
+        "create": {
+          "default": true,
+          "description": "If true, create RBAC resources @schema type: [boolean] @schema",
+          "title": "create",
+          "type": "boolean"
+        }
+      },
+      "required": [],
+      "title": "rbac"
+    },
+    "ruleFiles": {
+      "description": "Prometheus server ConfigMap entries for rule files (allow prometheus labels interpolation) @schema type: [object, null] @schema",
+      "required": [],
+      "title": "ruleFiles",
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "scrapeConfigFiles": {
+      "description": "Prometheus server ConfigMap entries for scrape_config_files (allows scrape configs defined in additional files) @schema type: [array, null] @schema",
+      "items": {
+        "required": []
+      },
+      "required": [],
+      "title": "scrapeConfigFiles",
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "scrapeConfigs": {
+      "description": "scrapeConfigs (map) defines Prometheus' default scrape_configs. Each can be disabled by setting \"enabled\" to \"false\" or leaving it empty. The key sets the default \"job_name\". Further scrapeConfigs can be added as new keys, these are then enabled by default. Ref. https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config @schema type: [object, null] @schema",
+      "properties": {
+        "kubernetes-api-servers": {
+          "properties": {
+            "bearer_token_file": {
+              "default": "/var/run/secrets/kubernetes.io/serviceaccount/token",
+              "title": "bearer_token_file",
+              "type": "string"
+            },
+            "enabled": {
+              "default": true,
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "job_name": {
+              "default": "",
+              "description": " type: [string, null] @schema",
+              "required": [],
+              "title": "job_name",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "kubernetes_sd_configs": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "role": {
+                        "default": "endpoints",
+                        "title": "role",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "title": "kubernetes_sd_configs",
+              "type": "array"
+            },
+            "relabel_configs": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "keep",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "default;kubernetes;https",
+                        "title": "regex",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "title": "relabel_configs",
+              "type": "array"
+            },
+            "scheme": {
+              "default": "https",
+              "title": "scheme",
+              "type": "string"
+            },
+            "tls_config": {
+              "properties": {
+                "ca_file": {
+                  "default": "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",
+                  "title": "ca_file",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "tls_config",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "kubernetes-api-servers",
+          "type": "object"
+        },
+        "kubernetes-nodes": {
+          "properties": {
+            "bearer_token_file": {
+              "default": "/var/run/secrets/kubernetes.io/serviceaccount/token",
+              "title": "bearer_token_file",
+              "type": "string"
+            },
+            "enabled": {
+              "default": true,
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "job_name": {
+              "default": "",
+              "description": " type: [string, null] @schema",
+              "required": [],
+              "title": "job_name",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "kubernetes_sd_configs": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "role": {
+                        "default": "node",
+                        "title": "role",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "title": "kubernetes_sd_configs",
+              "type": "array"
+            },
+            "relabel_configs": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "labelmap",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "__meta_kubernetes_node_label_(.+)",
+                        "title": "regex",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "replacement": {
+                        "default": "kubernetes.default.svc:443",
+                        "title": "replacement",
+                        "type": "string"
+                      },
+                      "target_label": {
+                        "default": "__address__",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "regex": {
+                        "default": "(.+)",
+                        "title": "regex",
+                        "type": "string"
+                      },
+                      "replacement": {
+                        "default": "/api/v1/nodes/$1/proxy/metrics",
+                        "title": "replacement",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "__metrics_path__",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "title": "relabel_configs",
+              "type": "array"
+            },
+            "scheme": {
+              "default": "https",
+              "title": "scheme",
+              "type": "string"
+            },
+            "tls_config": {
+              "properties": {
+                "ca_file": {
+                  "default": "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",
+                  "title": "ca_file",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "tls_config",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "kubernetes-nodes",
+          "type": "object"
+        },
+        "kubernetes-nodes-cadvisor": {
+          "properties": {
+            "bearer_token_file": {
+              "default": "/var/run/secrets/kubernetes.io/serviceaccount/token",
+              "title": "bearer_token_file",
+              "type": "string"
+            },
+            "enabled": {
+              "default": true,
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "job_name": {
+              "default": "",
+              "description": " type: [string, null] @schema",
+              "required": [],
+              "title": "job_name",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "kubernetes_sd_configs": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "role": {
+                        "default": "node",
+                        "title": "role",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "title": "kubernetes_sd_configs",
+              "type": "array"
+            },
+            "relabel_configs": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "labelmap",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "__meta_kubernetes_node_label_(.+)",
+                        "title": "regex",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "replacement": {
+                        "default": "kubernetes.default.svc:443",
+                        "title": "replacement",
+                        "type": "string"
+                      },
+                      "target_label": {
+                        "default": "__address__",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "regex": {
+                        "default": "(.+)",
+                        "title": "regex",
+                        "type": "string"
+                      },
+                      "replacement": {
+                        "default": "/api/v1/nodes/$1/proxy/metrics/cadvisor",
+                        "title": "replacement",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "__metrics_path__",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "title": "relabel_configs",
+              "type": "array"
+            },
+            "scheme": {
+              "default": "https",
+              "title": "scheme",
+              "type": "string"
+            },
+            "tls_config": {
+              "properties": {
+                "ca_file": {
+                  "default": "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",
+                  "title": "ca_file",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "tls_config",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "kubernetes-nodes-cadvisor",
+          "type": "object"
+        },
+        "kubernetes-pods": {
+          "properties": {
+            "enabled": {
+              "default": true,
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "honor_labels": {
+              "default": true,
+              "title": "honor_labels",
+              "type": "boolean"
+            },
+            "job_name": {
+              "default": "",
+              "description": " type: [string, null] @schema",
+              "required": [],
+              "title": "job_name",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "kubernetes_sd_configs": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "role": {
+                        "default": "pod",
+                        "title": "role",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "title": "kubernetes_sd_configs",
+              "type": "array"
+            },
+            "relabel_configs": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "keep",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": true,
+                        "title": "regex",
+                        "type": "boolean"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "drop",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": true,
+                        "title": "regex",
+                        "type": "boolean"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "(https?)",
+                        "title": "regex",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "__scheme__",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "(.+)",
+                        "title": "regex",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "__metrics_path__",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "(\\d+);(([A-Fa-f0-9]{1,4}::?){1,7}[A-Fa-f0-9]{1,4})",
+                        "title": "regex",
+                        "type": "string"
+                      },
+                      "replacement": {
+                        "default": "[$2]:$1",
+                        "title": "replacement",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "__address__",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "(\\d+);((([0-9]+?)(\\.|$)){4})",
+                        "title": "regex",
+                        "type": "string"
+                      },
+                      "replacement": {
+                        "default": "$2:$1",
+                        "title": "replacement",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "__address__",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "labelmap",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "__meta_kubernetes_pod_annotation_prometheus_io_param_(.+)",
+                        "title": "regex",
+                        "type": "string"
+                      },
+                      "replacement": {
+                        "default": "__param_$1",
+                        "title": "replacement",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "labelmap",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "__meta_kubernetes_pod_label_(.+)",
+                        "title": "regex",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "namespace",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "pod",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "drop",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "Pending|Succeeded|Failed|Completed",
+                        "title": "regex",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "node",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "title": "relabel_configs",
+              "type": "array"
+            }
+          },
+          "required": [],
+          "title": "kubernetes-pods",
+          "type": "object"
+        },
+        "kubernetes-pods-slow": {
+          "properties": {
+            "enabled": {
+              "default": true,
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "honor_labels": {
+              "default": true,
+              "title": "honor_labels",
+              "type": "boolean"
+            },
+            "job_name": {
+              "default": "",
+              "description": " type: [string, null] @schema",
+              "required": [],
+              "title": "job_name",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "kubernetes_sd_configs": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "role": {
+                        "default": "pod",
+                        "title": "role",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "title": "kubernetes_sd_configs",
+              "type": "array"
+            },
+            "relabel_configs": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "keep",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": true,
+                        "title": "regex",
+                        "type": "boolean"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "(https?)",
+                        "title": "regex",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "__scheme__",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "(.+)",
+                        "title": "regex",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "__metrics_path__",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "(\\d+);(([A-Fa-f0-9]{1,4}::?){1,7}[A-Fa-f0-9]{1,4})",
+                        "title": "regex",
+                        "type": "string"
+                      },
+                      "replacement": {
+                        "default": "[$2]:$1",
+                        "title": "replacement",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "__address__",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "(\\d+);((([0-9]+?)(\\.|$)){4})",
+                        "title": "regex",
+                        "type": "string"
+                      },
+                      "replacement": {
+                        "default": "$2:$1",
+                        "title": "replacement",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "__address__",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "labelmap",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "__meta_kubernetes_pod_annotation_prometheus_io_param_(.+)",
+                        "title": "regex",
+                        "type": "string"
+                      },
+                      "replacement": {
+                        "default": "__param_$1",
+                        "title": "replacement",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "labelmap",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "__meta_kubernetes_pod_label_(.+)",
+                        "title": "regex",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "namespace",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "pod",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "drop",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "Pending|Succeeded|Failed|Completed",
+                        "title": "regex",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "node",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "title": "relabel_configs",
+              "type": "array"
+            },
+            "scrape_interval": {
+              "default": "5m",
+              "title": "scrape_interval",
+              "type": "string"
+            },
+            "scrape_timeout": {
+              "default": "30s",
+              "title": "scrape_timeout",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "kubernetes-pods-slow",
+          "type": "object"
+        },
+        "kubernetes-service-endpoints": {
+          "properties": {
+            "enabled": {
+              "default": true,
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "honor_labels": {
+              "default": true,
+              "title": "honor_labels",
+              "type": "boolean"
+            },
+            "job_name": {
+              "default": "",
+              "description": " type: [string, null] @schema",
+              "required": [],
+              "title": "job_name",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "kubernetes_sd_configs": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "role": {
+                        "default": "endpoints",
+                        "title": "role",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "title": "kubernetes_sd_configs",
+              "type": "array"
+            },
+            "relabel_configs": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "keep",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": true,
+                        "title": "regex",
+                        "type": "boolean"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "drop",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": true,
+                        "title": "regex",
+                        "type": "boolean"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "(https?)",
+                        "title": "regex",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "__scheme__",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "(.+)",
+                        "title": "regex",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "__metrics_path__",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "(.+?)(?::\\d+)?;(\\d+)",
+                        "title": "regex",
+                        "type": "string"
+                      },
+                      "replacement": {
+                        "default": "$1:$2",
+                        "title": "replacement",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "__address__",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "labelmap",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "__meta_kubernetes_service_annotation_prometheus_io_param_(.+)",
+                        "title": "regex",
+                        "type": "string"
+                      },
+                      "replacement": {
+                        "default": "__param_$1",
+                        "title": "replacement",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "labelmap",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "__meta_kubernetes_service_label_(.+)",
+                        "title": "regex",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "namespace",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "service",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "node",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "title": "relabel_configs",
+              "type": "array"
+            }
+          },
+          "required": [],
+          "title": "kubernetes-service-endpoints",
+          "type": "object"
+        },
+        "kubernetes-service-endpoints-slow": {
+          "properties": {
+            "enabled": {
+              "default": true,
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "honor_labels": {
+              "default": true,
+              "title": "honor_labels",
+              "type": "boolean"
+            },
+            "job_name": {
+              "default": "",
+              "description": " type: [string, null] @schema",
+              "required": [],
+              "title": "job_name",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "kubernetes_sd_configs": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "role": {
+                        "default": "endpoints",
+                        "title": "role",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "title": "kubernetes_sd_configs",
+              "type": "array"
+            },
+            "relabel_configs": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "keep",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": true,
+                        "title": "regex",
+                        "type": "boolean"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "(https?)",
+                        "title": "regex",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "__scheme__",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "(.+)",
+                        "title": "regex",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "__metrics_path__",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "(.+?)(?::\\d+)?;(\\d+)",
+                        "title": "regex",
+                        "type": "string"
+                      },
+                      "replacement": {
+                        "default": "$1:$2",
+                        "title": "replacement",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "__address__",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "labelmap",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "__meta_kubernetes_service_annotation_prometheus_io_param_(.+)",
+                        "title": "regex",
+                        "type": "string"
+                      },
+                      "replacement": {
+                        "default": "__param_$1",
+                        "title": "replacement",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "labelmap",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "__meta_kubernetes_service_label_(.+)",
+                        "title": "regex",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "namespace",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "service",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "replace",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "node",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "title": "relabel_configs",
+              "type": "array"
+            },
+            "scrape_interval": {
+              "default": "5m",
+              "title": "scrape_interval",
+              "type": "string"
+            },
+            "scrape_timeout": {
+              "default": "30s",
+              "title": "scrape_timeout",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "kubernetes-service-endpoints-slow",
+          "type": "object"
+        },
+        "kubernetes-services": {
+          "properties": {
+            "enabled": {
+              "default": true,
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "honor_labels": {
+              "default": true,
+              "title": "honor_labels",
+              "type": "boolean"
+            },
+            "job_name": {
+              "default": "",
+              "description": " type: [string, null] @schema",
+              "required": [],
+              "title": "job_name",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "kubernetes_sd_configs": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "role": {
+                        "default": "service",
+                        "title": "role",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "title": "kubernetes_sd_configs",
+              "type": "array"
+            },
+            "metrics_path": {
+              "default": "/probe",
+              "title": "metrics_path",
+              "type": "string"
+            },
+            "params": {
+              "properties": {
+                "module": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "title": "module",
+                  "type": "array"
+                }
+              },
+              "required": [],
+              "title": "params",
+              "type": "object"
+            },
+            "relabel_configs": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "keep",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": true,
+                        "title": "regex",
+                        "type": "boolean"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "__param_target",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "replacement": {
+                        "default": "blackbox",
+                        "title": "replacement",
+                        "type": "string"
+                      },
+                      "target_label": {
+                        "default": "__address__",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "instance",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "labelmap",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "__meta_kubernetes_service_label_(.+)",
+                        "title": "regex",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "namespace",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      },
+                      "target_label": {
+                        "default": "service",
+                        "title": "target_label",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "title": "relabel_configs",
+              "type": "array"
+            }
+          },
+          "required": [],
+          "title": "kubernetes-services",
+          "type": "object"
+        },
+        "prometheus": {
+          "properties": {
+            "enabled": {
+              "default": true,
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "job_name": {
+              "default": "",
+              "description": " type: [string, null] @schema",
+              "required": [],
+              "title": "job_name",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "static_configs": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "targets": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "targets",
+                        "type": "array"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "title": "static_configs",
+              "type": "array"
+            }
+          },
+          "required": [],
+          "title": "prometheus",
+          "type": "object"
+        },
+        "prometheus-pushgateway": {
+          "properties": {
+            "enabled": {
+              "default": true,
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "honor_labels": {
+              "default": true,
+              "title": "honor_labels",
+              "type": "boolean"
+            },
+            "job_name": {
+              "default": "",
+              "description": " type: [string, null] @schema",
+              "required": [],
+              "title": "job_name",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "kubernetes_sd_configs": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "role": {
+                        "default": "service",
+                        "title": "role",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "title": "kubernetes_sd_configs",
+              "type": "array"
+            },
+            "relabel_configs": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "action": {
+                        "default": "keep",
+                        "title": "action",
+                        "type": "string"
+                      },
+                      "regex": {
+                        "default": "pushgateway",
+                        "title": "regex",
+                        "type": "string"
+                      },
+                      "source_labels": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "title": "source_labels",
+                        "type": "array"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "title": "relabel_configs",
+              "type": "array"
+            }
+          },
+          "required": [],
+          "title": "prometheus-pushgateway",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "scrapeConfigs",
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "server": {
+      "description": "prometheus server's configuration",
+      "properties": {
+        "affinity": {
+          "description": "Pod affinity @schema type: [object, null] @schema",
+          "required": [],
+          "title": "affinity",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "alertmanagers": {
+          "description": "Configuration of Alertmanagers @schema type: [array, null] @schema",
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "alertmanagers",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "automountServiceAccountToken": {
+          "default": "~",
+          "description": "Opt out of automounting Kubernetes API credentials. If set it will override serviceAccounts.server.automountServiceAccountToken value for ServiceAccount. @schema type: [boolean, null] @schema",
+          "required": [],
+          "title": "automountServiceAccountToken",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "baseURL": {
+          "default": "",
+          "description": "External URL which can access prometheus, e.g. ingress host name @schema type: [string, null] @schema",
+          "required": [],
+          "title": "baseURL",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "clusterRoleNameOverride": {
+          "default": "",
+          "description": "If set it will override prometheus.server.fullname value for ClusterRole and ClusterRoleBinding @schema type: [string, null] @schema",
+          "required": [],
+          "title": "clusterRoleNameOverride",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "command": {
+          "description": "Prometheus server command @schema type: [array, null] @schema",
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "command",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "configFromSecret": {
+          "default": "",
+          "description": "Prometheus server configuration from a secret Do not set both `configMapOverrideName` and `configFromSecret` simultaneously. Use either `configMapOverrideName` or `configFromSecret`. If `configFromSecret` is defined, a ConfigMap resource will NOT be generated. @schema type: [string, null] @schema",
+          "required": [],
+          "title": "configFromSecret",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "configMapAnnotations": {
+          "description": "Annotations to be added to ConfigMap @schema type: [object, null] @schema",
+          "required": [],
+          "title": "configMapAnnotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "configMapOverrideName": {
+          "default": "",
+          "description": "ConfigMap override where fullname is {{.Release.Name}}-{{.Values.server.configMapOverrideName}} Defining configMapOverrideName will cause templates/server-configmap.yaml to NOT generate a ConfigMap resource @schema type: [string, null] @schema",
+          "required": [],
+          "title": "configMapOverrideName",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "configPath": {
+          "default": "/etc/config/prometheus.yml",
+          "description": "Path to a configuration file on prometheus server container FS",
+          "required": [],
+          "title": "configPath"
+        },
+        "containerSecurityContext": {
+          "description": "Security context to be added to server container @schema type: [object, null] @schema",
+          "required": [],
+          "title": "containerSecurityContext",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "daemonSet": {
+          "description": "DaemonSet configuration",
+          "properties": {
+            "annotations": {
+              "description": "Annotations to be added to daemonset @schema type: [object, null] @schema",
+              "required": [],
+              "title": "annotations",
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "enabled": {
+              "default": "false",
+              "description": "If true, use a daemonset instead of a deployment for pod management. This allows to run prometheus agent on every node in the cluster.",
+              "required": [],
+              "title": "enabled"
+            },
+            "labels": {
+              "description": "Labels to be added to daemonset @schema type: [object, null] @schema",
+              "required": [],
+              "title": "labels",
+              "type": [
+                "object",
+                "null"
+              ]
+            }
+          },
+          "required": [],
+          "title": "daemonSet"
+        },
+        "defaultFlagsOverride": {
+          "description": "defaultFlagsOverride replaces all the default flags @schema type: [array, null] @schema",
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "defaultFlagsOverride",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "deploymentAnnotations": {
+          "description": "Annotations to be added to deployment @schema type: [object, null] @schema",
+          "required": [],
+          "title": "deploymentAnnotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "dnsConfig": {
+          "description": "Custom DNS configuration to be added to prometheus server pods @schema type: [object, null] @schema",
+          "required": [],
+          "title": "dnsConfig",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "dnsPolicy": {
+          "default": "ClusterFirst",
+          "description": "When hostNetwork is enabled, this will set to ClusterFirstWithHostNet automatically",
+          "required": [],
+          "title": "dnsPolicy"
+        },
+        "emptyDir": {
+          "description": "emptyDir volume configuration used if persistent volume is not enabled",
+          "properties": {
+            "medium": {
+              "default": "",
+              "description": "Configure medium @schema type: [string, null] @schema",
+              "required": [],
+              "title": "medium",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "sizeLimit": {
+              "default": "",
+              "description": "Configure size limit @schema type: [string, null] @schema",
+              "required": [],
+              "title": "sizeLimit",
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [],
+          "title": "emptyDir"
+        },
+        "enableServiceLinks": {
+          "default": "true",
+          "description": "EnableServiceLinks indicates whether information about services should be injected into pod's environment variables, matching the syntax of Docker links.",
+          "required": [],
+          "title": "enableServiceLinks"
+        },
+        "env": {
+          "description": "Additional server container environment variables  You specify this manually like you would a raw deployment manifest. This means you can bind in environment variables from secrets.  e.g. static environment variable:  - name: DEMO_GREETING    value: \"Hello from the environment\"  e.g. secret environment variable: - name: USERNAME   valueFrom:     secretKeyRef:       name: mysecret       key: username @schema type: [array, null] @schema",
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "env",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "exemplars": {
+          "description": "exemplars sets configuration to reference data outside of the MetricSet. Ref. https://prometheus.io/docs/prometheus/latest/configuration/configuration/#exemplars Must be enabled via --enable-feature=exemplar-storage @schema type: [object, null] @schema",
+          "required": [],
+          "title": "exemplars",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "extraArgs": {
+          "description": "Additional Prometheus server container arguments Set to null for argumentless flags @schema type: [object, null] @schema",
+          "required": [],
+          "title": "extraArgs",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "extraConfigmapLabels": {
+          "description": "Extra labels for Prometheus server ConfigMap (ConfigMap that holds serverFiles) @schema type: [object, null] @schema",
+          "required": [],
+          "title": "extraConfigmapLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "extraConfigmapMounts": {
+          "description": "Additional ConfigMaps to mount @schema type: [array, null] @schema",
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "extraConfigmapMounts",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "extraFlags": {
+          "description": "extraFlags adds additional flags @schema type: [array, null] @schema",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              }
+            ],
+            "required": []
+          },
+          "required": [],
+          "title": "extraFlags",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "extraHostPathMounts": {
+          "description": "Additional Prometheus server hostPath mounts @schema type: [array, null] @schema",
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "extraHostPathMounts",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "extraInitContainers": {
+          "description": "Additional InitContainers to initialize in the pod @schema type: [array, null] @schema",
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "extraInitContainers",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "extraSecretMounts": {
+          "description": "Additional Prometheus server Secrets to mount Defines additional mounts with secrets. Secrets must be manually created in the namespace. @schema type: [array, null] @schema",
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "extraSecretMounts",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "extraVolumeMounts": {
+          "description": "Additional Prometheus server Volume mounts @schema type: [array, null] @schema",
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "extraVolumeMounts",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "extraVolumes": {
+          "description": "Additional Prometheus server Volumes @schema type: [array, null] @schema",
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "extraVolumes",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "fullnameOverride": {
+          "default": "",
+          "description": "Override the prometheus.server.fullname for all objects related to the Prometheus server @schema type: [string, null] @schema",
+          "required": [],
+          "title": "fullnameOverride",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "global": {
+          "description": "global prometheus' configuration",
+          "properties": {
+            "evaluation_interval": {
+              "default": "1m",
+              "description": "How frequently to evaluate rules",
+              "required": [],
+              "title": "evaluation_interval"
+            },
+            "scrape_interval": {
+              "default": "1m",
+              "description": "How frequently to scrape targets by default",
+              "required": [],
+              "title": "scrape_interval"
+            },
+            "scrape_timeout": {
+              "default": "10s",
+              "description": "How long until a scrape request times out",
+              "required": [],
+              "title": "scrape_timeout"
+            }
+          },
+          "required": [],
+          "title": "global"
+        },
+        "hostAliases": {
+          "description": "hostAliases allows adding entries to /etc/hosts inside the containers @schema type: [array, null] @schema",
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "hostAliases",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "hostNetwork": {
+          "default": "false",
+          "description": "hostNetwork is required for use in managed kubernetes clusters (such as AWS EKS) with custom CNI (such as calico), because control-plane managed by AWS cannot communicate with pods' IP CIDR and admission webhooks are not working",
+          "required": [],
+          "title": "hostNetwork"
+        },
+        "hostPort": {
+          "default": "~",
+          "description": " @schema type: [integer, null] @schema",
+          "required": [],
+          "title": "hostPort",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "image": {
+          "description": "Prometheus server container image",
+          "properties": {
+            "digest": {
+              "default": "",
+              "description": "digest when set to a non-empty value, images will be pulled by digest (regardless of tag value). @schema type: [string, null] @schema",
+              "required": [],
+              "title": "digest",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "pullPolicy": {
+              "default": "IfNotPresent",
+              "description": "Prometheus server container image pull policy",
+              "required": [],
+              "title": "pullPolicy"
+            },
+            "repository": {
+              "default": "quay.io/prometheus/prometheus",
+              "description": "Prometheus server container image repository",
+              "required": [],
+              "title": "repository"
+            },
+            "tag": {
+              "default": "",
+              "description": "tag if not set appVersion field from Chart.yaml is used @schema type: [string, null] @schema",
+              "required": [],
+              "title": "tag",
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [],
+          "title": "image"
+        },
+        "ingress": {
+          "description": "Ingress configuration",
+          "properties": {
+            "annotations": {
+              "description": "Prometheus server Ingress annotations @schema type: [object, null] @schema",
+              "required": [],
+              "title": "annotations",
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "enabled": {
+              "default": "false",
+              "description": "If true, Prometheus server Ingress will be created",
+              "required": [],
+              "title": "enabled"
+            },
+            "extraLabels": {
+              "description": "Prometheus server Ingress additional labels @schema type: [object, null] @schema",
+              "required": [],
+              "title": "extraLabels",
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "extraPaths": {
+              "description": "Extra paths to prepend to every host configuration. This is useful when working with annotation based services (passed through tpl). @schema type: [array, null] @schema",
+              "items": {
+                "required": []
+              },
+              "required": [],
+              "title": "extraPaths",
+              "type": [
+                "array",
+                "null"
+              ]
+            },
+            "hosts": {
+              "description": "Prometheus server Ingress hostnames with optional path (passed through tpl) Must be provided if Ingress is enabled @schema type: [array, null] @schema",
+              "items": {
+                "required": []
+              },
+              "required": [],
+              "title": "hosts",
+              "type": [
+                "array",
+                "null"
+              ]
+            },
+            "ingressClassName": {
+              "default": "",
+              "description": "Set ingress class name @schema type: [string, null] @schema",
+              "required": [],
+              "title": "ingressClassName",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "path": {
+              "default": "/",
+              "description": "Prometheus server Ingress path",
+              "required": [],
+              "title": "path"
+            },
+            "pathType": {
+              "default": "Prefix",
+              "description": "pathType determines the interpretation of the path matching",
+              "required": [],
+              "title": "pathType"
+            },
+            "servicePort": {
+              "default": "~",
+              "description": "Redirect ingress to an additional defined port on the service @schema type: [integer, null] @schema",
+              "required": [],
+              "title": "servicePort",
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "tls": {
+              "description": "Prometheus server Ingress TLS configuration (hosts passed through tpl) Secrets must be manually created in the namespace @schema type: [array, null] @schema",
+              "items": {
+                "required": []
+              },
+              "required": [],
+              "title": "tls",
+              "type": [
+                "array",
+                "null"
+              ]
+            }
+          },
+          "required": [],
+          "title": "ingress"
+        },
+        "livenessProbeFailureThreshold": {
+          "default": "3",
+          "description": "Set failure threshold for liveness probe",
+          "required": [],
+          "title": "livenessProbeFailureThreshold"
+        },
+        "livenessProbeInitialDelay": {
+          "default": "30",
+          "description": "Set initial delay for liveness probe",
+          "required": [],
+          "title": "livenessProbeInitialDelay"
+        },
+        "livenessProbePeriodSeconds": {
+          "default": "15",
+          "description": "Set period for liveness probe",
+          "required": [],
+          "title": "livenessProbePeriodSeconds"
+        },
+        "livenessProbeSuccessThreshold": {
+          "default": "1",
+          "description": "Set success threshold for liveness probe",
+          "required": [],
+          "title": "livenessProbeSuccessThreshold"
+        },
+        "livenessProbeTimeout": {
+          "default": "10",
+          "description": "Set timeout for liveness probe",
+          "required": [],
+          "title": "livenessProbeTimeout"
+        },
+        "name": {
+          "default": "server",
+          "description": "Prometheus server container name",
+          "required": [],
+          "title": "name"
+        },
+        "namespaces": {
+          "description": "namespaces to include in service discovery instead of clusterwide discovery. Needed if you want to run Prometheus without cluster-admin privileges (namespaced configuration). See also releaseNamespace. Setting useExistingClusterRoleName is required. @schema type: [array, null] @schema",
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "namespaces",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "nodeSelector": {
+          "description": "Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/ @schema type: [object, null] @schema",
+          "required": [],
+          "title": "nodeSelector",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "otlp": {
+          "description": "otlp sets OTLP configuration https://prometheus.io/docs/guides/opentelemetry @schema type: [object, null] @schema",
+          "required": [],
+          "title": "otlp",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "persistentVolume": {
+          "description": "Persistent volume configuration",
+          "properties": {
+            "accessModes": {
+              "description": "Prometheus server data Persistent Volume access modes Must match those of existing PV or dynamic provisioner Ref: http://kubernetes.io/docs/user-guide/persistent-volumes/ @schema type: [array, null] @schema",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "accessModes",
+              "type": [
+                "array",
+                "null"
+              ]
+            },
+            "annotations": {
+              "description": "Prometheus server data Persistent Volume annotations @schema type: [object, null] @schema",
+              "required": [],
+              "title": "annotations",
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "enabled": {
+              "default": "true",
+              "description": "If true, Prometheus server will create/use a Persistent Volume Claim If false, use emptyDir",
+              "required": [],
+              "title": "enabled"
+            },
+            "existingClaim": {
+              "default": "",
+              "description": "Prometheus server data Persistent Volume existing claim name Requires server.persistentVolume.enabled: true If defined, PVC must be created manually before volume will be bound @schema type: [string, null] @schema",
+              "required": [],
+              "title": "existingClaim",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "labels": {
+              "description": "Prometheus server data Persistent Volume labels @schema type: [object, null] @schema",
+              "required": [],
+              "title": "labels",
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "mountPath": {
+              "default": "/data",
+              "description": "Prometheus server data Persistent Volume mount root path",
+              "required": [],
+              "title": "mountPath"
+            },
+            "selector": {
+              "description": "Persistent Volume Claim Selector Useful if Persistent Volumes have been provisioned in advance Ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector @schema type: [object, null] @schema",
+              "required": [],
+              "title": "selector",
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "size": {
+              "default": "8Gi",
+              "description": "Prometheus server data Persistent Volume size",
+              "required": [],
+              "title": "size"
+            },
+            "statefulSetNameOverride": {
+              "default": "",
+              "description": "If set it will override the name of the created persistent volume claim generated by the stateful set. @schema type: [string, null] @schema",
+              "required": [],
+              "title": "statefulSetNameOverride",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "storageClass": {
+              "default": "~",
+              "description": "Prometheus server data Persistent Volume Storage Class If defined, storageClassName: <storageClass> If set to \"-\", storageClassName: \"\", which disables dynamic provisioning If undefined (the default) or set to null, no storageClassName spec is   set, choosing the default provisioner.  (gp2 on AWS, standard on   GKE, AWS & OpenStack) @schema type: [string, null] @schema",
+              "required": [],
+              "title": "storageClass",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "subPath": {
+              "default": "",
+              "description": "Subdirectory of Prometheus server data Persistent Volume to mount Useful if the volume's root directory is not empty @schema type: [string, null] @schema",
+              "required": [],
+              "title": "subPath",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "volumeName": {
+              "default": "",
+              "description": "Persistent Volume Name Useful if Persistent Volumes have been provisioned in advance and you want to use a specific one @schema type: [string, null] @schema",
+              "required": [],
+              "title": "volumeName",
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [],
+          "title": "persistentVolume"
+        },
+        "podAnnotations": {
+          "description": "Annotations to be added to Prometheus server pods @schema type: [object, null] @schema",
+          "required": [],
+          "title": "podAnnotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "podAntiAffinity": {
+          "default": "",
+          "description": "Pod anti-affinity can prevent the scheduler from placing Prometheus server replicas on the same node. The value \"soft\" means that the scheduler should *prefer* to not schedule two replica pods onto the same node but no guarantee is provided. The value \"hard\" means that the scheduler is *required* to not schedule two replica pods onto the same node. The default value \"\" will disable pod anti-affinity so that no anti-affinity rules will be configured (unless set in `server.affinity`). @schema type: [string, null] @schema",
+          "required": [],
+          "title": "podAntiAffinity",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "podAntiAffinityTopologyKey": {
+          "default": "kubernetes.io/hostname",
+          "description": "If anti-affinity is enabled sets the topologyKey to use for anti-affinity. This can be changed to, for example, failure-domain.beta.kubernetes.io/zone",
+          "required": [],
+          "title": "podAntiAffinityTopologyKey"
+        },
+        "podDisruptionBudget": {
+          "description": "PodDisruptionBudget settings Ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/",
+          "properties": {
+            "enabled": {
+              "default": false,
+              "title": "enabled",
+              "type": "boolean"
+            }
+          },
+          "required": [],
+          "title": "podDisruptionBudget"
+        },
+        "podLabels": {
+          "description": "Labels to be added to Prometheus server pods @schema type: [object, null] @schema",
+          "required": [],
+          "title": "podLabels",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "portName": {
+          "default": "",
+          "description": "Set name of the port @schema type: [string, null] @schema",
+          "required": [],
+          "title": "portName",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "prefixURL": {
+          "default": "",
+          "description": "The URL prefix at which the container can be accessed. Useful in the case the '-web.external-url' includes a slug so that the various internal URLs are still able to access as they are in the default case. (Optional) @schema type: [string, null] @schema",
+          "required": [],
+          "title": "prefixURL",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "priorityClassName": {
+          "default": "",
+          "description": "prometheus server priorityClassName @schema type: [string, null] @schema",
+          "required": [],
+          "title": "priorityClassName",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "probeHeaders": {
+          "description": "probeHeaders sets custom HTTP headers for Liveness/Readiness/Startup Probe Useful for providing HTTP Basic Auth to healthchecks @schema type: [array, null] @schema",
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "probeHeaders",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "probeScheme": {
+          "default": "HTTP",
+          "description": "Set HTTP scheme for probes",
+          "required": [],
+          "title": "probeScheme"
+        },
+        "readinessProbeFailureThreshold": {
+          "default": "3",
+          "description": "Set failure threshold for readiness probe",
+          "required": [],
+          "title": "readinessProbeFailureThreshold"
+        },
+        "readinessProbeInitialDelay": {
+          "default": "30",
+          "description": "Set initial delay for readiness probe",
+          "required": [],
+          "title": "readinessProbeInitialDelay"
+        },
+        "readinessProbePeriodSeconds": {
+          "default": "5",
+          "description": "Set period for readiness probe",
+          "required": [],
+          "title": "readinessProbePeriodSeconds"
+        },
+        "readinessProbeSuccessThreshold": {
+          "default": "1",
+          "description": "Set success threshold for readiness probe",
+          "required": [],
+          "title": "readinessProbeSuccessThreshold"
+        },
+        "readinessProbeTimeout": {
+          "default": "4",
+          "description": "Set timeout for ediness probe",
+          "required": [],
+          "title": "readinessProbeTimeout"
+        },
+        "releaseNamespace": {
+          "default": "false",
+          "description": "releaseNamespace to enable only the release namespace for service discovery. By default all namespaces are included in service discovery. If releaseNamespace and namespaces are both set, a merged list will be created. Note that kubernetes_sd_configs.namespaces in scrape configs must be specified if namespaced service discovery is desired. Setting useExistingClusterRoleName is required.",
+          "required": [],
+          "title": "releaseNamespace"
+        },
+        "remoteRead": {
+          "description": "remoteRead sets remote_read configuration Ref. https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_read @schema type: [array, null] @schema",
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "remoteRead",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "remoteWrite": {
+          "description": "remoteWrite sets remote_write configuration Ref. https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write @schema type: [array, null] @schema",
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "remoteWrite",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "replicaCount": {
+          "default": 1,
+          "description": "Use a StatefulSet if replicaCount needs to be greater than 1 (see below) @schema type: [integer] @schema",
+          "title": "replicaCount",
+          "type": "integer"
+        },
+        "resources": {
+          "description": "Prometheus server resource requests and limits Ref: http://kubernetes.io/docs/user-guide/compute-resources/ @schema type: [object, null] @schema",
+          "required": [],
+          "title": "resources",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "retention": {
+          "default": "15d",
+          "description": "Prometheus data retention period (default if not specified is 15 days)",
+          "required": [],
+          "title": "retention"
+        },
+        "retentionSize": {
+          "default": "",
+          "description": "Prometheus' data retention size. Supported units: B, KB, MB, GB, TB, PB, EB. @schema type: [string, null] @schema",
+          "required": [],
+          "title": "retentionSize",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "revisionHistoryLimit": {
+          "default": 10,
+          "description": "Number of old history to retain to allow rollback Default Kubernetes value is set to 10 @schema type: [integer] @schema",
+          "title": "revisionHistoryLimit",
+          "type": "integer"
+        },
+        "route": {
+          "description": "route (map) allows configuration of HTTPRoute resources Requires Gateway API resources and suitable controller installed within the cluster Ref. https://gateway-api.sigs.k8s.io/guides/http-routing/",
+          "properties": {
+            "main": {
+              "properties": {
+                "additionalRules": {
+                  "description": "additionalRules (templated) allows adding custom rules to the route @schema type: [array, null] @schema",
+                  "items": {
+                    "required": []
+                  },
+                  "required": [],
+                  "title": "additionalRules",
+                  "type": [
+                    "array",
+                    "null"
+                  ]
+                },
+                "annotations": {
+                  "description": "Annotations to attach to the HTTPRoute resource @schema type: [object, null] @schema",
+                  "required": [],
+                  "title": "annotations",
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "apiVersion": {
+                  "default": "",
+                  "description": "ApiVersion set by default to \"gateway.networking.k8s.io/v1\" @schema type: [string, null] @schema",
+                  "required": [],
+                  "title": "apiVersion",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "enabled": {
+                  "default": "false",
+                  "description": "Enable this route",
+                  "required": [],
+                  "title": "enabled"
+                },
+                "filters": {
+                  "description": "Filters define the filters that are applied to requests that match this rule @schema type: [array, null] @schema",
+                  "items": {
+                    "required": []
+                  },
+                  "required": [],
+                  "title": "filters",
+                  "type": [
+                    "array",
+                    "null"
+                  ]
+                },
+                "hostnames": {
+                  "description": "Hostnames (templated) defines a set of hostnames that should match against the HTTP Host header to select a HTTPRoute used to process the request @schema type: [array, null] @schema",
+                  "items": {
+                    "required": []
+                  },
+                  "required": [],
+                  "title": "hostnames",
+                  "type": [
+                    "array",
+                    "null"
+                  ]
+                },
+                "httpsRedirect": {
+                  "default": "false",
+                  "description": "httpsRedirect adds a filter for redirecting to https (HTTP 301 Moved Permanently). To redirect HTTP traffic to HTTPS, you need to have a Gateway with both HTTP and HTTPS listeners. Matches and filters do not take effect if enabled. Ref. https://gateway-api.sigs.k8s.io/guides/http-redirect-rewrite/",
+                  "required": [],
+                  "title": "httpsRedirect"
+                },
+                "kind": {
+                  "default": "",
+                  "description": "kind set by default to HTTPRoute @schema type: [string, null] @schema",
+                  "required": [],
+                  "title": "kind",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "labels": {
+                  "description": "Labels to attach to the HTTPRoute resource @schema type: [object, null] @schema",
+                  "required": [],
+                  "title": "labels",
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "matches": {
+                  "description": "Matches define conditions used for matching the rule against incoming HTTP requests",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "properties": {
+                          "path": {
+                            "properties": {
+                              "type": {
+                                "default": "PathPrefix",
+                                "title": "type",
+                                "type": "string"
+                              },
+                              "value": {
+                                "default": "/",
+                                "title": "value",
+                                "type": "string"
+                              }
+                            },
+                            "required": [],
+                            "title": "path",
+                            "type": "object"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "required": [],
+                  "title": "matches"
+                },
+                "parentRefs": {
+                  "description": "ParentRefs refers to resources this HTTPRoute is to be attached to (Gateways) @schema type: [array, null] @schema",
+                  "items": {
+                    "required": []
+                  },
+                  "required": [],
+                  "title": "parentRefs",
+                  "type": [
+                    "array",
+                    "null"
+                  ]
+                }
+              },
+              "required": [],
+              "title": "main",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "route"
+        },
+        "runtimeClassName": {
+          "default": "",
+          "description": "prometheus server runtimeClassName @schema type: [string, null] @schema",
+          "required": [],
+          "title": "runtimeClassName",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "schedulerName": {
+          "default": "",
+          "description": "Use an alternate scheduler, e.g. \"stork\". Ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/ @schema type: [string, null] @schema",
+          "required": [],
+          "title": "schedulerName",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "securityContext": {
+          "description": "Security context to be added to server pods @schema type: [object, null] @schema",
+          "properties": {
+            "fsGroup": {
+              "default": 65534,
+              "title": "fsGroup",
+              "type": "integer"
+            },
+            "runAsGroup": {
+              "default": 65534,
+              "title": "runAsGroup",
+              "type": "integer"
+            },
+            "runAsNonRoot": {
+              "default": true,
+              "title": "runAsNonRoot",
+              "type": "boolean"
+            },
+            "runAsUser": {
+              "default": 65534,
+              "title": "runAsUser",
+              "type": "integer"
+            }
+          },
+          "required": [],
+          "title": "securityContext",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "service": {
+          "description": "Service configuration",
+          "properties": {
+            "additionalPorts": {
+              "description": "Additional port to define in the Service @schema type: [array, null] @schema",
+              "items": {
+                "required": []
+              },
+              "required": [],
+              "title": "additionalPorts",
+              "type": [
+                "array",
+                "null"
+              ]
+            },
+            "annotations": {
+              "description": "Annotations to be added to Service @schema type: [object, null] @schema",
+              "required": [],
+              "title": "annotations",
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "clusterIP": {
+              "default": "",
+              "description": "Set ClusterIP for Prometheus server service @schema type: [string, null] @schema",
+              "required": [],
+              "title": "clusterIP",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "enabled": {
+              "default": "true",
+              "description": "If false, no Service will be created for the Prometheus server",
+              "required": [],
+              "title": "enabled"
+            },
+            "externalIPs": {
+              "description": "List of IP addresses at which the Prometheus server service is available Ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips @schema type: [array, null] @schema",
+              "items": {
+                "required": []
+              },
+              "required": [],
+              "title": "externalIPs",
+              "type": [
+                "array",
+                "null"
+              ]
+            },
+            "externalTrafficPolicy": {
+              "default": "",
+              "description": "externalTrafficPolicy is applicable to service with externally-facing addresses (NodePorts, ExternalIPs, and LoadBalancer IPs) @schema type: [string, null] @schema",
+              "required": [],
+              "title": "externalTrafficPolicy",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "gRPC": {
+              "description": "Configure gRPC on service to allow auto discovery with thanos-querier",
+              "properties": {
+                "enabled": {
+                  "default": "false",
+                  "description": "Enable gRPC port on service to allow auto discovery with thanos-querier",
+                  "required": [],
+                  "title": "enabled"
+                },
+                "servicePort": {
+                  "default": 10901,
+                  "description": "Port for gRPC service @schema type: [integer] @schema",
+                  "title": "servicePort",
+                  "type": "integer"
+                }
+              },
+              "required": [],
+              "title": "gRPC"
+            },
+            "labels": {
+              "description": "Labels to be added to Service @schema type: [object, null] @schema",
+              "required": [],
+              "title": "labels",
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "loadBalancerClass": {
+              "default": "",
+              "description": "LoadBalancerClass for Prometheus server service (optional, cloud specific) @schema type: [string, null] @schema",
+              "required": [],
+              "title": "loadBalancerClass",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "loadBalancerIP": {
+              "default": "",
+              "description": "LoadBalancerIP for Prometheus server service (optional, cloud specific) @schema type: [string, null] @schema",
+              "required": [],
+              "title": "loadBalancerIP",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "loadBalancerSourceRanges": {
+              "description": "LoadBalancerSourceRanges for Prometheus server service (optional, cloud specific) @schema type: [array, null] @schema",
+              "items": {
+                "required": []
+              },
+              "required": [],
+              "title": "loadBalancerSourceRanges",
+              "type": [
+                "array",
+                "null"
+              ]
+            },
+            "servicePort": {
+              "default": 80,
+              "description": "Service port for Prometheus server service @schema type: [integer] @schema",
+              "title": "servicePort",
+              "type": "integer"
+            },
+            "sessionAffinity": {
+              "default": "None",
+              "description": "SessionAffinity configures the affinity settings for the Service",
+              "required": [],
+              "title": "sessionAffinity"
+            },
+            "statefulsetReplica": {
+              "description": "If using a statefulSet (statefulSet.enabled=true), configure the service to connect to a specific replica to have a consistent view of the data.",
+              "properties": {
+                "enabled": {
+                  "default": "false",
+                  "description": "If true, configure the service to connect to a specific replica",
+                  "required": [],
+                  "title": "enabled"
+                },
+                "replica": {
+                  "default": "0",
+                  "description": "The index of the replica to connect to (0-based)",
+                  "required": [],
+                  "title": "replica"
+                }
+              },
+              "required": [],
+              "title": "statefulsetReplica"
+            },
+            "type": {
+              "default": "ClusterIP",
+              "description": "ServiceType of Prometheus server service",
+              "required": [],
+              "title": "type"
+            }
+          },
+          "required": [],
+          "title": "service",
+          "type": "object"
+        },
+        "sidecarContainers": {
+          "description": "sidecarContainers - add more containers to prometheus server @schema type: [object, null] @schema",
+          "required": [],
+          "title": "sidecarContainers",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "sidecarTemplateValues": {
+          "description": "sidecarTemplateValues - context to be used in template for sidecarContainers @schema type: [object, null] @schema",
+          "required": [],
+          "title": "sidecarTemplateValues",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "startupProbe": {
+          "description": "Configure startup probe",
+          "properties": {
+            "enabled": {
+              "default": "false",
+              "description": "Enable startup probe",
+              "required": [],
+              "title": "enabled"
+            },
+            "failureThreshold": {
+              "default": "30",
+              "description": "set failure threshold for startup probe",
+              "required": [],
+              "title": "failureThreshold"
+            },
+            "periodSeconds": {
+              "default": "5",
+              "description": "Set period for startup probe",
+              "required": [],
+              "title": "periodSeconds"
+            },
+            "timeoutSeconds": {
+              "default": "10",
+              "description": "Set timeout for startup probe",
+              "required": [],
+              "title": "timeoutSeconds"
+            }
+          },
+          "required": [],
+          "title": "startupProbe"
+        },
+        "statefulSet": {
+          "description": "StatefulSet configuration",
+          "properties": {
+            "annotations": {
+              "description": "Annotations to be added to statefulset @schema type: [object, null] @schema",
+              "required": [],
+              "title": "annotations",
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "enabled": {
+              "default": "false",
+              "description": "If true, use a statefulset instead of a deployment for pod management. This allows to scale replicas to more than 1 pod",
+              "required": [],
+              "title": "enabled"
+            },
+            "headless": {
+              "description": "Prometheus' headless service to use for the statefulset",
+              "properties": {
+                "annotations": {
+                  "description": "Annotations to be added to headless service @schema type: [object, null] @schema",
+                  "required": [],
+                  "title": "annotations",
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "gRPC": {
+                  "description": "gRPC service configuration to allow auto discovery with thanos-querier",
+                  "properties": {
+                    "enabled": {
+                      "default": "false",
+                      "description": "Enable gRPC port on service to allow auto discovery with thanos-querier",
+                      "required": [],
+                      "title": "enabled"
+                    },
+                    "servicePort": {
+                      "default": 10901,
+                      "description": "Port for gRPC service @schema type: [integer] @schema",
+                      "title": "servicePort",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [],
+                  "title": "gRPC"
+                },
+                "labels": {
+                  "description": "Labels to be added to headless service @schema type: [object, null] @schema",
+                  "required": [],
+                  "title": "labels",
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "servicePort": {
+                  "default": 80,
+                  "description": "Port for headless service @schema type: [integer] @schema",
+                  "title": "servicePort",
+                  "type": "integer"
+                }
+              },
+              "required": [],
+              "title": "headless"
+            },
+            "labels": {
+              "description": "Labels to be added to statefulset @schema type: [object, null] @schema",
+              "required": [],
+              "title": "labels",
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "podManagementPolicy": {
+              "default": "OrderedReady",
+              "description": "Pod management policy for statefulset",
+              "required": [],
+              "title": "podManagementPolicy"
+            },
+            "pvcDeleteOnStsDelete": {
+              "default": "false",
+              "description": "Statefulset's persistent volume claim retention policy pvcDeleteOnStsDelete and pvcDeleteOnStsScale determine whether statefulset's PVCs are deleted (true) or retained (false) on scaling down and deleting statefulset, respectively. Requires 1.27.0+. Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention Statefulset's persistent volume claim retention policy on deletion",
+              "required": [],
+              "title": "pvcDeleteOnStsDelete"
+            },
+            "pvcDeleteOnStsScale": {
+              "default": "false",
+              "description": "Statefulset's persistent volume claim retention policy on scaling",
+              "required": [],
+              "title": "pvcDeleteOnStsScale"
+            }
+          },
+          "required": [],
+          "title": "statefulSet"
+        },
+        "storagePath": {
+          "default": "",
+          "description": "storage.tsdb.path When empty server.persistentVolume.mountPath is used instead @schema type: [string, null] @schema",
+          "required": [],
+          "title": "storagePath",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "strategy": {
+          "description": "Server Deployment Strategy type",
+          "properties": {
+            "type": {
+              "default": "Recreate",
+              "title": "type",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "strategy"
+        },
+        "tcpSocketProbeEnabled": {
+          "default": "false",
+          "description": "Prometheus server readiness and liveness probe initial delay and timeout Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/ Enable tcpSocket probe",
+          "required": [],
+          "title": "tcpSocketProbeEnabled"
+        },
+        "terminationGracePeriodSeconds": {
+          "default": "300",
+          "description": "Prometheus server pod termination grace period",
+          "required": [],
+          "title": "terminationGracePeriodSeconds"
+        },
+        "tolerations": {
+          "description": "Node tolerations for server scheduling to nodes with taints Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/ @schema type: [array, null] @schema",
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "tolerations",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "topologySpreadConstraints": {
+          "description": "Pod topology spread constraints Ref. https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ @schema type: [array, null] @schema",
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "topologySpreadConstraints",
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "tsdb": {
+          "description": "tsdb sets TSDB parameters Ref. https://prometheus.io/docs/prometheus/latest/configuration/configuration/#tsdb @schema type: [object, null] @schema",
+          "required": [],
+          "title": "tsdb",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "useExistingClusterRoleName": {
+          "default": "",
+          "description": "Name of an existing cluster role to use in a role binding in namespaces set in namespaces and releaseNamespace for namespaced discovery. @schema type: [string, null] @schema",
+          "required": [],
+          "title": "useExistingClusterRoleName",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "verticalAutoscaler": {
+          "description": "Vertical Pod Autoscaler config Ref: https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler",
+          "properties": {
+            "enabled": {
+              "default": "false",
+              "description": "If true a VPA object will be created for the controller (either StatefulSet or Deployment, based on above configs)",
+              "required": [],
+              "title": "enabled"
+            }
+          },
+          "required": [],
+          "title": "verticalAutoscaler"
+        }
+      },
+      "required": [],
+      "title": "server",
+      "type": "object"
+    },
+    "serverFiles": {
+      "description": "Prometheus server ConfigMap entries",
+      "properties": {
+        "alerting_rules.yml": {
+          "description": "Alerting configuration Ref: https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/ @schema type: [object, null] @schema",
+          "required": [],
+          "title": "alerting_rules.yml",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "alerts": {
+          "deprecated": true,
+          "description": "alerts DEPRECATED unless explicitly naming your files, please use alerting_rules.yml @schema type: [object, null] deprecated: true @schema",
+          "required": [],
+          "title": "alerts",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "prometheus.yml": {
+          "description": "Prometheus server configuration file",
+          "properties": {
+            "rule_files": {
+              "description": "rule_files defines additional rule files to load, relative to the Prometheus configuration directory.",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "rule_files"
+            }
+          },
+          "required": [],
+          "title": "prometheus.yml"
+        },
+        "recording_rules.yml": {
+          "description": "Recording configuration Ref: https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/ @schema type: [object, null] @schema",
+          "required": [],
+          "title": "recording_rules.yml",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "rules": {
+          "deprecated": true,
+          "description": "rules DEPRECATED unless explicitly naming your files, please use recording_rules.yml @schema type: [object, null] deprecated: true @schema",
+          "required": [],
+          "title": "rules",
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      },
+      "required": [],
+      "title": "serverFiles"
+    },
+    "serviceAccounts": {
+      "description": "Define serviceAccount names for components. Defaults to component's fully qualified name.",
+      "properties": {
+        "server": {
+          "properties": {
+            "annotations": {
+              "description": "Service account annotations @schema type: [object, null] @schema",
+              "required": [],
+              "title": "annotations",
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "automountServiceAccountToken": {
+              "default": "~",
+              "description": "Opt out of automounting Kubernetes API credentials. It will be overriden by server.automountServiceAccountToken value, if set. @schema type: [boolean, null] @schema",
+              "required": [],
+              "title": "automountServiceAccountToken",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "create": {
+              "default": true,
+              "description": "If true, create service account @schema type: [boolean] @schema",
+              "title": "create",
+              "type": "boolean"
+            },
+            "name": {
+              "default": "",
+              "description": "Service account name @schema type: [string, null] @schema",
+              "required": [],
+              "title": "name",
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [],
+          "title": "server",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "serviceAccounts"
     }
+  },
+  "required": [],
+  "type": "object"
 }

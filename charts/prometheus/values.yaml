@@ -7,33 +7,63 @@
 # -- Create RBAC resources
 rbac:
   # -- If true, create RBAC resources
+  # @schema
+  # type: [boolean]
+  # @schema
   create: true
 
 # -- imagePullSecrets for pulling images from a private repository
+# @schema
+# type: [array, null]
+# @schema
 imagePullSecrets: []
 # - name: "image-pull-secret"
 
 # -- Define serviceAccount names for components. Defaults to component's fully qualified name.
 serviceAccounts:
   server:
+    # -- If true, create service account
+    # @schema
+    # type: [boolean]
+    # @schema
     create: true
+    # -- Service account name
+    # @schema
+    # type: [string, null]
+    # @schema
     name: ""
+    # -- Service account annotations
+    # @schema
+    # type: [object, null]
+    # @schema
     annotations: {}
 
-    # Opt out of automounting Kubernetes API credentials.
+    # -- Opt out of automounting Kubernetes API credentials.
     # It will be overriden by server.automountServiceAccountToken value, if set.
-    # automountServiceAccountToken: false
+    # @schema
+    # type: [boolean, null]
+    # @schema
+    automountServiceAccountToken: ~
 
 # -- Additional labels to attach to all resources
+# @schema
+# type: [object, null]
+# @schema
 commonMetaLabels: {}
 
-# Monitors ConfigMap changes and POSTs to a URL
+# -- Monitors ConfigMap changes and POSTs to a URL
 # Ref: https://github.com/prometheus-operator/prometheus-operator/tree/main/cmd/prometheus-config-reloader
 configmapReload:
   # -- URL for configmap-reload to use for reloads
+  # @schema
+  # type: [string, null]
+  # @schema
   reloadUrl: ""
 
   # -- env sets environment variables to pass to the container. Can be set as name/value pairs, read from secrets or configmaps.
+  # @schema
+  # type: [array, null]
+  # @schema
   env: []
     # - name: SOMEVAR
     #   value: somevalue
@@ -47,38 +77,74 @@ configmapReload:
   # -- Further configuration of config-reloader
   prometheus:
     # -- If false, the configmap-reload container will not be deployed
+    # @schema
+    # type: [boolean]
+    # @schema
     enabled: true
 
     # -- configmap-reload container name
+    # @schema
+    # type: [string]
+    # @schema
     name: configmap-reload
 
     # -- configmap-reload container image
     image:
       # -- configmap-reload container image repository
+      # @schema
+      # type: [string]
+      # @schema
       repository: quay.io/prometheus-operator/prometheus-config-reloader
       # -- configmap-reload container image tag
+      # @schema
+      # type: [string]
+      # @schema
       tag: v0.87.1
       # -- When digest is set to a non-empty value, images will be pulled by digest (regardless of tag value).
+      # @schema
+      # type: [null, string]
+      # @schema
       digest: ""
       # -- configmap-reload container image pull policy
+      # @schema
+      # type: [string, null]
+      # @schema
       pullPolicy: IfNotPresent
 
     # -- config-reloader's container port for probes and metrics
+    # @schema
+    # type: [integer]
+    # @schema
     containerPort: 8080
     # -- config-reloader's container port name for probes and metrics
+      # @schema
+      # type: [string]
+    # @schema
     containerPortName: metrics
 
     # -- Additional configmap-reload container arguments
     # -- Set to null for argumentless flags
+    # @schema
+    # type: [object, null]
+    # @schema
     extraArgs: {}
 
     # -- Additional configmap-reload volume directories
+    # @schema
+    # type: [null, array]
+    # @schema
     extraVolumeDirs: []
 
     # -- Additional configmap-reload volume mounts
+    # @schema
+    # type: [null, array]
+    # @schema
     extraVolumeMounts: []
 
     # -- Additional configmap-reload mounts
+    # @schema
+    # type: [null, array]
+    # @schema
     extraConfigmapMounts: []
       # - name: prometheus-alerts
       #   mountPath: /etc/alerts.d
@@ -87,6 +153,9 @@ configmapReload:
       #   readOnly: true
 
     # -- Security context to be added to configmap-reload container
+    # @schema
+    # type: [object, null]
+    # @schema
     containerSecurityContext: {}
 
     # -- Settings for config-reloader's liveness probe
@@ -94,6 +163,9 @@ configmapReload:
     livenessProbe:
       httpGet:
         path: /healthz
+        # @schema
+        # type: [integer, string]
+        # @schema
         port: metrics
         scheme: HTTP
       periodSeconds: 10
@@ -103,6 +175,9 @@ configmapReload:
     readinessProbe:
       httpGet:
         path: /healthz
+        # @schema
+        # type: [integer, string]
+        # @schema
         port: metrics
         scheme: HTTP
       periodSeconds: 10
@@ -112,12 +187,18 @@ configmapReload:
       enabled: false
       httpGet:
         path: /healthz
+        # @schema
+        # type: [integer, string]
+        # @schema
         port: metrics
         scheme: HTTP
       periodSeconds: 10
 
     # -- configmap-reload resource requests and limits
     # Ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    # @schema
+    # type: [object, null]
+    # @schema
     resources: {}
 
 # prometheus server's configuration
@@ -125,15 +206,24 @@ server:
   # -- Prometheus server container name
   name: server
 
-  ## Opt out of automounting Kubernetes API credentials.
-  ## If set it will override serviceAccounts.server.automountServiceAccountToken value for ServiceAccount.
-  # automountServiceAccountToken: false
+  # -- Opt out of automounting Kubernetes API credentials.
+  # If set it will override serviceAccounts.server.automountServiceAccountToken value for ServiceAccount.
+  # @schema
+  # type: [boolean, null]
+  # @schema
+  automountServiceAccountToken: ~
 
   # -- If set it will override prometheus.server.fullname value for ClusterRole and ClusterRoleBinding
+  # @schema
+  # type: [string, null]
+  # @schema
   clusterRoleNameOverride: ""
 
   # -- Name of an existing cluster role to use in a role binding in namespaces set in
   # namespaces and releaseNamespace for namespaced discovery.
+  # @schema
+  # type: [string, null]
+  # @schema
   useExistingClusterRoleName: ""
 
   # -- releaseNamespace to enable only the release namespace for service discovery.
@@ -146,12 +236,18 @@ server:
   # -- namespaces to include in service discovery instead of clusterwide discovery. Needed if you want to run
   # Prometheus without cluster-admin privileges (namespaced configuration). See also releaseNamespace.
   # Setting useExistingClusterRoleName is required.
+  # @schema
+  # type: [array, null]
+  # @schema
   namespaces: []
     # - yournamespace
 
   # -- sidecarContainers - add more containers to prometheus server
+  # @schema
+  # type: [object, null]
+  # @schema
+  sidecarContainers: {}
   # Key/Value where Key is the sidecar `- name: <Key>`
-  # Example:
   #   sidecarContainers:
   #      webserver:
   #        image: nginx
@@ -168,10 +264,12 @@ server:
   #         name: oauth-proxy
   #         protocol: TCP
   #       resources: {}
-  sidecarContainers: {}
 
   # -- sidecarTemplateValues - context to be used in template for sidecarContainers
-  # Example:
+  # @schema
+  # type: [object, null]
+  # @schema
+  sidecarTemplateValues: {}
   #   sidecarTemplateValues: *your-custom-globals
   #   sidecarContainers:
   #     webserver: |-
@@ -179,25 +277,39 @@ server:
   # Template for `webserver-container-template` might looks like this:
   #   image: "{{ .Values.server.sidecarTemplateValues.repository }}:{{ .Values.server.sidecarTemplateValues.tag }}"
   #   ...
-  sidecarTemplateValues: {}
 
   # -- Prometheus server container image
   image:
     # -- Prometheus server container image repository
     repository: quay.io/prometheus/prometheus
     # -- tag if not set appVersion field from Chart.yaml is used
+    # @schema
+    # type: [string, null]
+    # @schema
     tag: ""
     # -- digest when set to a non-empty value, images will be pulled by digest (regardless of tag value).
+    # @schema
+    # type: [string, null]
+    # @schema
     digest: ""
     # -- Prometheus server container image pull policy
     pullPolicy: IfNotPresent
 
   # -- Prometheus server command
+  # @schema
+  # type: [array, null]
+  # @schema
   command: []
 
   # -- prometheus server priorityClassName
+  # @schema
+  # type: [string, null]
+  # @schema
   priorityClassName: ""
   # -- prometheus server runtimeClassName
+  # @schema
+  # type: [string, null]
+  # @schema
   runtimeClassName: ""
 
   # -- EnableServiceLinks indicates whether information about services should be injected
@@ -207,47 +319,62 @@ server:
   # -- The URL prefix at which the container can be accessed. Useful in the case the '-web.external-url' includes a slug
   # so that the various internal URLs are still able to access as they are in the default case.
   # (Optional)
+  # @schema
+  # type: [string, null]
+  # @schema
   prefixURL: ""
 
   # -- External URL which can access prometheus, e.g. ingress host name
+  # @schema
+  # type: [string, null]
+  # @schema
   baseURL: ""
 
   # -- Additional server container environment variables
-  ##
-  ## You specify this manually like you would a raw deployment manifest.
-  ## This means you can bind in environment variables from secrets.
-  ##
-  ## e.g. static environment variable:
-  ##  - name: DEMO_GREETING
-  ##    value: "Hello from the environment"
-  ##
-  ## e.g. secret environment variable:
-  ## - name: USERNAME
-  ##   valueFrom:
-  ##     secretKeyRef:
-  ##       name: mysecret
-  ##       key: username
+  #
+  # You specify this manually like you would a raw deployment manifest.
+  # This means you can bind in environment variables from secrets.
+  #
+  # e.g. static environment variable:
+  #  - name: DEMO_GREETING
+  #    value: "Hello from the environment"
+  #
+  # e.g. secret environment variable:
+  # - name: USERNAME
+  #   valueFrom:
+  #     secretKeyRef:
+  #       name: mysecret
+  #       key: username
+  # @schema
+  # type: [array, null]
+  # @schema
   env: []
 
   # -- defaultFlagsOverride replaces all the default flags
+  # @schema
+  # type: [array, null]
+  # @schema
   defaultFlagsOverride: []
-    ## E.g. enabling agent mode:
-    ## With prometheus >= 3.0 "--agent", < 3.0 "--enable-feature=agent"
+    # E.g. enabling agent mode:
+    # With prometheus >= 3.0 "--agent", < 3.0 "--enable-feature=agent"
     # - --agent
     # - --storage.agent.retention.max-time=30m
     # - --config.file=/etc/config/prometheus.yml
 
   # -- extraFlags adds additional flags
+  # @schema
+  # type: [array, null]
+  # @schema
   extraFlags:
     - web.enable-lifecycle
-    ## web.enable-admin-api flag controls access to the administrative HTTP API which includes functionality such as
-    ## deleting time series. This is disabled by default.
+    # web.enable-admin-api flag controls access to the administrative HTTP API which includes functionality such as
+    # deleting time series. This is disabled by default.
     # - web.enable-admin-api
-    ##
-    ## storage.tsdb.no-lockfile flag controls BD locking
+    #
+    # storage.tsdb.no-lockfile flag controls BD locking
     # - storage.tsdb.no-lockfile
-    ##
-    ## storage.tsdb.wal-compression flag enables compression of the write-ahead log (WAL)
+    #
+    # storage.tsdb.wal-compression flag enables compression of the write-ahead log (WAL)
     # - storage.tsdb.wal-compression
 
   # -- Path to a configuration file on prometheus server container FS
@@ -255,6 +382,9 @@ server:
 
   # -- The data directory used by prometheus to set --storage.tsdb.path
   # When empty server.persistentVolume.mountPath is used instead
+  # @schema
+  # type: [string, null]
+  # @schema
   storagePath: ""
 
   # -- global prometheus' configuration
@@ -267,18 +397,30 @@ server:
     evaluation_interval: 1m
   # -- remoteWrite sets remote_write configuration
   # Ref. https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write
+  # @schema
+  # type: [array, null]
+  # @schema
   remoteWrite: []
   # -- remoteRead sets remote_read configuration
   # Ref. https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_read
+  # @schema
+  # type: [array, null]
+  # @schema
   remoteRead: []
 
   # -- tsdb sets TSDB parameters
   # Ref. https://prometheus.io/docs/prometheus/latest/configuration/configuration/#tsdb
+  # @schema
+  # type: [object, null]
+  # @schema
   tsdb: {}
     # out_of_order_time_window: 0s
 
   # -- otlp sets OTLP configuration
   # https://prometheus.io/docs/guides/opentelemetry
+  # @schema
+  # type: [object, null]
+  # @schema
   otlp: {}
     # promote_resource_attributes: []
     # keep_identifying_resource_attributes: false
@@ -287,30 +429,51 @@ server:
   # -- exemplars sets configuration to reference data outside of the MetricSet.
   # Ref. https://prometheus.io/docs/prometheus/latest/configuration/configuration/#exemplars
   # Must be enabled via --enable-feature=exemplar-storage
+  # @schema
+  # type: [object, null]
+  # @schema
   exemplars: {}
     # max_exemplars: 100000
 
   # -- probeHeaders sets custom HTTP headers for Liveness/Readiness/Startup Probe
   # Useful for providing HTTP Basic Auth to healthchecks
+  # @schema
+  # type: [array, null]
+  # @schema
   probeHeaders: []
     # - name: "Authorization"
     #   value: "Bearer ABCDEabcde12345"
 
   # -- Additional Prometheus server container arguments
   # Set to null for argumentless flags
+  # @schema
+  # type: [object, null]
+  # @schema
   extraArgs: {}
     # web.enable-remote-write-receiver: null
 
   # -- Additional InitContainers to initialize in the pod
+  # @schema
+  # type: [array, null]
+  # @schema
   extraInitContainers: []
 
   # -- Additional Prometheus server Volume mounts
+  # @schema
+  # type: [array, null]
+  # @schema
   extraVolumeMounts: []
 
   # -- Additional Prometheus server Volumes
+  # @schema
+  # type: [array, null]
+  # @schema
   extraVolumes: []
 
   # -- Additional Prometheus server hostPath mounts
+  # @schema
+  # type: [array, null]
+  # @schema
   extraHostPathMounts: []
     # - name: certs-dir
     #   mountPath: /etc/kubernetes/certs
@@ -319,6 +482,9 @@ server:
     #   readOnly: true
 
   # -- Additional ConfigMaps to mount
+  # @schema
+  # type: [array, null]
+  # @schema
   extraConfigmapMounts: []
     # - name: certs-configmap
     #   mountPath: /prometheus
@@ -328,6 +494,9 @@ server:
 
   # -- Additional Prometheus server Secrets to mount
   # Defines additional mounts with secrets. Secrets must be manually created in the namespace.
+  # @schema
+  # type: [array, null]
+  # @schema
   extraSecretMounts: []
     # - name: secret-files
     #   mountPath: /etc/secrets
@@ -339,17 +508,29 @@ server:
   # Do not set both `configMapOverrideName` and `configFromSecret` simultaneously.
   # Use either `configMapOverrideName` or `configFromSecret`.
   # If `configFromSecret` is defined, a ConfigMap resource will NOT be generated.
+  # @schema
+  # type: [string, null]
+  # @schema
   configFromSecret: ""
 
   # -- ConfigMap override where fullname is {{.Release.Name}}-{{.Values.server.configMapOverrideName}}
   # Defining configMapOverrideName will cause templates/server-configmap.yaml
   # to NOT generate a ConfigMap resource
+  # @schema
+  # type: [string, null]
+  # @schema
   configMapOverrideName: ""
 
   # -- Extra labels for Prometheus server ConfigMap (ConfigMap that holds serverFiles)
+  # @schema
+  # type: [object, null]
+  # @schema
   extraConfigmapLabels: {}
 
   # -- Override the prometheus.server.fullname for all objects related to the Prometheus server
+  # @schema
+  # type: [string, null]
+  # @schema
   fullnameOverride: ""
 
   # -- Ingress configuration
@@ -357,20 +538,35 @@ server:
     # -- If true, Prometheus server Ingress will be created
     enabled: false
     # -- Set ingress class name
+    # @schema
+    # type: [string, null]
+    # @schema
     ingressClassName: ""
 
     # -- Prometheus server Ingress annotations
+    # @schema
+    # type: [object, null]
+    # @schema
     annotations: {}
       # kubernetes.io/tls-acme: 'true'
 
     # -- Prometheus server Ingress additional labels
+    # @schema
+    # type: [object, null]
+    # @schema
     extraLabels: {}
 
-    ## Redirect ingress to an additional defined port on the service
-    # servicePort: 8081
+    # -- Redirect ingress to an additional defined port on the service
+    # @schema
+    # type: [integer, null]
+    # @schema
+    servicePort: ~
 
     # -- Prometheus server Ingress hostnames with optional path (passed through tpl)
     # Must be provided if Ingress is enabled
+    # @schema
+    # type: [array, null]
+    # @schema
     hosts: []
     #  - prometheus.domain.com
     #  - domain.com/prometheus
@@ -382,6 +578,9 @@ server:
     pathType: Prefix
 
     # -- Extra paths to prepend to every host configuration. This is useful when working with annotation based services (passed through tpl).
+    # @schema
+    # type: [array, null]
+    # @schema
     extraPaths: []
     # - path: /*
     #   backend:
@@ -390,6 +589,9 @@ server:
 
     # -- Prometheus server Ingress TLS configuration (hosts passed through tpl)
     # Secrets must be manually created in the namespace
+    # @schema
+    # type: [array, null]
+    # @schema
     tls: []
     #  - secretName: prometheus-server-tls
     #    hosts:
@@ -404,30 +606,54 @@ server:
       enabled: false
 
       # -- ApiVersion set by default to "gateway.networking.k8s.io/v1"
+      # @schema
+      # type: [string, null]
+      # @schema
       apiVersion: ""
       # -- kind set by default to HTTPRoute
+      # @schema
+      # type: [string, null]
+      # @schema
       kind: ""
 
       # -- Annotations to attach to the HTTPRoute resource
+      # @schema
+      # type: [object, null]
+      # @schema
       annotations: {}
       # -- Labels to attach to the HTTPRoute resource
+      # @schema
+      # type: [object, null]
+      # @schema
       labels: {}
 
       # -- ParentRefs refers to resources this HTTPRoute is to be attached to (Gateways)
+      # @schema
+      # type: [array, null]
+      # @schema
       parentRefs: []
         # - name: contour
         #   sectionName: http
 
       # -- Hostnames (templated) defines a set of hostnames that should match against the HTTP Host
       # header to select a HTTPRoute used to process the request
+      # @schema
+      # type: [array, null]
+      # @schema
       hostnames: []
         # - my.example.com
 
       # -- additionalRules (templated) allows adding custom rules to the route
+      # @schema
+      # type: [array, null]
+      # @schema
       additionalRules: []
 
       # -- Filters define the filters that are applied to requests that match
       # this rule
+      # @schema
+      # type: [array, null]
+      # @schema
       filters: []
 
       # -- Matches define conditions used for matching the rule against incoming
@@ -448,6 +674,9 @@ server:
     type: Recreate
 
   # -- hostAliases allows adding entries to /etc/hosts inside the containers
+  # @schema
+  # type: [array, null]
+  # @schema
   hostAliases: []
   #  - ip: "127.0.0.1"
   #    hostnames:
@@ -455,6 +684,9 @@ server:
 
   # -- Node tolerations for server scheduling to nodes with taints
   # Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
+  # @schema
+  # type: [array, null]
+  # @schema
   tolerations: []
     # - key: "key"
     #   operator: "Equal|Exists"
@@ -463,9 +695,15 @@ server:
 
   # -- Node labels for Prometheus server pod assignment
   # -- Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  # @schema
+  # type: [object, null]
+  # @schema
   nodeSelector: {}
 
   # -- Pod affinity
+  # @schema
+  # type: [object, null]
+  # @schema
   affinity: {}
 
   # -- Pod anti-affinity can prevent the scheduler from placing Prometheus server replicas on the same node.
@@ -474,6 +712,9 @@ server:
   # The value "hard" means that the scheduler is *required* to not schedule two replica pods onto the same node.
   # The default value "" will disable pod anti-affinity so that no anti-affinity rules will be configured (unless
   # set in `server.affinity`).
+  # @schema
+  # type: [string, null]
+  # @schema
   podAntiAffinity: ""
 
   # -- If anti-affinity is enabled sets the topologyKey to use for anti-affinity.
@@ -482,6 +723,9 @@ server:
 
   # -- Pod topology spread constraints
   # Ref. https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
+  # @schema
+  # type: [array, null]
+  # @schema
   topologySpreadConstraints: []
 
   # -- PodDisruptionBudget settings
@@ -490,12 +734,15 @@ server:
     enabled: false
     # maxUnavailable: 1
     # minAvailable: 1
-    ## unhealthyPodEvictionPolicy is available since 1.27.0 (beta)
-    ## https://kubernetes.io/docs/tasks/run-application/configure-pdb/#unhealthy-pod-eviction-policy
+    # unhealthyPodEvictionPolicy is available since 1.27.0 (beta)
+    # https://kubernetes.io/docs/tasks/run-application/configure-pdb/#unhealthy-pod-eviction-policy
     # unhealthyPodEvictionPolicy: IfHealthyBudget
 
   # -- Use an alternate scheduler, e.g. "stork".
   # Ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  # @schema
+  # type: [string, null]
+  # @schema
   schedulerName: ""
 
   # -- Persistent volume configuration
@@ -506,23 +753,38 @@ server:
 
     # -- If set it will override the name of the created persistent volume claim
     # generated by the stateful set.
+    # @schema
+    # type: [string, null]
+    # @schema
     statefulSetNameOverride: ""
 
     # -- Prometheus server data Persistent Volume access modes
     # Must match those of existing PV or dynamic provisioner
     # Ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+    # @schema
+    # type: [array, null]
+    # @schema
     accessModes:
       - ReadWriteOnce
 
     # -- Prometheus server data Persistent Volume labels
+    # @schema
+    # type: [object, null]
+    # @schema
     labels: {}
 
     # -- Prometheus server data Persistent Volume annotations
+    # @schema
+    # type: [object, null]
+    # @schema
     annotations: {}
 
     # -- Prometheus server data Persistent Volume existing claim name
     # Requires server.persistentVolume.enabled: true
     # If defined, PVC must be created manually before volume will be bound
+    # @schema
+    # type: [string, null]
+    # @schema
     existingClaim: ""
 
     # -- Prometheus server data Persistent Volume mount root path
@@ -531,22 +793,30 @@ server:
     # -- Prometheus server data Persistent Volume size
     size: 8Gi
 
-    ## Prometheus server data Persistent Volume Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
-    # storageClass: "-"
+    # -- Prometheus server data Persistent Volume Storage Class
+    # If defined, storageClassName: <storageClass>
+    # If set to "-", storageClassName: "", which disables dynamic provisioning
+    # If undefined (the default) or set to null, no storageClassName spec is
+    #   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    #   GKE, AWS & OpenStack)
+    # @schema
+    # type: [string, null]
+    # @schema
+    storageClass: ~
 
     # -- Subdirectory of Prometheus server data Persistent Volume to mount
     # Useful if the volume's root directory is not empty
+    # @schema
+    # type: [string, null]
+    # @schema
     subPath: ""
 
     # -- Persistent Volume Claim Selector
     # Useful if Persistent Volumes have been provisioned in advance
     # Ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector
+    # @schema
+    # type: [object, null]
+    # @schema
     selector: {}
       #  matchLabels:
       #    release: "stable"
@@ -555,36 +825,66 @@ server:
 
     # -- Persistent Volume Name
     # Useful if Persistent Volumes have been provisioned in advance and you want to use a specific one
+    # @schema
+    # type: [string, null]
+    # @schema
     volumeName: ""
 
   # -- emptyDir volume configuration used if persistent volume is not enabled
   emptyDir:
     # -- Configure medium
+    # @schema
+    # type: [string, null]
+    # @schema
     medium: ""
     # -- Configure size limit
+    # @schema
+    # type: [string, null]
+    # @schema
     sizeLimit: ""
 
   # -- Annotations to be added to Prometheus server pods
+  # @schema
+  # type: [object, null]
+  # @schema
   podAnnotations: {}
     # iam.amazonaws.com/role: prometheus
 
   # -- Labels to be added to Prometheus server pods
+  # @schema
+  # type: [object, null]
+  # @schema
   podLabels: {}
 
   # -- Configuration of Alertmanagers
+  # @schema
+  # type: [array, null]
+  # @schema
   alertmanagers: []
 
   # -- Use a StatefulSet if replicaCount needs to be greater than 1 (see below)
+  # @schema
+  # type: [integer]
+  # @schema
   replicaCount: 1
 
   # -- Number of old history to retain to allow rollback
   # Default Kubernetes value is set to 10
+  # @schema
+  # type: [integer]
+  # @schema
   revisionHistoryLimit: 10
 
   # -- Annotations to be added to ConfigMap
+  # @schema
+  # type: [object, null]
+  # @schema
   configMapAnnotations: {}
 
   # -- Annotations to be added to deployment
+  # @schema
+  # type: [object, null]
+  # @schema
   deploymentAnnotations: {}
 
   # -- StatefulSet configuration
@@ -594,8 +894,14 @@ server:
     enabled: false
 
     # -- Annotations to be added to statefulset
+    # @schema
+    # type: [object, null]
+    # @schema
     annotations: {}
     # -- Labels to be added to statefulset
+    # @schema
+    # type: [object, null]
+    # @schema
     labels: {}
     # -- Pod management policy for statefulset
     podManagementPolicy: OrderedReady
@@ -603,16 +909,28 @@ server:
     # -- Prometheus' headless service to use for the statefulset
     headless:
       # -- Annotations to be added to headless service
+      # @schema
+      # type: [object, null]
+      # @schema
       annotations: {}
       # -- Labels to be added to headless service
+      # @schema
+      # type: [object, null]
+      # @schema
       labels: {}
       # -- Port for headless service
+      # @schema
+      # type: [integer]
+      # @schema
       servicePort: 80
       # -- gRPC service configuration to allow auto discovery with thanos-querier
       gRPC:
         # -- Enable gRPC port on service to allow auto discovery with thanos-querier
         enabled: false
         # -- Port for gRPC service
+        # @schema
+        # type: [integer]
+        # @schema
         servicePort: 10901
         # nodePort: 10901
 
@@ -632,8 +950,14 @@ server:
     # This allows to run prometheus agent on every node in the cluster.
     enabled: false
     # -- Annotations to be added to daemonset
+    # @schema
+    # type: [object, null]
+    # @schema
     annotations: {}
     # -- Labels to be added to daemonset
+    # @schema
+    # type: [object, null]
+    # @schema
     labels: {}
 
   # -- Prometheus server readiness and liveness probe initial delay and timeout
@@ -675,6 +999,9 @@ server:
 
   # -- Prometheus server resource requests and limits
   # Ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  # @schema
+  # type: [object, null]
+  # @schema
   resources: {}
     # limits:
     #   cpu: 500m
@@ -692,9 +1019,15 @@ server:
   dnsPolicy: ClusterFirst
 
   # Use hostPort
-  # hostPort: 9090
+  # @schema
+  # type: [integer, null]
+  # @schema
+  hostPort: ~
 
   # -- Set name of the port
+  # @schema
+  # type: [string, null]
+  # @schema
   portName: ""
 
   # -- Vertical Pod Autoscaler config
@@ -708,6 +1041,9 @@ server:
     # - containerName: 'prometheus-server'
 
   # -- Custom DNS configuration to be added to prometheus server pods
+  # @schema
+  # type: [object, null]
+  # @schema
   dnsConfig: {}
     # nameservers:
     #   - 1.2.3.4
@@ -720,6 +1056,9 @@ server:
     #   - name: edns0
 
   # -- Security context to be added to server pods
+  # @schema
+  # type: [object, null]
+  # @schema
   securityContext:
     runAsUser: 65534
     runAsNonRoot: true
@@ -727,6 +1066,9 @@ server:
     fsGroup: 65534
 
   # -- Security context to be added to server container
+  # @schema
+  # type: [object, null]
+  # @schema
   containerSecurityContext: {}
 
   # Service configuration
@@ -734,22 +1076,46 @@ server:
     # -- If false, no Service will be created for the Prometheus server
     enabled: true
     # -- Annotations to be added to Service
+    # @schema
+    # type: [object, null]
+    # @schema
     annotations: {}
     # -- Labels to be added to Service
+    # @schema
+    # type: [object, null]
+    # @schema
     labels: {}
     # -- Set ClusterIP for Prometheus server service
+    # @schema
+    # type: [string, null]
+    # @schema
     clusterIP: ""
 
     # -- List of IP addresses at which the Prometheus server service is available
     # Ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
+    # @schema
+    # type: [array, null]
+    # @schema
     externalIPs: []
     # -- LoadBalancerIP for Prometheus server service (optional, cloud specific)
+    # @schema
+    # type: [string, null]
+    # @schema
     loadBalancerIP: ""
     # -- LoadBalancerSourceRanges for Prometheus server service (optional, cloud specific)
+    # @schema
+    # type: [array, null]
+    # @schema
     loadBalancerSourceRanges: []
     # -- LoadBalancerClass for Prometheus server service (optional, cloud specific)
+    # @schema
+    # type: [string, null]
+    # @schema
     loadBalancerClass: ""
     # -- Service port for Prometheus server service
+    # @schema
+    # type: [integer]
+    # @schema
     servicePort: 80
     # --SessionAffinity configures the affinity settings for the Service
     sessionAffinity: None
@@ -757,6 +1123,9 @@ server:
     type: ClusterIP
     # -- externalTrafficPolicy is applicable to service with externally-facing addresses
     # (NodePorts, ExternalIPs, and LoadBalancer IPs)
+    # @schema
+    # type: [string, null]
+    # @schema
     externalTrafficPolicy: ""
 
     # -- Configure gRPC on service to allow auto discovery with thanos-querier
@@ -764,6 +1133,9 @@ server:
       # -- Enable gRPC port on service to allow auto discovery with thanos-querier
       enabled: false
       # -- Port for gRPC service
+      # @schema
+      # type: [integer]
+      # @schema
       servicePort: 10901
       # nodePort: 10901
 
@@ -777,6 +1149,9 @@ server:
       replica: 0
 
     # -- Additional port to define in the Service
+    # @schema
+    # type: [array, null]
+    # @schema
     additionalPorts: []
     # additionalPorts:
     # - name: authenticated
@@ -790,21 +1165,33 @@ server:
   retention: "15d"
 
   # -- Prometheus' data retention size. Supported units: B, KB, MB, GB, TB, PB, EB.
+  # @schema
+  # type: [string, null]
+  # @schema
   retentionSize: ""
 
 # -- scrapeConfigs (map) defines Prometheus' default scrape_configs.
 # Each can be disabled by setting "enabled" to "false" or leaving it empty. The key sets the default "job_name".
 # Further scrapeConfigs can be added as new keys, these are then enabled by default.
 # Ref. https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config
+# @schema
+# type: [object, null]
+# @schema
 scrapeConfigs:
   prometheus:
     enabled: true
+    # @schema
+    # type: [string, null]
+    # @schema
     job_name: ""
     static_configs:
       - targets:
           - localhost:9090
   kubernetes-api-servers:
     enabled: true
+    # @schema
+    # type: [string, null]
+    # @schema
     job_name: ""
     kubernetes_sd_configs:
       - role: endpoints
@@ -821,6 +1208,9 @@ scrapeConfigs:
         regex: default;kubernetes;https
   kubernetes-nodes:
     enabled: true
+    # @schema
+    # type: [string, null]
+    # @schema
     job_name: ""
     scheme: https
     tls_config:
@@ -839,6 +1229,9 @@ scrapeConfigs:
         replacement: /api/v1/nodes/$1/proxy/metrics
   kubernetes-nodes-cadvisor:
     enabled: true
+    # @schema
+    # type: [string, null]
+    # @schema
     job_name: ""
     scheme: https
     tls_config:
@@ -857,6 +1250,9 @@ scrapeConfigs:
         replacement: /api/v1/nodes/$1/proxy/metrics/cadvisor
   kubernetes-service-endpoints:
     enabled: true
+    # @schema
+    # type: [string, null]
+    # @schema
     job_name: ""
     honor_labels: true
     kubernetes_sd_configs:
@@ -899,6 +1295,9 @@ scrapeConfigs:
         target_label: node
   kubernetes-service-endpoints-slow:
     enabled: true
+    # @schema
+    # type: [string, null]
+    # @schema
     job_name: ""
     honor_labels: true
     scrape_interval: 5m
@@ -940,6 +1339,9 @@ scrapeConfigs:
         target_label: node
   prometheus-pushgateway:
     enabled: true
+    # @schema
+    # type: [string, null]
+    # @schema
     job_name: ""
     honor_labels: true
     kubernetes_sd_configs:
@@ -950,6 +1352,9 @@ scrapeConfigs:
         regex: pushgateway
   kubernetes-services:
     enabled: true
+    # @schema
+    # type: [string, null]
+    # @schema
     job_name: ""
     honor_labels: true
     metrics_path: /probe
@@ -975,6 +1380,9 @@ scrapeConfigs:
         target_label: service
   kubernetes-pods:
     enabled: true
+    # @schema
+    # type: [string, null]
+    # @schema
     job_name: ""
     honor_labels: true
     kubernetes_sd_configs:
@@ -1027,6 +1435,9 @@ scrapeConfigs:
         target_label: node
   kubernetes-pods-slow:
     enabled: true
+    # @schema
+    # type: [string, null]
+    # @schema
     job_name: ""
     honor_labels: true
     scrape_interval: 5m
@@ -1080,6 +1491,9 @@ scrapeConfigs:
 # -- extraScrapeConfigs adds additional scrape configs to prometheus.yml
 # must be a string so you have to add a | after extraScrapeConfigs:
 # example adds prometheus-blackbox-exporter scrape config
+# @schema
+# type: [string, null]
+# @schema
 extraScrapeConfigs: ""
   # - job_name: 'prometheus-blackbox-exporter'
   #   metrics_path: /probe
@@ -1097,16 +1511,25 @@ extraScrapeConfigs: ""
   #       replacement: prometheus-blackbox-exporter:9115
 
 # -- Prometheus server ConfigMap entries for rule files (allow prometheus labels interpolation)
+# @schema
+# type: [object, null]
+# @schema
 ruleFiles: {}
 
 # -- Prometheus server ConfigMap entries for scrape_config_files
 # (allows scrape configs defined in additional files)
+# @schema
+# type: [array, null]
+# @schema
 scrapeConfigFiles: []
 
 # -- Prometheus server ConfigMap entries
 serverFiles:
   # -- Alerting configuration
   # Ref: https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
+  # @schema
+  # type: [object, null]
+  # @schema
   alerting_rules.yml: {}
   # groups:
   #   - name: Instances
@@ -1120,12 +1543,23 @@ serverFiles:
   #           description: '{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 5 minutes.'
   #           summary: 'Instance {{ $labels.instance }} down'
   # -- alerts DEPRECATED unless explicitly naming your files, please use alerting_rules.yml
+  # @schema
+  # type: [object, null]
+  # deprecated: true
+  # @schema
   alerts: {}
 
   # -- Recording configuration
   # Ref: https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/
+  # @schema
+  # type: [object, null]
+  # @schema
   recording_rules.yml: {}
   # -- rules DEPRECATED unless explicitly naming your files, please use recording_rules.yml
+  # @schema
+  # type: [object, null]
+  # deprecated: true
+  # @schema
   rules: {}
 
   # -- Prometheus server configuration file
@@ -1134,12 +1568,15 @@ serverFiles:
     rule_files:
       - /etc/config/recording_rules.yml
       - /etc/config/alerting_rules.yml
-      ## Below two files are DEPRECATED will be removed from this default values file
+      # Below two files are DEPRECATED will be removed from this default values file
       - /etc/config/rules
       - /etc/config/alerts
 
 # -- Adds option to add alert_relabel_configs to avoid duplicate alerts in alertmanager
 # useful in H/A prometheus with different external labels but the same alerts
+# @schema
+# type: [object, null]
+# @schema
 alertRelabelConfigs: {}
   # alert_relabel_configs:
   # - source_labels: [dc]
@@ -1148,13 +1585,19 @@ alertRelabelConfigs: {}
 
 # -- Network policy
 networkPolicy:
-  #  -- Enable creation of NetworkPolicy resources.
+  # -- Enable creation of NetworkPolicy resources.
   enabled: false
 
 # -- Override namespace of namespaced resources
+# @schema
+# type: [string, null]
+# @schema
 forceNamespace: ""
 
 # -- Extra manifests to deploy as an array
+# @schema
+# type: [array, null]
+# @schema
 extraManifests: []
   # - |
   #   apiVersion: v1
@@ -1175,7 +1618,7 @@ alertmanager:
 
   # -- Persistence configuration for Alertmanager
   persistence:
-    # -- If true, storage will create or use Persistence Volume
+    # -- If true, storage will create or use a persistent volume
     # If false, storage will use emptyDir
     enabled: true
 
@@ -1194,7 +1637,7 @@ alertmanager:
     # If set to "-", storageClassName: "", which disables dynamic provisioning
     # If undefined (the default) or set to null, no storageClassName spec is
     # set, choosing the default provisioner.
-    # storageClass: "-"
+    storageClass: ~
 
     # -- Access mode
     accessModes:
