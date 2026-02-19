@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "properties": {
     "alertRelabelConfigs": {
-      "description": "Adds option to add alert_relabel_configs to avoid duplicate alerts in alertmanager useful in H/A prometheus with different external labels but the same alerts @schema type: [object, null] @schema",
+      "description": "Adds option to add alert_relabel_configs to avoid duplicate alerts in alertmanager\nuseful in H/A prometheus with different external labels but the same alerts",
       "required": [],
       "title": "alertRelabelConfigs",
       "type": [
@@ -11,13 +11,13 @@
       ]
     },
     "alertmanager": {
-      "description": "alertmanager sub-chart configurable values  Ref. https://github.com/prometheus-community/helm-charts/tree/main/charts/alertmanager",
+      "description": "alertmanager sub-chart configurable values\n Ref. https://github.com/prometheus-community/helm-charts/tree/main/charts/alertmanager",
       "properties": {
         "enabled": {
-          "default": "true",
+          "default": true,
           "description": "If false, alertmanager will not be installed",
-          "required": [],
-          "title": "enabled"
+          "title": "enabled",
+          "type": "boolean"
         },
         "persistence": {
           "description": "Persistence configuration for Alertmanager",
@@ -32,45 +32,49 @@
                 ],
                 "required": []
               },
-              "required": [],
-              "title": "accessModes"
+              "title": "accessModes",
+              "type": "array"
             },
             "annotations": {
-              "description": "Custom annotations for the PVC created by the alertmanager StatefulSet. Useful for configuring storage provider options such as disk type, KMS encryption keys, or custom volume name prefixes.",
+              "description": "Custom annotations for the PVC created by the alertmanager StatefulSet.\nUseful for configuring storage provider options such as disk type, KMS encryption keys, or custom volume name\nprefixes.",
               "required": [],
-              "title": "annotations"
+              "title": "annotations",
+              "type": "object"
             },
             "emptyDir": {
               "description": "Configure emptyDir volume",
               "required": [],
-              "title": "emptyDir"
+              "title": "emptyDir",
+              "type": "object"
             },
             "enabled": {
-              "default": "true",
-              "description": "If true, storage will create or use a persistent volume If false, storage will use emptyDir",
-              "required": [],
-              "title": "enabled"
+              "default": true,
+              "description": "If true, storage will create or use a persistent volume\nIf false, storage will use emptyDir",
+              "title": "enabled",
+              "type": "boolean"
             },
             "labels": {
-              "description": "Custom labels for the PVC created by the alertmanager StatefulSet. Useful for selecting, grouping, and organizing so that they can be queried or targeted in deployments, policies, etc.",
+              "description": "Custom labels for the PVC created by the alertmanager StatefulSet.\nUseful for selecting, grouping, and organizing so that they can be queried or targeted in deployments,\npolicies, etc.",
               "required": [],
-              "title": "labels"
+              "title": "labels",
+              "type": "object"
             },
             "size": {
               "default": "2Gi",
               "description": "Size of persistent volume",
-              "required": [],
-              "title": "size"
+              "title": "size",
+              "type": "string"
             },
             "storageClass": {
               "default": "~",
-              "description": " If defined, storageClassName: <storageClass> If set to \"-\", storageClassName: \"\", which disables dynamic provisioning If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner.",
-              "required": [],
-              "title": "storageClass"
+              "description": "Persistent Volume Storage Class\nIf defined, storageClassName: <storageClass>\nIf set to \"-\", storageClassName: \"\", which disables dynamic provisioning\nIf undefined (the default) or set to null, no storageClassName spec is\nset, choosing the default provisioner.",
+              "title": "storageClass",
+              "type": "null"
             }
           },
           "required": [],
-          "title": "persistence"
+          "title": "persistence",
+          "type": "object"
         },
         "podSecurityContext": {
           "description": "Security context for alertmanager pod",
@@ -97,14 +101,16 @@
             }
           },
           "required": [],
-          "title": "podSecurityContext"
+          "title": "podSecurityContext",
+          "type": "object"
         }
       },
       "required": [],
-      "title": "alertmanager"
+      "title": "alertmanager",
+      "type": "object"
     },
     "commonMetaLabels": {
-      "description": "Additional labels to attach to all resources @schema type: [object, null] @schema",
+      "description": "Additional labels to attach to all resources",
       "required": [],
       "title": "commonMetaLabels",
       "type": [
@@ -113,10 +119,10 @@
       ]
     },
     "configmapReload": {
-      "description": "Monitors ConfigMap changes and POSTs to a URL Ref: https://github.com/prometheus-operator/prometheus-operator/tree/main/cmd/prometheus-config-reloader",
+      "description": "Monitors ConfigMap changes and POSTs to a URL\nRef: https://github.com/prometheus-operator/prometheus-operator/tree/main/cmd/prometheus-config-reloader",
       "properties": {
         "env": {
-          "description": "env sets environment variables to pass to the container. Can be set as name/value pairs, read from secrets or configmaps. @schema type: [array, null] @schema",
+          "description": "env sets environment variables to pass to the container. Can be set as name/value pairs, read from secrets or configmaps.",
           "items": {
             "required": []
           },
@@ -132,18 +138,18 @@
           "properties": {
             "containerPort": {
               "default": 8080,
-              "description": "config-reloader's container port for probes and metrics @schema type: [integer] @schema",
+              "description": "config-reloader's container port for probes and metrics",
               "title": "containerPort",
               "type": "integer"
             },
             "containerPortName": {
               "default": "metrics",
-              "description": "config-reloader's container port name for probes and metrics @schema type: [string] @schema",
+              "description": "config-reloader's container port name for probes and metrics",
               "title": "containerPortName",
               "type": "string"
             },
             "containerSecurityContext": {
-              "description": "Security context to be added to configmap-reload container @schema type: [object, null] @schema",
+              "description": "Security context to be added to configmap-reload container",
               "required": [],
               "title": "containerSecurityContext",
               "type": [
@@ -153,12 +159,12 @@
             },
             "enabled": {
               "default": true,
-              "description": "If false, the configmap-reload container will not be deployed @schema type: [boolean] @schema",
+              "description": "If false, the configmap-reload container will not be deployed",
               "title": "enabled",
               "type": "boolean"
             },
             "extraArgs": {
-              "description": "Set to null for argumentless flags @schema type: [object, null] @schema",
+              "description": "Additional configmap-reload container arguments\nSet to null for argumentless flags",
               "required": [],
               "title": "extraArgs",
               "type": [
@@ -167,7 +173,7 @@
               ]
             },
             "extraConfigmapMounts": {
-              "description": "Additional configmap-reload mounts @schema type: [null, array] @schema",
+              "description": "Additional configmap-reload mounts",
               "items": {
                 "required": []
               },
@@ -179,7 +185,7 @@
               ]
             },
             "extraVolumeDirs": {
-              "description": "Additional configmap-reload volume directories @schema type: [null, array] @schema",
+              "description": "Additional configmap-reload volume directories",
               "items": {
                 "required": []
               },
@@ -191,7 +197,7 @@
               ]
             },
             "extraVolumeMounts": {
-              "description": "Additional configmap-reload volume mounts @schema type: [null, array] @schema",
+              "description": "Additional configmap-reload volume mounts",
               "items": {
                 "required": []
               },
@@ -207,7 +213,7 @@
               "properties": {
                 "digest": {
                   "default": "",
-                  "description": "When digest is set to a non-empty value, images will be pulled by digest (regardless of tag value). @schema type: [null, string] @schema",
+                  "description": "When digest is set to a non-empty value, images will be pulled by digest (regardless of tag value).",
                   "required": [],
                   "title": "digest",
                   "type": [
@@ -217,7 +223,7 @@
                 },
                 "pullPolicy": {
                   "default": "IfNotPresent",
-                  "description": "configmap-reload container image pull policy @schema type: [string, null] @schema",
+                  "description": "configmap-reload container image pull policy",
                   "required": [],
                   "title": "pullPolicy",
                   "type": [
@@ -227,22 +233,23 @@
                 },
                 "repository": {
                   "default": "quay.io/prometheus-operator/prometheus-config-reloader",
-                  "description": "configmap-reload container image repository @schema type: [string] @schema",
+                  "description": "configmap-reload container image repository",
                   "title": "repository",
                   "type": "string"
                 },
                 "tag": {
                   "default": "v0.87.1",
-                  "description": "configmap-reload container image tag @schema type: [string] @schema",
+                  "description": "configmap-reload container image tag",
                   "title": "tag",
                   "type": "string"
                 }
               },
               "required": [],
-              "title": "image"
+              "title": "image",
+              "type": "object"
             },
             "livenessProbe": {
-              "description": "Settings for config-reloader's liveness probe Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/",
+              "description": "Settings for config-reloader's liveness probe\nRef: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/",
               "properties": {
                 "httpGet": {
                   "properties": {
@@ -253,7 +260,6 @@
                     },
                     "port": {
                       "default": "metrics",
-                      "description": " type: [integer, string] @schema",
                       "required": [],
                       "title": "port",
                       "type": [
@@ -283,11 +289,12 @@
                 }
               },
               "required": [],
-              "title": "livenessProbe"
+              "title": "livenessProbe",
+              "type": "object"
             },
             "name": {
               "default": "configmap-reload",
-              "description": "configmap-reload container name @schema type: [string] @schema",
+              "description": "configmap-reload container name",
               "title": "name",
               "type": "string"
             },
@@ -303,7 +310,6 @@
                     },
                     "port": {
                       "default": "metrics",
-                      "description": " type: [integer, string] @schema",
                       "required": [],
                       "title": "port",
                       "type": [
@@ -328,10 +334,11 @@
                 }
               },
               "required": [],
-              "title": "readinessProbe"
+              "title": "readinessProbe",
+              "type": "object"
             },
             "resources": {
-              "description": "configmap-reload resource requests and limits Ref: http://kubernetes.io/docs/user-guide/compute-resources/ @schema type: [object, null] @schema",
+              "description": "configmap-reload resource requests and limits\nRef: http://kubernetes.io/docs/user-guide/compute-resources/",
               "required": [],
               "title": "resources",
               "type": [
@@ -356,7 +363,6 @@
                     },
                     "port": {
                       "default": "metrics",
-                      "description": " type: [integer, string] @schema",
                       "required": [],
                       "title": "port",
                       "type": [
@@ -381,15 +387,17 @@
                 }
               },
               "required": [],
-              "title": "startupProbe"
+              "title": "startupProbe",
+              "type": "object"
             }
           },
           "required": [],
-          "title": "prometheus"
+          "title": "prometheus",
+          "type": "object"
         },
         "reloadUrl": {
           "default": "",
-          "description": "URL for configmap-reload to use for reloads @schema type: [string, null] @schema",
+          "description": "URL for configmap-reload to use for reloads",
           "required": [],
           "title": "reloadUrl",
           "type": [
@@ -399,10 +407,11 @@
         }
       },
       "required": [],
-      "title": "configmapReload"
+      "title": "configmapReload",
+      "type": "object"
     },
     "extraManifests": {
-      "description": "Extra manifests to deploy as an array @schema type: [array, null] @schema",
+      "description": "Extra manifests to deploy as an array",
       "items": {
         "required": []
       },
@@ -415,7 +424,7 @@
     },
     "extraScrapeConfigs": {
       "default": "",
-      "description": "extraScrapeConfigs adds additional scrape configs to prometheus.yml must be a string so you have to add a | after extraScrapeConfigs: example adds prometheus-blackbox-exporter scrape config @schema type: [string, null] @schema",
+      "description": "extraScrapeConfigs adds additional scrape configs to prometheus.yml\nmust be a string so you have to add a | after extraScrapeConfigs:\nexample adds prometheus-blackbox-exporter scrape config",
       "required": [],
       "title": "extraScrapeConfigs",
       "type": [
@@ -425,7 +434,7 @@
     },
     "forceNamespace": {
       "default": "",
-      "description": "Override namespace of namespaced resources @schema type: [string, null] @schema",
+      "description": "Override namespace of namespaced resources",
       "required": [],
       "title": "forceNamespace",
       "type": [
@@ -440,7 +449,7 @@
       "type": "object"
     },
     "imagePullSecrets": {
-      "description": "imagePullSecrets for pulling images from a private repository @schema type: [array, null] @schema",
+      "description": "imagePullSecrets for pulling images from a private repository",
       "items": {
         "required": []
       },
@@ -452,33 +461,35 @@
       ]
     },
     "kube-state-metrics": {
-      "description": "kube-state-metrics sub-chart configurable values Please see https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-state-metrics",
+      "description": "kube-state-metrics sub-chart configurable values\nPlease see https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-state-metrics",
       "properties": {
         "enabled": {
-          "default": "true",
+          "default": true,
           "description": "If false, kube-state-metrics sub-chart will not be installed",
-          "required": [],
-          "title": "enabled"
+          "title": "enabled",
+          "type": "boolean"
         }
       },
       "required": [],
-      "title": "kube-state-metrics"
+      "title": "kube-state-metrics",
+      "type": "object"
     },
     "networkPolicy": {
       "description": "Network policy",
       "properties": {
         "enabled": {
-          "default": "false",
+          "default": false,
           "description": "Enable creation of NetworkPolicy resources.",
-          "required": [],
-          "title": "enabled"
+          "title": "enabled",
+          "type": "boolean"
         }
       },
       "required": [],
-      "title": "networkPolicy"
+      "title": "networkPolicy",
+      "type": "object"
     },
     "prometheus-node-exporter": {
-      "description": "prometheus-node-exporter sub-chart configurable values Please see https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-node-exporter",
+      "description": "prometheus-node-exporter sub-chart configurable values\nPlease see https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-node-exporter",
       "properties": {
         "containerSecurityContext": {
           "description": "Security context for prometheus-node-exporter pod",
@@ -490,39 +501,42 @@
             }
           },
           "required": [],
-          "title": "containerSecurityContext"
+          "title": "containerSecurityContext",
+          "type": "object"
         },
         "enabled": {
-          "default": "true",
+          "default": true,
           "description": "If false, node-exporter will not be installed",
-          "required": [],
-          "title": "enabled"
+          "title": "enabled",
+          "type": "boolean"
         },
         "rbac": {
           "description": "Config RBAC resources for prometheus-node-exporter",
           "properties": {
             "pspEnabled": {
-              "default": "false",
+              "default": false,
               "description": "Enable PSP resources creation (unavailable since 1.25)",
-              "required": [],
-              "title": "pspEnabled"
+              "title": "pspEnabled",
+              "type": "boolean"
             }
           },
           "required": [],
-          "title": "rbac"
+          "title": "rbac",
+          "type": "object"
         }
       },
       "required": [],
-      "title": "prometheus-node-exporter"
+      "title": "prometheus-node-exporter",
+      "type": "object"
     },
     "prometheus-pushgateway": {
-      "description": "prometheus-pushgateway sub-chart configurable values Please see https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-pushgateway",
+      "description": "prometheus-pushgateway sub-chart configurable values\nPlease see https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-pushgateway",
       "properties": {
         "enabled": {
-          "default": "true",
+          "default": true,
           "description": "If false, pushgateway will not be installed",
-          "required": [],
-          "title": "enabled"
+          "title": "enabled",
+          "type": "boolean"
         },
         "serviceAnnotations": {
           "description": "Optional service annotations",
@@ -534,27 +548,30 @@
             }
           },
           "required": [],
-          "title": "serviceAnnotations"
+          "title": "serviceAnnotations",
+          "type": "object"
         }
       },
       "required": [],
-      "title": "prometheus-pushgateway"
+      "title": "prometheus-pushgateway",
+      "type": "object"
     },
     "rbac": {
       "description": "Create RBAC resources",
       "properties": {
         "create": {
           "default": true,
-          "description": "If true, create RBAC resources @schema type: [boolean] @schema",
+          "description": "If true, create RBAC resources",
           "title": "create",
           "type": "boolean"
         }
       },
       "required": [],
-      "title": "rbac"
+      "title": "rbac",
+      "type": "object"
     },
     "ruleFiles": {
-      "description": "Prometheus server ConfigMap entries for rule files (allow prometheus labels interpolation) @schema type: [object, null] @schema",
+      "description": "Prometheus server ConfigMap entries for rule files (allow prometheus labels interpolation)",
       "required": [],
       "title": "ruleFiles",
       "type": [
@@ -563,7 +580,7 @@
       ]
     },
     "scrapeConfigFiles": {
-      "description": "Prometheus server ConfigMap entries for scrape_config_files (allows scrape configs defined in additional files) @schema type: [array, null] @schema",
+      "description": "Prometheus server ConfigMap entries for scrape_config_files\n(allows scrape configs defined in additional files)",
       "items": {
         "required": []
       },
@@ -575,7 +592,7 @@
       ]
     },
     "scrapeConfigs": {
-      "description": "scrapeConfigs (map) defines Prometheus' default scrape_configs. Each can be disabled by setting \"enabled\" to \"false\" or leaving it empty. The key sets the default \"job_name\". Further scrapeConfigs can be added as new keys, these are then enabled by default. Ref. https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config @schema type: [object, null] @schema",
+      "description": "scrapeConfigs (map) defines Prometheus' default scrape_configs.\nEach can be disabled by setting \"enabled\" to \"false\" or leaving it empty. The key sets the default \"job_name\".\nFurther scrapeConfigs can be added as new keys, these are then enabled by default.\nRef. https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config",
       "properties": {
         "kubernetes-api-servers": {
           "properties": {
@@ -591,7 +608,6 @@
             },
             "job_name": {
               "default": "",
-              "description": " type: [string, null] @schema",
               "required": [],
               "title": "job_name",
               "type": [
@@ -698,7 +714,6 @@
             },
             "job_name": {
               "default": "",
-              "description": " type: [string, null] @schema",
               "required": [],
               "title": "job_name",
               "type": [
@@ -836,7 +851,6 @@
             },
             "job_name": {
               "default": "",
-              "description": " type: [string, null] @schema",
               "required": [],
               "title": "job_name",
               "type": [
@@ -974,7 +988,6 @@
             },
             "job_name": {
               "default": "",
-              "description": " type: [string, null] @schema",
               "required": [],
               "title": "job_name",
               "type": [
@@ -1383,7 +1396,6 @@
             },
             "job_name": {
               "default": "",
-              "description": " type: [string, null] @schema",
               "required": [],
               "title": "job_name",
               "type": [
@@ -1774,7 +1786,6 @@
             },
             "job_name": {
               "default": "",
-              "description": " type: [string, null] @schema",
               "required": [],
               "title": "job_name",
               "type": [
@@ -2114,7 +2125,6 @@
             },
             "job_name": {
               "default": "",
-              "description": " type: [string, null] @schema",
               "required": [],
               "title": "job_name",
               "type": [
@@ -2436,7 +2446,6 @@
             },
             "job_name": {
               "default": "",
-              "description": " type: [string, null] @schema",
               "required": [],
               "title": "job_name",
               "type": [
@@ -2663,7 +2672,6 @@
             },
             "job_name": {
               "default": "",
-              "description": " type: [string, null] @schema",
               "required": [],
               "title": "job_name",
               "type": [
@@ -2717,7 +2725,6 @@
             },
             "job_name": {
               "default": "",
-              "description": " type: [string, null] @schema",
               "required": [],
               "title": "job_name",
               "type": [
@@ -2799,7 +2806,7 @@
       "description": "prometheus server's configuration",
       "properties": {
         "affinity": {
-          "description": "Pod affinity @schema type: [object, null] @schema",
+          "description": "Pod affinity",
           "required": [],
           "title": "affinity",
           "type": [
@@ -2808,7 +2815,7 @@
           ]
         },
         "alertmanagers": {
-          "description": "Configuration of Alertmanagers @schema type: [array, null] @schema",
+          "description": "Configuration of Alertmanagers",
           "items": {
             "required": []
           },
@@ -2821,7 +2828,7 @@
         },
         "automountServiceAccountToken": {
           "default": "~",
-          "description": "Opt out of automounting Kubernetes API credentials. If set it will override serviceAccounts.server.automountServiceAccountToken value for ServiceAccount. @schema type: [boolean, null] @schema",
+          "description": "Opt out of automounting Kubernetes API credentials.\nIf set it will override serviceAccounts.server.automountServiceAccountToken value for ServiceAccount.",
           "required": [],
           "title": "automountServiceAccountToken",
           "type": [
@@ -2831,7 +2838,7 @@
         },
         "baseURL": {
           "default": "",
-          "description": "External URL which can access prometheus, e.g. ingress host name @schema type: [string, null] @schema",
+          "description": "External URL which can access prometheus, e.g. ingress host name",
           "required": [],
           "title": "baseURL",
           "type": [
@@ -2841,7 +2848,7 @@
         },
         "clusterRoleNameOverride": {
           "default": "",
-          "description": "If set it will override prometheus.server.fullname value for ClusterRole and ClusterRoleBinding @schema type: [string, null] @schema",
+          "description": "If set it will override prometheus.server.fullname value for ClusterRole and ClusterRoleBinding",
           "required": [],
           "title": "clusterRoleNameOverride",
           "type": [
@@ -2850,7 +2857,7 @@
           ]
         },
         "command": {
-          "description": "Prometheus server command @schema type: [array, null] @schema",
+          "description": "Prometheus server command",
           "items": {
             "required": []
           },
@@ -2863,7 +2870,7 @@
         },
         "configFromSecret": {
           "default": "",
-          "description": "Prometheus server configuration from a secret Do not set both `configMapOverrideName` and `configFromSecret` simultaneously. Use either `configMapOverrideName` or `configFromSecret`. If `configFromSecret` is defined, a ConfigMap resource will NOT be generated. @schema type: [string, null] @schema",
+          "description": "Prometheus server configuration from a secret\nDo not set both `configMapOverrideName` and `configFromSecret` simultaneously.\nUse either `configMapOverrideName` or `configFromSecret`.\nIf `configFromSecret` is defined, a ConfigMap resource will NOT be generated.",
           "required": [],
           "title": "configFromSecret",
           "type": [
@@ -2872,7 +2879,7 @@
           ]
         },
         "configMapAnnotations": {
-          "description": "Annotations to be added to ConfigMap @schema type: [object, null] @schema",
+          "description": "Annotations to be added to ConfigMap",
           "required": [],
           "title": "configMapAnnotations",
           "type": [
@@ -2882,7 +2889,7 @@
         },
         "configMapOverrideName": {
           "default": "",
-          "description": "ConfigMap override where fullname is {{.Release.Name}}-{{.Values.server.configMapOverrideName}} Defining configMapOverrideName will cause templates/server-configmap.yaml to NOT generate a ConfigMap resource @schema type: [string, null] @schema",
+          "description": "ConfigMap override where fullname is {{.Release.Name}}-{{.Values.server.configMapOverrideName}}\nDefining configMapOverrideName will cause templates/server-configmap.yaml\nto NOT generate a ConfigMap resource",
           "required": [],
           "title": "configMapOverrideName",
           "type": [
@@ -2893,11 +2900,11 @@
         "configPath": {
           "default": "/etc/config/prometheus.yml",
           "description": "Path to a configuration file on prometheus server container FS",
-          "required": [],
-          "title": "configPath"
+          "title": "configPath",
+          "type": "string"
         },
         "containerSecurityContext": {
-          "description": "Security context to be added to server container @schema type: [object, null] @schema",
+          "description": "Security context to be added to server container",
           "required": [],
           "title": "containerSecurityContext",
           "type": [
@@ -2909,7 +2916,7 @@
           "description": "DaemonSet configuration",
           "properties": {
             "annotations": {
-              "description": "Annotations to be added to daemonset @schema type: [object, null] @schema",
+              "description": "Annotations to be added to daemonset",
               "required": [],
               "title": "annotations",
               "type": [
@@ -2918,13 +2925,13 @@
               ]
             },
             "enabled": {
-              "default": "false",
-              "description": "If true, use a daemonset instead of a deployment for pod management. This allows to run prometheus agent on every node in the cluster.",
-              "required": [],
-              "title": "enabled"
+              "default": false,
+              "description": "If true, use a daemonset instead of a deployment for pod management.\nThis allows to run prometheus agent on every node in the cluster.",
+              "title": "enabled",
+              "type": "boolean"
             },
             "labels": {
-              "description": "Labels to be added to daemonset @schema type: [object, null] @schema",
+              "description": "Labels to be added to daemonset",
               "required": [],
               "title": "labels",
               "type": [
@@ -2934,10 +2941,11 @@
             }
           },
           "required": [],
-          "title": "daemonSet"
+          "title": "daemonSet",
+          "type": "object"
         },
         "defaultFlagsOverride": {
-          "description": "defaultFlagsOverride replaces all the default flags @schema type: [array, null] @schema",
+          "description": "defaultFlagsOverride replaces all the default flags",
           "items": {
             "required": []
           },
@@ -2949,7 +2957,7 @@
           ]
         },
         "deploymentAnnotations": {
-          "description": "Annotations to be added to deployment @schema type: [object, null] @schema",
+          "description": "Annotations to be added to deployment",
           "required": [],
           "title": "deploymentAnnotations",
           "type": [
@@ -2958,7 +2966,7 @@
           ]
         },
         "dnsConfig": {
-          "description": "Custom DNS configuration to be added to prometheus server pods @schema type: [object, null] @schema",
+          "description": "Custom DNS configuration to be added to prometheus server pods",
           "required": [],
           "title": "dnsConfig",
           "type": [
@@ -2969,15 +2977,15 @@
         "dnsPolicy": {
           "default": "ClusterFirst",
           "description": "When hostNetwork is enabled, this will set to ClusterFirstWithHostNet automatically",
-          "required": [],
-          "title": "dnsPolicy"
+          "title": "dnsPolicy",
+          "type": "string"
         },
         "emptyDir": {
           "description": "emptyDir volume configuration used if persistent volume is not enabled",
           "properties": {
             "medium": {
               "default": "",
-              "description": "Configure medium @schema type: [string, null] @schema",
+              "description": "Configure medium",
               "required": [],
               "title": "medium",
               "type": [
@@ -2987,7 +2995,7 @@
             },
             "sizeLimit": {
               "default": "",
-              "description": "Configure size limit @schema type: [string, null] @schema",
+              "description": "Configure size limit",
               "required": [],
               "title": "sizeLimit",
               "type": [
@@ -2997,16 +3005,17 @@
             }
           },
           "required": [],
-          "title": "emptyDir"
+          "title": "emptyDir",
+          "type": "object"
         },
         "enableServiceLinks": {
-          "default": "true",
-          "description": "EnableServiceLinks indicates whether information about services should be injected into pod's environment variables, matching the syntax of Docker links.",
-          "required": [],
-          "title": "enableServiceLinks"
+          "default": true,
+          "description": "EnableServiceLinks indicates whether information about services should be injected\ninto pod's environment variables, matching the syntax of Docker links.",
+          "title": "enableServiceLinks",
+          "type": "boolean"
         },
         "env": {
-          "description": "Additional server container environment variables  You specify this manually like you would a raw deployment manifest. This means you can bind in environment variables from secrets.  e.g. static environment variable:  - name: DEMO_GREETING    value: \"Hello from the environment\"  e.g. secret environment variable: - name: USERNAME   valueFrom:     secretKeyRef:       name: mysecret       key: username @schema type: [array, null] @schema",
+          "description": "Additional server container environment variables\n\nYou specify this manually like you would a raw deployment manifest.\nThis means you can bind in environment variables from secrets.\n\ne.g. static environment variable:\n - name: DEMO_GREETING\n   value: \"Hello from the environment\"\n\ne.g. secret environment variable:\n- name: USERNAME\n  valueFrom:\n    secretKeyRef:\n      name: mysecret\n      key: username",
           "items": {
             "required": []
           },
@@ -3018,7 +3027,7 @@
           ]
         },
         "exemplars": {
-          "description": "exemplars sets configuration to reference data outside of the MetricSet. Ref. https://prometheus.io/docs/prometheus/latest/configuration/configuration/#exemplars Must be enabled via --enable-feature=exemplar-storage @schema type: [object, null] @schema",
+          "description": "exemplars sets configuration to reference data outside of the MetricSet.\nRef. https://prometheus.io/docs/prometheus/latest/configuration/configuration/#exemplars\nMust be enabled via --enable-feature=exemplar-storage",
           "required": [],
           "title": "exemplars",
           "type": [
@@ -3027,7 +3036,7 @@
           ]
         },
         "extraArgs": {
-          "description": "Additional Prometheus server container arguments Set to null for argumentless flags @schema type: [object, null] @schema",
+          "description": "Additional Prometheus server container arguments\nSet to null for argumentless flags",
           "required": [],
           "title": "extraArgs",
           "type": [
@@ -3036,7 +3045,7 @@
           ]
         },
         "extraConfigmapLabels": {
-          "description": "Extra labels for Prometheus server ConfigMap (ConfigMap that holds serverFiles) @schema type: [object, null] @schema",
+          "description": "Extra labels for Prometheus server ConfigMap (ConfigMap that holds serverFiles)",
           "required": [],
           "title": "extraConfigmapLabels",
           "type": [
@@ -3045,7 +3054,7 @@
           ]
         },
         "extraConfigmapMounts": {
-          "description": "Additional ConfigMaps to mount @schema type: [array, null] @schema",
+          "description": "Additional ConfigMaps to mount",
           "items": {
             "required": []
           },
@@ -3057,7 +3066,7 @@
           ]
         },
         "extraFlags": {
-          "description": "extraFlags adds additional flags @schema type: [array, null] @schema",
+          "description": "extraFlags adds additional flags",
           "items": {
             "anyOf": [
               {
@@ -3074,7 +3083,7 @@
           ]
         },
         "extraHostPathMounts": {
-          "description": "Additional Prometheus server hostPath mounts @schema type: [array, null] @schema",
+          "description": "Additional Prometheus server hostPath mounts",
           "items": {
             "required": []
           },
@@ -3086,7 +3095,7 @@
           ]
         },
         "extraInitContainers": {
-          "description": "Additional InitContainers to initialize in the pod @schema type: [array, null] @schema",
+          "description": "Additional InitContainers to initialize in the pod",
           "items": {
             "required": []
           },
@@ -3098,7 +3107,7 @@
           ]
         },
         "extraSecretMounts": {
-          "description": "Additional Prometheus server Secrets to mount Defines additional mounts with secrets. Secrets must be manually created in the namespace. @schema type: [array, null] @schema",
+          "description": "Additional Prometheus server Secrets to mount\nDefines additional mounts with secrets. Secrets must be manually created in the namespace.",
           "items": {
             "required": []
           },
@@ -3110,7 +3119,7 @@
           ]
         },
         "extraVolumeMounts": {
-          "description": "Additional Prometheus server Volume mounts @schema type: [array, null] @schema",
+          "description": "Additional Prometheus server Volume mounts",
           "items": {
             "required": []
           },
@@ -3122,7 +3131,7 @@
           ]
         },
         "extraVolumes": {
-          "description": "Additional Prometheus server Volumes @schema type: [array, null] @schema",
+          "description": "Additional Prometheus server Volumes",
           "items": {
             "required": []
           },
@@ -3135,7 +3144,7 @@
         },
         "fullnameOverride": {
           "default": "",
-          "description": "Override the prometheus.server.fullname for all objects related to the Prometheus server @schema type: [string, null] @schema",
+          "description": "Override the prometheus.server.fullname for all objects related to the Prometheus server",
           "required": [],
           "title": "fullnameOverride",
           "type": [
@@ -3149,27 +3158,28 @@
             "evaluation_interval": {
               "default": "1m",
               "description": "How frequently to evaluate rules",
-              "required": [],
-              "title": "evaluation_interval"
+              "title": "evaluation_interval",
+              "type": "string"
             },
             "scrape_interval": {
               "default": "1m",
               "description": "How frequently to scrape targets by default",
-              "required": [],
-              "title": "scrape_interval"
+              "title": "scrape_interval",
+              "type": "string"
             },
             "scrape_timeout": {
               "default": "10s",
               "description": "How long until a scrape request times out",
-              "required": [],
-              "title": "scrape_timeout"
+              "title": "scrape_timeout",
+              "type": "string"
             }
           },
           "required": [],
-          "title": "global"
+          "title": "global",
+          "type": "object"
         },
         "hostAliases": {
-          "description": "hostAliases allows adding entries to /etc/hosts inside the containers @schema type: [array, null] @schema",
+          "description": "hostAliases allows adding entries to /etc/hosts inside the containers",
           "items": {
             "required": []
           },
@@ -3181,14 +3191,14 @@
           ]
         },
         "hostNetwork": {
-          "default": "false",
-          "description": "hostNetwork is required for use in managed kubernetes clusters (such as AWS EKS) with custom CNI (such as calico), because control-plane managed by AWS cannot communicate with pods' IP CIDR and admission webhooks are not working",
-          "required": [],
-          "title": "hostNetwork"
+          "default": false,
+          "description": "hostNetwork is required for use in managed kubernetes clusters (such as AWS EKS)\nwith custom CNI (such as calico),\nbecause control-plane managed by AWS cannot communicate with pods' IP CIDR and admission webhooks are not working",
+          "title": "hostNetwork",
+          "type": "boolean"
         },
         "hostPort": {
           "default": "~",
-          "description": " @schema type: [integer, null] @schema",
+          "description": "Use hostPort",
           "required": [],
           "title": "hostPort",
           "type": [
@@ -3201,7 +3211,7 @@
           "properties": {
             "digest": {
               "default": "",
-              "description": "digest when set to a non-empty value, images will be pulled by digest (regardless of tag value). @schema type: [string, null] @schema",
+              "description": "digest when set to a non-empty value, images will be pulled by digest (regardless of tag value).",
               "required": [],
               "title": "digest",
               "type": [
@@ -3212,18 +3222,18 @@
             "pullPolicy": {
               "default": "IfNotPresent",
               "description": "Prometheus server container image pull policy",
-              "required": [],
-              "title": "pullPolicy"
+              "title": "pullPolicy",
+              "type": "string"
             },
             "repository": {
               "default": "quay.io/prometheus/prometheus",
               "description": "Prometheus server container image repository",
-              "required": [],
-              "title": "repository"
+              "title": "repository",
+              "type": "string"
             },
             "tag": {
               "default": "",
-              "description": "tag if not set appVersion field from Chart.yaml is used @schema type: [string, null] @schema",
+              "description": "tag if not set appVersion field from Chart.yaml is used",
               "required": [],
               "title": "tag",
               "type": [
@@ -3233,13 +3243,14 @@
             }
           },
           "required": [],
-          "title": "image"
+          "title": "image",
+          "type": "object"
         },
         "ingress": {
           "description": "Ingress configuration",
           "properties": {
             "annotations": {
-              "description": "Prometheus server Ingress annotations @schema type: [object, null] @schema",
+              "description": "Prometheus server Ingress annotations",
               "required": [],
               "title": "annotations",
               "type": [
@@ -3248,13 +3259,13 @@
               ]
             },
             "enabled": {
-              "default": "false",
+              "default": false,
               "description": "If true, Prometheus server Ingress will be created",
-              "required": [],
-              "title": "enabled"
+              "title": "enabled",
+              "type": "boolean"
             },
             "extraLabels": {
-              "description": "Prometheus server Ingress additional labels @schema type: [object, null] @schema",
+              "description": "Prometheus server Ingress additional labels",
               "required": [],
               "title": "extraLabels",
               "type": [
@@ -3263,7 +3274,7 @@
               ]
             },
             "extraPaths": {
-              "description": "Extra paths to prepend to every host configuration. This is useful when working with annotation based services (passed through tpl). @schema type: [array, null] @schema",
+              "description": "Extra paths to prepend to every host configuration. This is useful when working with annotation based services (passed through tpl).",
               "items": {
                 "required": []
               },
@@ -3275,7 +3286,7 @@
               ]
             },
             "hosts": {
-              "description": "Prometheus server Ingress hostnames with optional path (passed through tpl) Must be provided if Ingress is enabled @schema type: [array, null] @schema",
+              "description": "Prometheus server Ingress hostnames with optional path (passed through tpl)\nMust be provided if Ingress is enabled",
               "items": {
                 "required": []
               },
@@ -3288,7 +3299,7 @@
             },
             "ingressClassName": {
               "default": "",
-              "description": "Set ingress class name @schema type: [string, null] @schema",
+              "description": "Set ingress class name",
               "required": [],
               "title": "ingressClassName",
               "type": [
@@ -3299,18 +3310,18 @@
             "path": {
               "default": "/",
               "description": "Prometheus server Ingress path",
-              "required": [],
-              "title": "path"
+              "title": "path",
+              "type": "string"
             },
             "pathType": {
               "default": "Prefix",
               "description": "pathType determines the interpretation of the path matching",
-              "required": [],
-              "title": "pathType"
+              "title": "pathType",
+              "type": "string"
             },
             "servicePort": {
               "default": "~",
-              "description": "Redirect ingress to an additional defined port on the service @schema type: [integer, null] @schema",
+              "description": "Redirect ingress to an additional defined port on the service",
               "required": [],
               "title": "servicePort",
               "type": [
@@ -3319,7 +3330,7 @@
               ]
             },
             "tls": {
-              "description": "Prometheus server Ingress TLS configuration (hosts passed through tpl) Secrets must be manually created in the namespace @schema type: [array, null] @schema",
+              "description": "Prometheus server Ingress TLS configuration (hosts passed through tpl)\nSecrets must be manually created in the namespace",
               "items": {
                 "required": []
               },
@@ -3332,46 +3343,47 @@
             }
           },
           "required": [],
-          "title": "ingress"
+          "title": "ingress",
+          "type": "object"
         },
         "livenessProbeFailureThreshold": {
-          "default": "3",
+          "default": 3,
           "description": "Set failure threshold for liveness probe",
-          "required": [],
-          "title": "livenessProbeFailureThreshold"
+          "title": "livenessProbeFailureThreshold",
+          "type": "integer"
         },
         "livenessProbeInitialDelay": {
-          "default": "30",
+          "default": 30,
           "description": "Set initial delay for liveness probe",
-          "required": [],
-          "title": "livenessProbeInitialDelay"
+          "title": "livenessProbeInitialDelay",
+          "type": "integer"
         },
         "livenessProbePeriodSeconds": {
-          "default": "15",
+          "default": 15,
           "description": "Set period for liveness probe",
-          "required": [],
-          "title": "livenessProbePeriodSeconds"
+          "title": "livenessProbePeriodSeconds",
+          "type": "integer"
         },
         "livenessProbeSuccessThreshold": {
-          "default": "1",
+          "default": 1,
           "description": "Set success threshold for liveness probe",
-          "required": [],
-          "title": "livenessProbeSuccessThreshold"
+          "title": "livenessProbeSuccessThreshold",
+          "type": "integer"
         },
         "livenessProbeTimeout": {
-          "default": "10",
+          "default": 10,
           "description": "Set timeout for liveness probe",
-          "required": [],
-          "title": "livenessProbeTimeout"
+          "title": "livenessProbeTimeout",
+          "type": "integer"
         },
         "name": {
           "default": "server",
           "description": "Prometheus server container name",
-          "required": [],
-          "title": "name"
+          "title": "name",
+          "type": "string"
         },
         "namespaces": {
-          "description": "namespaces to include in service discovery instead of clusterwide discovery. Needed if you want to run Prometheus without cluster-admin privileges (namespaced configuration). See also releaseNamespace. Setting useExistingClusterRoleName is required. @schema type: [array, null] @schema",
+          "description": "namespaces to include in service discovery instead of clusterwide discovery. Needed if you want to run\nPrometheus without cluster-admin privileges (namespaced configuration). See also releaseNamespace.\nSetting useExistingClusterRoleName is required.",
           "items": {
             "required": []
           },
@@ -3383,7 +3395,7 @@
           ]
         },
         "nodeSelector": {
-          "description": "Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/ @schema type: [object, null] @schema",
+          "description": "Node labels for Prometheus server pod assignment\nRef: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/",
           "required": [],
           "title": "nodeSelector",
           "type": [
@@ -3392,7 +3404,7 @@
           ]
         },
         "otlp": {
-          "description": "otlp sets OTLP configuration https://prometheus.io/docs/guides/opentelemetry @schema type: [object, null] @schema",
+          "description": "otlp sets OTLP configuration\nhttps://prometheus.io/docs/guides/opentelemetry",
           "required": [],
           "title": "otlp",
           "type": [
@@ -3404,7 +3416,7 @@
           "description": "Persistent volume configuration",
           "properties": {
             "accessModes": {
-              "description": "Prometheus server data Persistent Volume access modes Must match those of existing PV or dynamic provisioner Ref: http://kubernetes.io/docs/user-guide/persistent-volumes/ @schema type: [array, null] @schema",
+              "description": "Prometheus server data Persistent Volume access modes\nMust match those of existing PV or dynamic provisioner\nRef: http://kubernetes.io/docs/user-guide/persistent-volumes/",
               "items": {
                 "anyOf": [
                   {
@@ -3421,7 +3433,7 @@
               ]
             },
             "annotations": {
-              "description": "Prometheus server data Persistent Volume annotations @schema type: [object, null] @schema",
+              "description": "Prometheus server data Persistent Volume annotations",
               "required": [],
               "title": "annotations",
               "type": [
@@ -3430,14 +3442,14 @@
               ]
             },
             "enabled": {
-              "default": "true",
-              "description": "If true, Prometheus server will create/use a Persistent Volume Claim If false, use emptyDir",
-              "required": [],
-              "title": "enabled"
+              "default": true,
+              "description": "If true, Prometheus server will create/use a Persistent Volume Claim\nIf false, use emptyDir",
+              "title": "enabled",
+              "type": "boolean"
             },
             "existingClaim": {
               "default": "",
-              "description": "Prometheus server data Persistent Volume existing claim name Requires server.persistentVolume.enabled: true If defined, PVC must be created manually before volume will be bound @schema type: [string, null] @schema",
+              "description": "Prometheus server data Persistent Volume existing claim name\nRequires server.persistentVolume.enabled: true\nIf defined, PVC must be created manually before volume will be bound",
               "required": [],
               "title": "existingClaim",
               "type": [
@@ -3446,7 +3458,7 @@
               ]
             },
             "labels": {
-              "description": "Prometheus server data Persistent Volume labels @schema type: [object, null] @schema",
+              "description": "Prometheus server data Persistent Volume labels",
               "required": [],
               "title": "labels",
               "type": [
@@ -3457,11 +3469,11 @@
             "mountPath": {
               "default": "/data",
               "description": "Prometheus server data Persistent Volume mount root path",
-              "required": [],
-              "title": "mountPath"
+              "title": "mountPath",
+              "type": "string"
             },
             "selector": {
-              "description": "Persistent Volume Claim Selector Useful if Persistent Volumes have been provisioned in advance Ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector @schema type: [object, null] @schema",
+              "description": "Persistent Volume Claim Selector\nUseful if Persistent Volumes have been provisioned in advance\nRef: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector",
               "required": [],
               "title": "selector",
               "type": [
@@ -3472,12 +3484,12 @@
             "size": {
               "default": "8Gi",
               "description": "Prometheus server data Persistent Volume size",
-              "required": [],
-              "title": "size"
+              "title": "size",
+              "type": "string"
             },
             "statefulSetNameOverride": {
               "default": "",
-              "description": "If set it will override the name of the created persistent volume claim generated by the stateful set. @schema type: [string, null] @schema",
+              "description": "If set it will override the name of the created persistent volume claim\ngenerated by the stateful set.",
               "required": [],
               "title": "statefulSetNameOverride",
               "type": [
@@ -3487,7 +3499,7 @@
             },
             "storageClass": {
               "default": "~",
-              "description": "Prometheus server data Persistent Volume Storage Class If defined, storageClassName: <storageClass> If set to \"-\", storageClassName: \"\", which disables dynamic provisioning If undefined (the default) or set to null, no storageClassName spec is   set, choosing the default provisioner.  (gp2 on AWS, standard on   GKE, AWS & OpenStack) @schema type: [string, null] @schema",
+              "description": "Prometheus server data Persistent Volume Storage Class\nIf defined, storageClassName: <storageClass>\nIf set to \"-\", storageClassName: \"\", which disables dynamic provisioning\nIf undefined (the default) or set to null, no storageClassName spec is\n  set, choosing the default provisioner.  (gp2 on AWS, standard on\n  GKE, AWS & OpenStack)",
               "required": [],
               "title": "storageClass",
               "type": [
@@ -3497,7 +3509,7 @@
             },
             "subPath": {
               "default": "",
-              "description": "Subdirectory of Prometheus server data Persistent Volume to mount Useful if the volume's root directory is not empty @schema type: [string, null] @schema",
+              "description": "Subdirectory of Prometheus server data Persistent Volume to mount\nUseful if the volume's root directory is not empty",
               "required": [],
               "title": "subPath",
               "type": [
@@ -3507,7 +3519,7 @@
             },
             "volumeName": {
               "default": "",
-              "description": "Persistent Volume Name Useful if Persistent Volumes have been provisioned in advance and you want to use a specific one @schema type: [string, null] @schema",
+              "description": "Persistent Volume Name\nUseful if Persistent Volumes have been provisioned in advance and you want to use a specific one",
               "required": [],
               "title": "volumeName",
               "type": [
@@ -3517,10 +3529,11 @@
             }
           },
           "required": [],
-          "title": "persistentVolume"
+          "title": "persistentVolume",
+          "type": "object"
         },
         "podAnnotations": {
-          "description": "Annotations to be added to Prometheus server pods @schema type: [object, null] @schema",
+          "description": "Annotations to be added to Prometheus server pods",
           "required": [],
           "title": "podAnnotations",
           "type": [
@@ -3530,7 +3543,7 @@
         },
         "podAntiAffinity": {
           "default": "",
-          "description": "Pod anti-affinity can prevent the scheduler from placing Prometheus server replicas on the same node. The value \"soft\" means that the scheduler should *prefer* to not schedule two replica pods onto the same node but no guarantee is provided. The value \"hard\" means that the scheduler is *required* to not schedule two replica pods onto the same node. The default value \"\" will disable pod anti-affinity so that no anti-affinity rules will be configured (unless set in `server.affinity`). @schema type: [string, null] @schema",
+          "description": "Pod anti-affinity can prevent the scheduler from placing Prometheus server replicas on the same node.\nThe value \"soft\" means that the scheduler should *prefer* to not schedule two replica pods onto the same node\nbut no guarantee is provided.\nThe value \"hard\" means that the scheduler is *required* to not schedule two replica pods onto the same node.\nThe default value \"\" will disable pod anti-affinity so that no anti-affinity rules will be configured (unless\nset in `server.affinity`).",
           "required": [],
           "title": "podAntiAffinity",
           "type": [
@@ -3540,12 +3553,12 @@
         },
         "podAntiAffinityTopologyKey": {
           "default": "kubernetes.io/hostname",
-          "description": "If anti-affinity is enabled sets the topologyKey to use for anti-affinity. This can be changed to, for example, failure-domain.beta.kubernetes.io/zone",
-          "required": [],
-          "title": "podAntiAffinityTopologyKey"
+          "description": "If anti-affinity is enabled sets the topologyKey to use for anti-affinity.\nThis can be changed to, for example, failure-domain.beta.kubernetes.io/zone",
+          "title": "podAntiAffinityTopologyKey",
+          "type": "string"
         },
         "podDisruptionBudget": {
-          "description": "PodDisruptionBudget settings Ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/",
+          "description": "PodDisruptionBudget settings\nRef: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/",
           "properties": {
             "enabled": {
               "default": false,
@@ -3554,10 +3567,11 @@
             }
           },
           "required": [],
-          "title": "podDisruptionBudget"
+          "title": "podDisruptionBudget",
+          "type": "object"
         },
         "podLabels": {
-          "description": "Labels to be added to Prometheus server pods @schema type: [object, null] @schema",
+          "description": "Labels to be added to Prometheus server pods",
           "required": [],
           "title": "podLabels",
           "type": [
@@ -3567,7 +3581,7 @@
         },
         "portName": {
           "default": "",
-          "description": "Set name of the port @schema type: [string, null] @schema",
+          "description": "Set name of the port",
           "required": [],
           "title": "portName",
           "type": [
@@ -3577,7 +3591,7 @@
         },
         "prefixURL": {
           "default": "",
-          "description": "The URL prefix at which the container can be accessed. Useful in the case the '-web.external-url' includes a slug so that the various internal URLs are still able to access as they are in the default case. (Optional) @schema type: [string, null] @schema",
+          "description": "The URL prefix at which the container can be accessed. Useful in the case the '-web.external-url' includes a slug\nso that the various internal URLs are still able to access as they are in the default case.\n(Optional)",
           "required": [],
           "title": "prefixURL",
           "type": [
@@ -3587,7 +3601,7 @@
         },
         "priorityClassName": {
           "default": "",
-          "description": "prometheus server priorityClassName @schema type: [string, null] @schema",
+          "description": "prometheus server priorityClassName",
           "required": [],
           "title": "priorityClassName",
           "type": [
@@ -3596,7 +3610,7 @@
           ]
         },
         "probeHeaders": {
-          "description": "probeHeaders sets custom HTTP headers for Liveness/Readiness/Startup Probe Useful for providing HTTP Basic Auth to healthchecks @schema type: [array, null] @schema",
+          "description": "probeHeaders sets custom HTTP headers for Liveness/Readiness/Startup Probe\nUseful for providing HTTP Basic Auth to healthchecks",
           "items": {
             "required": []
           },
@@ -3610,47 +3624,47 @@
         "probeScheme": {
           "default": "HTTP",
           "description": "Set HTTP scheme for probes",
-          "required": [],
-          "title": "probeScheme"
+          "title": "probeScheme",
+          "type": "string"
         },
         "readinessProbeFailureThreshold": {
-          "default": "3",
+          "default": 3,
           "description": "Set failure threshold for readiness probe",
-          "required": [],
-          "title": "readinessProbeFailureThreshold"
+          "title": "readinessProbeFailureThreshold",
+          "type": "integer"
         },
         "readinessProbeInitialDelay": {
-          "default": "30",
+          "default": 30,
           "description": "Set initial delay for readiness probe",
-          "required": [],
-          "title": "readinessProbeInitialDelay"
+          "title": "readinessProbeInitialDelay",
+          "type": "integer"
         },
         "readinessProbePeriodSeconds": {
-          "default": "5",
+          "default": 5,
           "description": "Set period for readiness probe",
-          "required": [],
-          "title": "readinessProbePeriodSeconds"
+          "title": "readinessProbePeriodSeconds",
+          "type": "integer"
         },
         "readinessProbeSuccessThreshold": {
-          "default": "1",
+          "default": 1,
           "description": "Set success threshold for readiness probe",
-          "required": [],
-          "title": "readinessProbeSuccessThreshold"
+          "title": "readinessProbeSuccessThreshold",
+          "type": "integer"
         },
         "readinessProbeTimeout": {
-          "default": "4",
+          "default": 4,
           "description": "Set timeout for ediness probe",
-          "required": [],
-          "title": "readinessProbeTimeout"
+          "title": "readinessProbeTimeout",
+          "type": "integer"
         },
         "releaseNamespace": {
-          "default": "false",
-          "description": "releaseNamespace to enable only the release namespace for service discovery. By default all namespaces are included in service discovery. If releaseNamespace and namespaces are both set, a merged list will be created. Note that kubernetes_sd_configs.namespaces in scrape configs must be specified if namespaced service discovery is desired. Setting useExistingClusterRoleName is required.",
-          "required": [],
-          "title": "releaseNamespace"
+          "default": false,
+          "description": "releaseNamespace to enable only the release namespace for service discovery.\nBy default all namespaces are included in service discovery.\nIf releaseNamespace and namespaces are both set, a merged list will be created.\nNote that kubernetes_sd_configs.namespaces in scrape configs must be specified\nif namespaced service discovery is desired. Setting useExistingClusterRoleName is required.",
+          "title": "releaseNamespace",
+          "type": "boolean"
         },
         "remoteRead": {
-          "description": "remoteRead sets remote_read configuration Ref. https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_read @schema type: [array, null] @schema",
+          "description": "remoteRead sets remote_read configuration\nRef. https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_read",
           "items": {
             "required": []
           },
@@ -3662,7 +3676,7 @@
           ]
         },
         "remoteWrite": {
-          "description": "remoteWrite sets remote_write configuration Ref. https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write @schema type: [array, null] @schema",
+          "description": "remoteWrite sets remote_write configuration\nRef. https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write",
           "items": {
             "required": []
           },
@@ -3675,12 +3689,12 @@
         },
         "replicaCount": {
           "default": 1,
-          "description": "Use a StatefulSet if replicaCount needs to be greater than 1 (see below) @schema type: [integer] @schema",
+          "description": "Use a StatefulSet if replicaCount needs to be greater than 1 (see below)",
           "title": "replicaCount",
           "type": "integer"
         },
         "resources": {
-          "description": "Prometheus server resource requests and limits Ref: http://kubernetes.io/docs/user-guide/compute-resources/ @schema type: [object, null] @schema",
+          "description": "Prometheus server resource requests and limits\nRef: http://kubernetes.io/docs/user-guide/compute-resources/",
           "required": [],
           "title": "resources",
           "type": [
@@ -3691,12 +3705,12 @@
         "retention": {
           "default": "15d",
           "description": "Prometheus data retention period (default if not specified is 15 days)",
-          "required": [],
-          "title": "retention"
+          "title": "retention",
+          "type": "string"
         },
         "retentionSize": {
           "default": "",
-          "description": "Prometheus' data retention size. Supported units: B, KB, MB, GB, TB, PB, EB. @schema type: [string, null] @schema",
+          "description": "Prometheus' data retention size. Supported units: B, KB, MB, GB, TB, PB, EB.",
           "required": [],
           "title": "retentionSize",
           "type": [
@@ -3706,17 +3720,17 @@
         },
         "revisionHistoryLimit": {
           "default": 10,
-          "description": "Number of old history to retain to allow rollback Default Kubernetes value is set to 10 @schema type: [integer] @schema",
+          "description": "Number of old history to retain to allow rollback\nDefault Kubernetes value is set to 10",
           "title": "revisionHistoryLimit",
           "type": "integer"
         },
         "route": {
-          "description": "route (map) allows configuration of HTTPRoute resources Requires Gateway API resources and suitable controller installed within the cluster Ref. https://gateway-api.sigs.k8s.io/guides/http-routing/",
+          "description": "route (map) allows configuration of HTTPRoute resources\nRequires Gateway API resources and suitable controller installed within the cluster\nRef. https://gateway-api.sigs.k8s.io/guides/http-routing/",
           "properties": {
             "main": {
               "properties": {
                 "additionalRules": {
-                  "description": "additionalRules (templated) allows adding custom rules to the route @schema type: [array, null] @schema",
+                  "description": "additionalRules (templated) allows adding custom rules to the route",
                   "items": {
                     "required": []
                   },
@@ -3728,7 +3742,7 @@
                   ]
                 },
                 "annotations": {
-                  "description": "Annotations to attach to the HTTPRoute resource @schema type: [object, null] @schema",
+                  "description": "Annotations to attach to the HTTPRoute resource",
                   "required": [],
                   "title": "annotations",
                   "type": [
@@ -3738,7 +3752,7 @@
                 },
                 "apiVersion": {
                   "default": "",
-                  "description": "ApiVersion set by default to \"gateway.networking.k8s.io/v1\" @schema type: [string, null] @schema",
+                  "description": "ApiVersion set by default to \"gateway.networking.k8s.io/v1\"",
                   "required": [],
                   "title": "apiVersion",
                   "type": [
@@ -3747,13 +3761,13 @@
                   ]
                 },
                 "enabled": {
-                  "default": "false",
+                  "default": false,
                   "description": "Enable this route",
-                  "required": [],
-                  "title": "enabled"
+                  "title": "enabled",
+                  "type": "boolean"
                 },
                 "filters": {
-                  "description": "Filters define the filters that are applied to requests that match this rule @schema type: [array, null] @schema",
+                  "description": "Filters define the filters that are applied to requests that match\nthis rule",
                   "items": {
                     "required": []
                   },
@@ -3765,7 +3779,7 @@
                   ]
                 },
                 "hostnames": {
-                  "description": "Hostnames (templated) defines a set of hostnames that should match against the HTTP Host header to select a HTTPRoute used to process the request @schema type: [array, null] @schema",
+                  "description": "Hostnames (templated) defines a set of hostnames that should match against the HTTP Host\nheader to select a HTTPRoute used to process the request",
                   "items": {
                     "required": []
                   },
@@ -3777,14 +3791,14 @@
                   ]
                 },
                 "httpsRedirect": {
-                  "default": "false",
-                  "description": "httpsRedirect adds a filter for redirecting to https (HTTP 301 Moved Permanently). To redirect HTTP traffic to HTTPS, you need to have a Gateway with both HTTP and HTTPS listeners. Matches and filters do not take effect if enabled. Ref. https://gateway-api.sigs.k8s.io/guides/http-redirect-rewrite/",
-                  "required": [],
-                  "title": "httpsRedirect"
+                  "default": false,
+                  "description": "httpsRedirect adds a filter for redirecting to https (HTTP 301 Moved Permanently).\nTo redirect HTTP traffic to HTTPS, you need to have a Gateway with both HTTP and HTTPS listeners.\nMatches and filters do not take effect if enabled.\nRef. https://gateway-api.sigs.k8s.io/guides/http-redirect-rewrite/",
+                  "title": "httpsRedirect",
+                  "type": "boolean"
                 },
                 "kind": {
                   "default": "",
-                  "description": "kind set by default to HTTPRoute @schema type: [string, null] @schema",
+                  "description": "kind set by default to HTTPRoute",
                   "required": [],
                   "title": "kind",
                   "type": [
@@ -3793,7 +3807,7 @@
                   ]
                 },
                 "labels": {
-                  "description": "Labels to attach to the HTTPRoute resource @schema type: [object, null] @schema",
+                  "description": "Labels to attach to the HTTPRoute resource",
                   "required": [],
                   "title": "labels",
                   "type": [
@@ -3802,7 +3816,7 @@
                   ]
                 },
                 "matches": {
-                  "description": "Matches define conditions used for matching the rule against incoming HTTP requests",
+                  "description": "Matches define conditions used for matching the rule against incoming\nHTTP requests",
                   "items": {
                     "anyOf": [
                       {
@@ -3831,11 +3845,11 @@
                     ],
                     "required": []
                   },
-                  "required": [],
-                  "title": "matches"
+                  "title": "matches",
+                  "type": "array"
                 },
                 "parentRefs": {
-                  "description": "ParentRefs refers to resources this HTTPRoute is to be attached to (Gateways) @schema type: [array, null] @schema",
+                  "description": "ParentRefs refers to resources this HTTPRoute is to be attached to (Gateways)",
                   "items": {
                     "required": []
                   },
@@ -3853,11 +3867,12 @@
             }
           },
           "required": [],
-          "title": "route"
+          "title": "route",
+          "type": "object"
         },
         "runtimeClassName": {
           "default": "",
-          "description": "prometheus server runtimeClassName @schema type: [string, null] @schema",
+          "description": "prometheus server runtimeClassName",
           "required": [],
           "title": "runtimeClassName",
           "type": [
@@ -3867,7 +3882,7 @@
         },
         "schedulerName": {
           "default": "",
-          "description": "Use an alternate scheduler, e.g. \"stork\". Ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/ @schema type: [string, null] @schema",
+          "description": "Use an alternate scheduler, e.g. \"stork\".\nRef: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/",
           "required": [],
           "title": "schedulerName",
           "type": [
@@ -3876,7 +3891,7 @@
           ]
         },
         "securityContext": {
-          "description": "Security context to be added to server pods @schema type: [object, null] @schema",
+          "description": "Security context to be added to server pods",
           "properties": {
             "fsGroup": {
               "default": 65534,
@@ -3910,7 +3925,7 @@
           "description": "Service configuration",
           "properties": {
             "additionalPorts": {
-              "description": "Additional port to define in the Service @schema type: [array, null] @schema",
+              "description": "Additional port to define in the Service",
               "items": {
                 "required": []
               },
@@ -3922,7 +3937,7 @@
               ]
             },
             "annotations": {
-              "description": "Annotations to be added to Service @schema type: [object, null] @schema",
+              "description": "Annotations to be added to Service",
               "required": [],
               "title": "annotations",
               "type": [
@@ -3932,7 +3947,7 @@
             },
             "clusterIP": {
               "default": "",
-              "description": "Set ClusterIP for Prometheus server service @schema type: [string, null] @schema",
+              "description": "Set ClusterIP for Prometheus server service",
               "required": [],
               "title": "clusterIP",
               "type": [
@@ -3941,13 +3956,13 @@
               ]
             },
             "enabled": {
-              "default": "true",
+              "default": true,
               "description": "If false, no Service will be created for the Prometheus server",
-              "required": [],
-              "title": "enabled"
+              "title": "enabled",
+              "type": "boolean"
             },
             "externalIPs": {
-              "description": "List of IP addresses at which the Prometheus server service is available Ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips @schema type: [array, null] @schema",
+              "description": "List of IP addresses at which the Prometheus server service is available\nRef: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips",
               "items": {
                 "required": []
               },
@@ -3960,7 +3975,7 @@
             },
             "externalTrafficPolicy": {
               "default": "",
-              "description": "externalTrafficPolicy is applicable to service with externally-facing addresses (NodePorts, ExternalIPs, and LoadBalancer IPs) @schema type: [string, null] @schema",
+              "description": "externalTrafficPolicy is applicable to service with externally-facing addresses\n(NodePorts, ExternalIPs, and LoadBalancer IPs)",
               "required": [],
               "title": "externalTrafficPolicy",
               "type": [
@@ -3972,23 +3987,24 @@
               "description": "Configure gRPC on service to allow auto discovery with thanos-querier",
               "properties": {
                 "enabled": {
-                  "default": "false",
+                  "default": false,
                   "description": "Enable gRPC port on service to allow auto discovery with thanos-querier",
-                  "required": [],
-                  "title": "enabled"
+                  "title": "enabled",
+                  "type": "boolean"
                 },
                 "servicePort": {
                   "default": 10901,
-                  "description": "Port for gRPC service @schema type: [integer] @schema",
+                  "description": "Port for gRPC service",
                   "title": "servicePort",
                   "type": "integer"
                 }
               },
               "required": [],
-              "title": "gRPC"
+              "title": "gRPC",
+              "type": "object"
             },
             "labels": {
-              "description": "Labels to be added to Service @schema type: [object, null] @schema",
+              "description": "Labels to be added to Service",
               "required": [],
               "title": "labels",
               "type": [
@@ -3998,7 +4014,7 @@
             },
             "loadBalancerClass": {
               "default": "",
-              "description": "LoadBalancerClass for Prometheus server service (optional, cloud specific) @schema type: [string, null] @schema",
+              "description": "LoadBalancerClass for Prometheus server service (optional, cloud specific)",
               "required": [],
               "title": "loadBalancerClass",
               "type": [
@@ -4008,7 +4024,7 @@
             },
             "loadBalancerIP": {
               "default": "",
-              "description": "LoadBalancerIP for Prometheus server service (optional, cloud specific) @schema type: [string, null] @schema",
+              "description": "LoadBalancerIP for Prometheus server service (optional, cloud specific)",
               "required": [],
               "title": "loadBalancerIP",
               "type": [
@@ -4017,7 +4033,7 @@
               ]
             },
             "loadBalancerSourceRanges": {
-              "description": "LoadBalancerSourceRanges for Prometheus server service (optional, cloud specific) @schema type: [array, null] @schema",
+              "description": "LoadBalancerSourceRanges for Prometheus server service (optional, cloud specific)",
               "items": {
                 "required": []
               },
@@ -4030,40 +4046,41 @@
             },
             "servicePort": {
               "default": 80,
-              "description": "Service port for Prometheus server service @schema type: [integer] @schema",
+              "description": "Service port for Prometheus server service",
               "title": "servicePort",
               "type": "integer"
             },
             "sessionAffinity": {
               "default": "None",
               "description": "SessionAffinity configures the affinity settings for the Service",
-              "required": [],
-              "title": "sessionAffinity"
+              "title": "sessionAffinity",
+              "type": "string"
             },
             "statefulsetReplica": {
-              "description": "If using a statefulSet (statefulSet.enabled=true), configure the service to connect to a specific replica to have a consistent view of the data.",
+              "description": "If using a statefulSet (statefulSet.enabled=true), configure the\nservice to connect to a specific replica to have a consistent view\nof the data.",
               "properties": {
                 "enabled": {
-                  "default": "false",
+                  "default": false,
                   "description": "If true, configure the service to connect to a specific replica",
-                  "required": [],
-                  "title": "enabled"
+                  "title": "enabled",
+                  "type": "boolean"
                 },
                 "replica": {
-                  "default": "0",
+                  "default": 0,
                   "description": "The index of the replica to connect to (0-based)",
-                  "required": [],
-                  "title": "replica"
+                  "title": "replica",
+                  "type": "integer"
                 }
               },
               "required": [],
-              "title": "statefulsetReplica"
+              "title": "statefulsetReplica",
+              "type": "object"
             },
             "type": {
               "default": "ClusterIP",
               "description": "ServiceType of Prometheus server service",
-              "required": [],
-              "title": "type"
+              "title": "type",
+              "type": "string"
             }
           },
           "required": [],
@@ -4071,7 +4088,7 @@
           "type": "object"
         },
         "sidecarContainers": {
-          "description": "sidecarContainers - add more containers to prometheus server @schema type: [object, null] @schema",
+          "description": "sidecarContainers - add more containers to prometheus server",
           "required": [],
           "title": "sidecarContainers",
           "type": [
@@ -4080,7 +4097,7 @@
           ]
         },
         "sidecarTemplateValues": {
-          "description": "sidecarTemplateValues - context to be used in template for sidecarContainers @schema type: [object, null] @schema",
+          "description": "sidecarTemplateValues - context to be used in template for sidecarContainers",
           "required": [],
           "title": "sidecarTemplateValues",
           "type": [
@@ -4092,38 +4109,39 @@
           "description": "Configure startup probe",
           "properties": {
             "enabled": {
-              "default": "false",
+              "default": false,
               "description": "Enable startup probe",
-              "required": [],
-              "title": "enabled"
+              "title": "enabled",
+              "type": "boolean"
             },
             "failureThreshold": {
-              "default": "30",
+              "default": 30,
               "description": "set failure threshold for startup probe",
-              "required": [],
-              "title": "failureThreshold"
+              "title": "failureThreshold",
+              "type": "integer"
             },
             "periodSeconds": {
-              "default": "5",
+              "default": 5,
               "description": "Set period for startup probe",
-              "required": [],
-              "title": "periodSeconds"
+              "title": "periodSeconds",
+              "type": "integer"
             },
             "timeoutSeconds": {
-              "default": "10",
+              "default": 10,
               "description": "Set timeout for startup probe",
-              "required": [],
-              "title": "timeoutSeconds"
+              "title": "timeoutSeconds",
+              "type": "integer"
             }
           },
           "required": [],
-          "title": "startupProbe"
+          "title": "startupProbe",
+          "type": "object"
         },
         "statefulSet": {
           "description": "StatefulSet configuration",
           "properties": {
             "annotations": {
-              "description": "Annotations to be added to statefulset @schema type: [object, null] @schema",
+              "description": "Annotations to be added to statefulset",
               "required": [],
               "title": "annotations",
               "type": [
@@ -4132,16 +4150,16 @@
               ]
             },
             "enabled": {
-              "default": "false",
-              "description": "If true, use a statefulset instead of a deployment for pod management. This allows to scale replicas to more than 1 pod",
-              "required": [],
-              "title": "enabled"
+              "default": false,
+              "description": "If true, use a statefulset instead of a deployment for pod management.\nThis allows to scale replicas to more than 1 pod",
+              "title": "enabled",
+              "type": "boolean"
             },
             "headless": {
               "description": "Prometheus' headless service to use for the statefulset",
               "properties": {
                 "annotations": {
-                  "description": "Annotations to be added to headless service @schema type: [object, null] @schema",
+                  "description": "Annotations to be added to headless service",
                   "required": [],
                   "title": "annotations",
                   "type": [
@@ -4153,23 +4171,24 @@
                   "description": "gRPC service configuration to allow auto discovery with thanos-querier",
                   "properties": {
                     "enabled": {
-                      "default": "false",
+                      "default": false,
                       "description": "Enable gRPC port on service to allow auto discovery with thanos-querier",
-                      "required": [],
-                      "title": "enabled"
+                      "title": "enabled",
+                      "type": "boolean"
                     },
                     "servicePort": {
                       "default": 10901,
-                      "description": "Port for gRPC service @schema type: [integer] @schema",
+                      "description": "Port for gRPC service",
                       "title": "servicePort",
                       "type": "integer"
                     }
                   },
                   "required": [],
-                  "title": "gRPC"
+                  "title": "gRPC",
+                  "type": "object"
                 },
                 "labels": {
-                  "description": "Labels to be added to headless service @schema type: [object, null] @schema",
+                  "description": "Labels to be added to headless service",
                   "required": [],
                   "title": "labels",
                   "type": [
@@ -4179,16 +4198,17 @@
                 },
                 "servicePort": {
                   "default": 80,
-                  "description": "Port for headless service @schema type: [integer] @schema",
+                  "description": "Port for headless service",
                   "title": "servicePort",
                   "type": "integer"
                 }
               },
               "required": [],
-              "title": "headless"
+              "title": "headless",
+              "type": "object"
             },
             "labels": {
-              "description": "Labels to be added to statefulset @schema type: [object, null] @schema",
+              "description": "Labels to be added to statefulset",
               "required": [],
               "title": "labels",
               "type": [
@@ -4199,28 +4219,29 @@
             "podManagementPolicy": {
               "default": "OrderedReady",
               "description": "Pod management policy for statefulset",
-              "required": [],
-              "title": "podManagementPolicy"
+              "title": "podManagementPolicy",
+              "type": "string"
             },
             "pvcDeleteOnStsDelete": {
-              "default": "false",
-              "description": "Statefulset's persistent volume claim retention policy pvcDeleteOnStsDelete and pvcDeleteOnStsScale determine whether statefulset's PVCs are deleted (true) or retained (false) on scaling down and deleting statefulset, respectively. Requires 1.27.0+. Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention Statefulset's persistent volume claim retention policy on deletion",
-              "required": [],
-              "title": "pvcDeleteOnStsDelete"
+              "default": false,
+              "description": "Statefulset's persistent volume claim retention policy\npvcDeleteOnStsDelete and pvcDeleteOnStsScale determine whether\nstatefulset's PVCs are deleted (true) or retained (false) on scaling down\nand deleting statefulset, respectively. Requires 1.27.0+.\nRef: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention\nStatefulset's persistent volume claim retention policy on deletion",
+              "title": "pvcDeleteOnStsDelete",
+              "type": "boolean"
             },
             "pvcDeleteOnStsScale": {
-              "default": "false",
+              "default": false,
               "description": "Statefulset's persistent volume claim retention policy on scaling",
-              "required": [],
-              "title": "pvcDeleteOnStsScale"
+              "title": "pvcDeleteOnStsScale",
+              "type": "boolean"
             }
           },
           "required": [],
-          "title": "statefulSet"
+          "title": "statefulSet",
+          "type": "object"
         },
         "storagePath": {
           "default": "",
-          "description": "storage.tsdb.path When empty server.persistentVolume.mountPath is used instead @schema type: [string, null] @schema",
+          "description": "The data directory used by prometheus to set --storage.tsdb.path\nWhen empty server.persistentVolume.mountPath is used instead",
           "required": [],
           "title": "storagePath",
           "type": [
@@ -4238,22 +4259,23 @@
             }
           },
           "required": [],
-          "title": "strategy"
+          "title": "strategy",
+          "type": "object"
         },
         "tcpSocketProbeEnabled": {
-          "default": "false",
-          "description": "Prometheus server readiness and liveness probe initial delay and timeout Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/ Enable tcpSocket probe",
-          "required": [],
-          "title": "tcpSocketProbeEnabled"
+          "default": false,
+          "description": "Prometheus server readiness and liveness probe initial delay and timeout\nRef: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/\nEnable tcpSocket probe",
+          "title": "tcpSocketProbeEnabled",
+          "type": "boolean"
         },
         "terminationGracePeriodSeconds": {
-          "default": "300",
+          "default": 300,
           "description": "Prometheus server pod termination grace period",
-          "required": [],
-          "title": "terminationGracePeriodSeconds"
+          "title": "terminationGracePeriodSeconds",
+          "type": "integer"
         },
         "tolerations": {
-          "description": "Node tolerations for server scheduling to nodes with taints Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/ @schema type: [array, null] @schema",
+          "description": "Node tolerations for server scheduling to nodes with taints\nRef: https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/",
           "items": {
             "required": []
           },
@@ -4265,7 +4287,7 @@
           ]
         },
         "topologySpreadConstraints": {
-          "description": "Pod topology spread constraints Ref. https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ @schema type: [array, null] @schema",
+          "description": "Pod topology spread constraints\nRef. https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/",
           "items": {
             "required": []
           },
@@ -4277,7 +4299,7 @@
           ]
         },
         "tsdb": {
-          "description": "tsdb sets TSDB parameters Ref. https://prometheus.io/docs/prometheus/latest/configuration/configuration/#tsdb @schema type: [object, null] @schema",
+          "description": "tsdb sets TSDB parameters\nRef. https://prometheus.io/docs/prometheus/latest/configuration/configuration/#tsdb",
           "required": [],
           "title": "tsdb",
           "type": [
@@ -4287,7 +4309,7 @@
         },
         "useExistingClusterRoleName": {
           "default": "",
-          "description": "Name of an existing cluster role to use in a role binding in namespaces set in namespaces and releaseNamespace for namespaced discovery. @schema type: [string, null] @schema",
+          "description": "Name of an existing cluster role to use in a role binding in namespaces set in\nnamespaces and releaseNamespace for namespaced discovery.",
           "required": [],
           "title": "useExistingClusterRoleName",
           "type": [
@@ -4296,17 +4318,18 @@
           ]
         },
         "verticalAutoscaler": {
-          "description": "Vertical Pod Autoscaler config Ref: https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler",
+          "description": "Vertical Pod Autoscaler config\nRef: https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler",
           "properties": {
             "enabled": {
-              "default": "false",
-              "description": "If true a VPA object will be created for the controller (either StatefulSet or Deployment, based on above configs)",
-              "required": [],
-              "title": "enabled"
+              "default": false,
+              "description": "If true a VPA object will be created for the controller\n(either StatefulSet or Deployment, based on above configs)",
+              "title": "enabled",
+              "type": "boolean"
             }
           },
           "required": [],
-          "title": "verticalAutoscaler"
+          "title": "verticalAutoscaler",
+          "type": "object"
         }
       },
       "required": [],
@@ -4317,7 +4340,7 @@
       "description": "Prometheus server ConfigMap entries",
       "properties": {
         "alerting_rules.yml": {
-          "description": "Alerting configuration Ref: https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/ @schema type: [object, null] @schema",
+          "description": "Alerting configuration\nRef: https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/",
           "required": [],
           "title": "alerting_rules.yml",
           "type": [
@@ -4327,7 +4350,7 @@
         },
         "alerts": {
           "deprecated": true,
-          "description": "alerts DEPRECATED unless explicitly naming your files, please use alerting_rules.yml @schema type: [object, null] deprecated: true @schema",
+          "description": "groups:\n  - name: Instances\n    rules:\n      - alert: InstanceDown\n        expr: up == 0\n        for: 5m\n        labels:\n          severity: page\n        annotations:\n          description: '{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 5 minutes.'\n          summary: 'Instance {{ $labels.instance }} down'\nalerts DEPRECATED unless explicitly naming your files, please use alerting_rules.yml",
           "required": [],
           "title": "alerts",
           "type": [
@@ -4357,15 +4380,16 @@
                 ],
                 "required": []
               },
-              "required": [],
-              "title": "rule_files"
+              "title": "rule_files",
+              "type": "array"
             }
           },
           "required": [],
-          "title": "prometheus.yml"
+          "title": "prometheus.yml",
+          "type": "object"
         },
         "recording_rules.yml": {
-          "description": "Recording configuration Ref: https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/ @schema type: [object, null] @schema",
+          "description": "Recording configuration\nRef: https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/",
           "required": [],
           "title": "recording_rules.yml",
           "type": [
@@ -4375,7 +4399,7 @@
         },
         "rules": {
           "deprecated": true,
-          "description": "rules DEPRECATED unless explicitly naming your files, please use recording_rules.yml @schema type: [object, null] deprecated: true @schema",
+          "description": "rules DEPRECATED unless explicitly naming your files, please use recording_rules.yml",
           "required": [],
           "title": "rules",
           "type": [
@@ -4385,7 +4409,8 @@
         }
       },
       "required": [],
-      "title": "serverFiles"
+      "title": "serverFiles",
+      "type": "object"
     },
     "serviceAccounts": {
       "description": "Define serviceAccount names for components. Defaults to component's fully qualified name.",
@@ -4393,7 +4418,7 @@
         "server": {
           "properties": {
             "annotations": {
-              "description": "Service account annotations @schema type: [object, null] @schema",
+              "description": "Service account annotations",
               "required": [],
               "title": "annotations",
               "type": [
@@ -4403,7 +4428,7 @@
             },
             "automountServiceAccountToken": {
               "default": "~",
-              "description": "Opt out of automounting Kubernetes API credentials. It will be overriden by server.automountServiceAccountToken value, if set. @schema type: [boolean, null] @schema",
+              "description": "Opt out of automounting Kubernetes API credentials.\nIt will be overriden by server.automountServiceAccountToken value, if set.",
               "required": [],
               "title": "automountServiceAccountToken",
               "type": [
@@ -4413,13 +4438,13 @@
             },
             "create": {
               "default": true,
-              "description": "If true, create service account @schema type: [boolean] @schema",
+              "description": "If true, create service account",
               "title": "create",
               "type": "boolean"
             },
             "name": {
               "default": "",
-              "description": "Service account name @schema type: [string, null] @schema",
+              "description": "Service account name",
               "required": [],
               "title": "name",
               "type": [
@@ -4434,7 +4459,8 @@
         }
       },
       "required": [],
-      "title": "serviceAccounts"
+      "title": "serviceAccounts",
+      "type": "object"
     }
   },
   "required": [],
