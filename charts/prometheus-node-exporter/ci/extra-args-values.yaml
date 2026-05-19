@@ -1,0 +1,4 @@
+extraArgs:
+  collector.diskstats.ignored-devices: "^(ram|loop|fd|(h|s|v)d[a-z]|nvme\\d+n\\d+p)\\d+$"
+  log.format: json
+  no-collector.fibrechannel: null

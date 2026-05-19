@@ -104,13 +104,17 @@ spec:
             - --path.sysfs=/host/sys
             {{- if .Values.hostRootFsMount.enabled }}
             - --path.rootfs=/host/root
+            {{- end }}
             {{- if semverCompare ">=1.4.0-0" (coalesce .Values.version .Values.image.tag .Chart.AppVersion) }}
             - --path.udev.data=/host/root/run/udev/data
             {{- end }}
-            {{- end }}
             - --web.listen-address=[$(HOST_IP)]:{{ $servicePort }}
-            {{- with .Values.extraArgs }}
-            {{- toYaml . | nindent 12 }}
+            {{- range $k, $v := .Values.extraArgs }}
+            {{- if $v }}
+            - --{{ $k }}={{ $v }}
+            {{- else }}
+            - --{{ $k }}
+            {{- end }}
             {{- end }}
           {{- with .Values.containerSecurityContext }}
           securityContext:
