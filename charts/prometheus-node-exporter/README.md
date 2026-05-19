@@ -11,7 +11,7 @@ The chart is distributed as an [OCI Artifact](https://helm.sh/docs/topics/regist
 - OCI Artifact: `oci://ghcr.io/prometheus-community/charts/prometheus-node-exporter`
 - Helm Repository: `https://prometheus-community.github.io/helm-charts` with chart `prometheus-node-exporter`
 
-The installation instructions use the OCI registry. Refer to the [`helm repo`]([`helm repo`](https://helm.sh/docs/helm/helm_repo/)) command documentation for information on installing charts via the traditional repository.
+The installation instructions use the OCI registry. Refer to the ([`helm repo`](https://helm.sh/docs/helm/helm_repo/)) command documentation for information on installing charts via the traditional repository.
 
 ### Install Chart
 
@@ -40,6 +40,33 @@ helm upgrade [RELEASE_NAME] oci://ghcr.io/prometheus-community/charts/prometheus
 ```
 
 _See [helm upgrade](https://helm.sh/docs/helm/helm_upgrade/) for command documentation._
+
+### 4.x to 5.x
+
+Version 5.0.0 makes a change in the field `extraArgs`. Previously, the field has been an array of strings. This
+release makes it a map whereby changing already present (default) values does not require repeating all of them when further modifications are required. If you have set any `extraArgs`, e.g.:
+
+```yaml
+extraArgs:
+  - --log.format=json
+  - --no-collector.fibrechannel
+```
+
+you have to change them before upgrading to:
+
+```yaml
+extraArgs:
+  log.format: json
+  no-collector.fibrechannel: null
+```
+
+The following `extraArgs` are set by default and can be removed from your previous custom configuration if set:
+
+```yaml
+extraArgs:
+  collector.filesystem.mount-points-exclude: "^/(dev|proc|sys|run/containerd/.+|var/lib/docker/.+|var/lib/kubelet/.+)($|/)"
+  collector.filesystem.fs-types-exclude: "^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs|erofs)$"
+```
 
 #### 3.x to 4.x
 
