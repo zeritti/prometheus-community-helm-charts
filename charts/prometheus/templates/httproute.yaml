@@ -7,7 +7,7 @@ metadata:
   {{- with $route.annotations }}
   annotations: {{ toYaml . | nindent 4 }}
   {{- end }}
-  name: {{ include "prometheus.server.fullname" $ }}
+  name: {{ if ne $name "main" }}{{ printf "%s-%s" (include "prometheus.server.fullname" $) $name | trunc 63 | trimSuffix "-" }}{{ else }}{{ include "prometheus.server.fullname" $ }}{{ end }}
   namespace: {{ include "prometheus.namespace" $ }}
   labels: {{ include "prometheus.server.labels" $ | nindent 4 }}
     {{- with $route.labels }}
