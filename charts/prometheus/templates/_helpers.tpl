@@ -92,6 +92,15 @@ from the charts directory
 {{- end -}}
 
 {{/*
+Determine the alertmanager's installation namespace respecting alertmanager.namespaceOverride
+*/}}
+{{- define "prometheus.alertmanager.namespace" -}}
+{{- if (index .Subcharts "alertmanager") -}}
+{{- default .Release.Namespace (index .Values "alertmanager" "namespaceOverride") -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create a fully qualified pushgateway name that works even when the dependency
 charts are not downloaded locally.
 */}}
@@ -100,6 +109,57 @@ charts are not downloaded locally.
 {{- include "prometheus-pushgateway.fullname" (index .Subcharts "prometheus-pushgateway") -}}
 {{- else -}}
 {{- printf "%s-%s" .Release.Name "prometheus-pushgateway" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Determine the pushgateway's installation namespace respecting prometheus-pushgateway.namespaceOverride
+*/}}
+{{- define "prometheus.pushgateway.namespace" -}}
+{{- if (index .Subcharts "prometheus-pushgateway") -}}
+{{- default .Release.Namespace (index .Values "prometheus-pushgateway" "namespaceOverride") -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create a fully qualified kube-state-metrics name that works even when the dependency
+charts are not downloaded locally.
+*/}}
+{{- define "prometheus.kube-state-metrics.fullname" -}}
+{{- if (index .Subcharts "kube-state-metrics") -}}
+{{- include "kube-state-metrics.fullname" (index .Subcharts "kube-state-metrics") -}}
+{{- else -}}
+{{- printf "%s-%s" .Release.Name "kube-state-metrics" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Determine the kube-state-metrics's installation namespace respecting kube-state-metrics.namespaceOverride
+*/}}
+{{- define "prometheus.kube-state-metrics.namespace" -}}
+{{- if (index .Subcharts "kube-state-metrics") -}}
+{{- default .Release.Namespace (index .Values "kube-state-metrics" "namespaceOverride") -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create a fully qualified prometheus-node-exporter name that works even when the dependency
+charts are not downloaded locally.
+*/}}
+{{- define "prometheus.node-exporter.fullname" -}}
+{{- if (index .Subcharts "prometheus-node-exporter") -}}
+{{- include "prometheus-node-exporter.fullname" (index .Subcharts "prometheus-node-exporter") -}}
+{{- else -}}
+{{- printf "%s-%s" .Release.Name "prometheus-node-exporter" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Determine the prometheus-node-exporter's installation namespace respecting prometheus-node-exporter.namespaceOverride
+*/}}
+{{- define "prometheus.node-exporter.namespace" -}}
+{{- if (index .Subcharts "prometheus-node-exporter") -}}
+{{- default .Release.Namespace (index .Values "prometheus-node-exporter" "namespaceOverride") -}}
 {{- end -}}
 {{- end -}}
 
