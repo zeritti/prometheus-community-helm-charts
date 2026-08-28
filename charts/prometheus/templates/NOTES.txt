@@ -43,8 +43,7 @@ Get the Prometheus server URL by running these commands in the same shell:
 {{- $amSvcType := default "" $amSvc.type -}}
 {{- $amIngress := default dict $am.ingress -}}
 Prometheus alertmanager can be accessed via port {{ default 9093 $amSvc.port }} on the following DNS name from within your cluster:
-{{ template "prometheus.alertmanager.fullname" . }}.{{ include "prometheus.alertmanager.namespace" . }}.svc.cluster
-.local
+{{ template "prometheus.alertmanager.fullname" . }}.{{ include "prometheus.alertmanager.namespace" . }}.svc.cluster.local
 
 {{ if $amIngress.enabled -}}
 From outside the cluster, the alertmanager URL(s) are:
@@ -94,8 +93,8 @@ http://{{ . }}
 {{- else }}
 Get the Pushgateway URL by running these commands in the same shell:
 {{- if contains "NodePort" $pgSvcType }}
-  export NODE_PORT=$(kubectl get --namespace {{ include "prometheus.pushgateway.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" t}"  services {{  $pgFullname }})
-  export NODE_IP=$(kubectl get nodes --namespace {{ include "prometheus.pushgateway.namespace" . }} -o jsonpath="{.items[0].status.addresses[0]  .address}")
+  export NODE_PORT=$(kubectl get --namespace {{ include "prometheus.pushgateway.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{  $pgFullname }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ include "prometheus.pushgateway.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
   echo http://$NODE_IP:$NODE_PORT
 {{- else if contains "LoadBalancer" $pgSvcType }}
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
@@ -130,7 +129,7 @@ Get the kube-state-metrics URL by running these commands in the same shell:
 {{- if contains "NodePort" $ksmSvcType }}
   export NODE_PORT=$(kubectl get --namespace {{ include "kube-state-metrics.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}"
   t}"  services {{  $ksmFullname }})
-  export NODE_IP=$(kubectl get nodes --namespace {{ include "kube-state-metrics.namespace" . }} -o jsonpath="{.items[0].status.addresses[0]  .address}")
+  export NODE_IP=$(kubectl get nodes --namespace {{ include "kube-state-metrics.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
   echo http://$NODE_IP:$NODE_PORT
 {{- else if contains "LoadBalancer" $ksmSvcType }}
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
