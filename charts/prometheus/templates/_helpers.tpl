@@ -143,27 +143,6 @@ Determine the kube-state-metrics's installation namespace respecting kube-state-
 {{- end -}}
 
 {{/*
-Create a fully qualified prometheus-node-exporter name that works even when the dependency
-charts are not downloaded locally.
-*/}}
-{{- define "prometheus.node-exporter.fullname" -}}
-{{- if (index .Subcharts "prometheus-node-exporter") -}}
-{{- include "prometheus-node-exporter.fullname" (index .Subcharts "prometheus-node-exporter") -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name "prometheus-node-exporter" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Determine the prometheus-node-exporter's installation namespace respecting prometheus-node-exporter.namespaceOverride
-*/}}
-{{- define "prometheus.node-exporter.namespace" -}}
-{{- if (index .Subcharts "prometheus-node-exporter") -}}
-{{- default .Release.Namespace (index .Values "prometheus-node-exporter" "namespaceOverride") -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Create a fully qualified Prometheus server name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
