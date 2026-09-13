@@ -24,6 +24,13 @@ serviceAccounts:
 ## Additional labels to attach to all resources
 commonMetaLabels: {}
 
+## Enable config file auto reload by Prometheus itself (available since release 3.12)
+configAutoReload:
+  ## If enabled, disable the config-reloader container by setting configmapReload.prometheus.enabled=false.
+  enabled: false
+  ## interval specifies the interval for checking and automatically reloading the Prometheus configuration file if changed
+  interval: 30s
+
 ## Monitors ConfigMap changes and POSTs to a URL
 ## Ref: https://github.com/prometheus-operator/prometheus-operator/tree/main/cmd/prometheus-config-reloader
 ##
