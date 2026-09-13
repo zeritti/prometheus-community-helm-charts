@@ -38,6 +38,17 @@
                 }
             }
         },
+        "configAutoReload": {
+           "properties": {
+              "enabled": {
+                 "type": "boolean"
+              },
+              "interval": {
+                 "type": "string"
+              }
+           },
+           "type": "object"
+        },
         "configmapReload": {
             "type": "object",
             "properties": {

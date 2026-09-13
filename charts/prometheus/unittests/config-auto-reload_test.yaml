@@ -1,0 +1,51 @@
+suite: test native config auto reload
+templates:
+  - deploy.yaml
+tests:
+  - it: should set default flags for config auto reload
+    set:
+      configAutoReload:
+        enabled: true
+      configmapReload:
+        prometheus:
+          enabled: false
+          name: configmap-reload
+      server:
+        name: server
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: --config.auto-reload
+          count: 1
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: --config.auto-reload-interval=30s
+          count: 1
+      - notContains:
+          path: spec.template.spec.containers
+          content:
+            name: prometheus-server-configmap-reload
+  - it: should set custom reload interval for config auto reload
+    set:
+      configAutoReload:
+        enabled: true
+        interval: 10s
+      configmapReload:
+        prometheus:
+          enabled: false
+          name: configmap-reload
+      server:
+        name: server
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: --config.auto-reload
+          count: 1
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: --config.auto-reload-interval=10s
+          count: 1
+      - notContains:
+          path: spec.template.spec.containers
+          content:
+            name: prometheus-server-configmap-reload

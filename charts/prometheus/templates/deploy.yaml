@@ -224,6 +224,10 @@ spec:
           {{- if .Values.server.baseURL }}
             - --web.external-url={{ .Values.server.baseURL }}
           {{- end }}
+          {{- if .Values.configAutoReload.enabled }}
+            - --config.auto-reload
+            - --config.auto-reload-interval={{ .Values.configAutoReload.interval }}
+          {{- end }}
         {{- end }}
           ports:
             - containerPort: {{ include "prometheus.port" . }}
