@@ -1,0 +1,24 @@
+---
+alertmanager:
+  enabled: false
+
+kube-state-metrics:
+  enabled: false
+
+prometheus-node-exporter:
+  enabled: false
+
+prometheus-pushgateway:
+  enabled: false
+
+configAutoReload:
+  enabled: true
+  interval: 15s
+configmapReload:
+  prometheus:
+    enabled: false
+
+server:
+  automountServiceAccountToken: true
+  persistentVolume:
+    enabled: false
