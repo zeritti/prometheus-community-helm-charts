@@ -18,7 +18,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-ingress-config
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "apisix-ingress-controller-manager.namespace" . }}
 data:
   config.yaml: |
     log_level: {{ .Values.config.logLevel | default "info" }}

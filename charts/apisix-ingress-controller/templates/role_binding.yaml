@@ -20,7 +20,7 @@ metadata:
   labels:
     {{- include "apisix-ingress-controller-manager.labels" . | nindent 4 }}
   name: {{ .Release.Name }}-apisix-ingress-leader-election-rolebinding
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "apisix-ingress-controller-manager.namespace" . }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role

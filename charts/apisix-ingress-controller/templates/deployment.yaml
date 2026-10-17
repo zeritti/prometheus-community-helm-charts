@@ -18,7 +18,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "apisix-ingress-controller-manager.name.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "apisix-ingress-controller-manager.namespace" . }}
   annotations:
   {{- range $key, $value := .Values.deployment.annotations }}
     {{ $key }}: {{ $value | quote }}

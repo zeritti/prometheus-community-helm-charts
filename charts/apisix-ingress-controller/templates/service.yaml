@@ -20,7 +20,7 @@ metadata:
   labels:
     {{- include "apisix-ingress-controller-manager.labels" . | nindent 4 }}
   name: {{ include "apisix-ingress-controller-manager.name.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "apisix-ingress-controller-manager.namespace" . }}
 spec:
   ports:
   - name: metrics

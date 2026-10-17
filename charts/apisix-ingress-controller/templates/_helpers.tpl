@@ -104,3 +104,11 @@ Port of the controller health probe server, taken from config.probeAddr
 {{- end -}}
 {{- $port -}}
 {{- end -}}
+
+{{/*
+Define the apisix-ingress-controller-manager.namespace template to support overriding the installation namespace
+different from .Release.Namespace
+*/}}
+{{- define "apisix-ingress-controller-manager.namespace" -}}
+  {{- default .Release.Namespace .Values.namespaceOverride -}}
+{{- end }}

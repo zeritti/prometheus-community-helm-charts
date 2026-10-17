@@ -162,6 +162,7 @@ The same for container level, you need to set:
 | gatewayProxy.statusAddress | list | `[]` | External IP addresses that the controller uses to populate the status field of GatewayProxy or Ingress resources for developers to access. |
 | labelsOverride | object | `{}` | Override default labels assigned to Apache APISIX ingress controller resource |
 | nameOverride | string | `""` | Default values for apisix-ingress-controller. This is a YAML-formatted file. Declare variables to be passed into your templates.  |
+| namespaceOverride | string | `""` | namespaceOverride allows for overriding the installation namespace |
 | podDisruptionBudget | object | `{"enabled":false,"maxUnavailable":1,"minAvailable":"90%"}` | See https://kubernetes.io/docs/tasks/run-application/configure-pdb/ for more details |
 | podDisruptionBudget.enabled | bool | `false` | Enable or disable podDisruptionBudget |
 | podDisruptionBudget.maxUnavailable | int | `1` | Set the maxUnavailable of podDisruptionBudget |

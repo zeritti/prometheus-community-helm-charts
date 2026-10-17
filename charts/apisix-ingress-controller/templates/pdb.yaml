@@ -23,7 +23,7 @@ apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: {{ include "apisix-ingress-controller-manager.name.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "apisix-ingress-controller-manager.namespace" . }}
   labels:
     {{- include "apisix-ingress-controller-manager.labels" . | nindent 4 }}
 spec:

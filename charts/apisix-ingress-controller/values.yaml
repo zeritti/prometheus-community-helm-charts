@@ -23,6 +23,9 @@ nameOverride: ""
 
 fullnameOverride: ""
 
+# -- namespaceOverride allows for overriding the installation namespace
+namespaceOverride: ""
+
 # -- Override default labels assigned to Apache APISIX ingress controller resource
 labelsOverride: {}
 # labelsOverride:
