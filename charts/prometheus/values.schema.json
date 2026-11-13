@@ -428,6 +428,17 @@
                 "priorityClassName": {
                     "type": "string"
                 },
+                "runtime": {
+                  "type":  "object",
+                  "properties": {
+                    "logLevel": {
+                      "type": "string"
+                    },
+                    "goGC": {
+                      "type": ["integer", "null"]
+                    }
+                  }
+                },
                 "runtimeClassName": {
                     "type": "string"
                 },

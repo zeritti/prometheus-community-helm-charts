@@ -311,6 +311,14 @@ server:
     # - name: "Authorization"
     #   value: "Bearer ABCDEabcde12345"
 
+  ## Set runtime configuration in the configuration file
+  ##
+  runtime:
+    ## logLevel sets logging level. Possible values: debug, info (default), warn, error. Can be changed by reloading the configuration.
+    logLevel: ""
+    ## goGC configures the Go garbage collector GOGC parameter (int). Default = 75. Lowering this number increases CPU usage.
+    goGC: ~
+
   ## Additional Prometheus server container arguments
   ## Set to null for argumentless flags
   ##

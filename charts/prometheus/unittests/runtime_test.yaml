@@ -1,0 +1,48 @@
+suite: test runtime configuration
+templates:
+  - cm.yaml
+tests:
+  - it: omits runtime settings by default
+    asserts:
+      - notMatchRegex:
+          path: data["prometheus.yml"]
+          pattern: '(?m)^runtime:'
+
+  - it: renders both runtime settings
+    set:
+      server.runtime.logLevel: debug
+      server.runtime.goGC: 50
+    asserts:
+      - matchRegex:
+          path: data["prometheus.yml"]
+          pattern: '(?m)^runtime:\n  log_level: debug\n  gogc: 50$'
+
+  - it: renders only the log level when configured alone
+    set:
+      server.runtime.logLevel: warn
+    asserts:
+      - matchRegex:
+          path: data["prometheus.yml"]
+          pattern: '(?m)^runtime:\n  log_level: warn$'
+      - notMatchRegex:
+          path: data["prometheus.yml"]
+          pattern: '(?m)^  gogc:'
+
+  - it: renders only the garbage collector setting when configured alone
+    set:
+      server.runtime.goGC: 100
+    asserts:
+      - matchRegex:
+          path: data["prometheus.yml"]
+          pattern: '(?m)^runtime:\n  gogc: 100$'
+      - notMatchRegex:
+          path: data["prometheus.yml"]
+          pattern: '(?m)^  log_level:'
+
+  - it: renders the garbage collector correctly when set to 0
+    set:
+      server.runtime.goGC: 0
+    asserts:
+      - matchRegex:
+          path: data["prometheus.yml"]
+          pattern: '(?m)^runtime:\n  gogc: 0$'

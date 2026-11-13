@@ -47,6 +47,17 @@ data:
     otlp:
 {{ $root.Values.server.otlp | toYaml | indent 8 }}
 {{- end }}
+{{- $runtime := $root.Values.server.runtime | default dict }}
+{{- $hasGoGC := and (ne $runtime.goGC nil) (ge ($runtime.goGC | int) 0) }}
+{{- if or $runtime.logLevel $hasGoGC }}
+    runtime:
+      {{- if $runtime.logLevel }}
+      log_level: {{ $runtime.logLevel }}
+      {{- end }}
+      {{- if $hasGoGC }}
+      gogc: {{ $runtime.goGC }}
+      {{- end }}
+{{- end }}
 {{- if $root.Values.scrapeConfigFiles }}
     scrape_config_files:
 {{ toYaml $root.Values.scrapeConfigFiles | indent 4 }}
